@@ -64,10 +64,10 @@ These performance increases enable larger simulations, narrowing the difference 
 
 # State of the field                                                                                                                  
 
-Would Johannes be the best to write something about other DSL etc. approaches for GPU stencil computations?
-I mean if he would have the time to slap something quickly here? I can polish whatever he has time to quickly sketch.
+Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained computations required for 3D multi-physic simulations, which run out of the required cache due to the need of having many interdependent values in working memory at the same time.
 
-Compared to the state of the field Astaroth excels in the robustness of the integration of its domain specific language to its runtime and with its integration to existing codes (make the meaning of this more precise).
+Some other common tools for acceleration of scientific tools include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` (cite the manual like MURaM does or what?). 
+Compared to these, `Astaroth` gives more control to the user, and especially when compared to the directive based approaches of `OpenMP` and `OpenACC`, it is less of black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like handling the required communications for multi-process applications and automatic scheduling of computational tasks. Compared to the C++ based approaches of `Kokkos` and `Raja`, `Astaroth` exposes a more language agnostic API, extending the range of applications which can take advantage of `Astaroth`.
 
 # Software design
 
