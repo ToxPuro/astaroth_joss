@@ -102,14 +102,13 @@ increase the number of people relying on `Astaroth` as the core execution engine
 List of papers: (if something is missing please add)
 
 Stencil computations on amd and nvidia graphics processors: Performance and tuning strategies [@pekkila2025stencil]
-Interaction of large-and small-scale dynamos in isotropic turbulent flows from GPU-accelerated simulations
-Scalable communication for high-order stencil computations using CUDA-aware MPI
-Exploring the formation of resistive pseudodisks with the GPU code astaroth
-Methods for compressible fluid simulation on GPUs using high-order finite differences
-Observability, monitoring, and in situ analytics in exascale applications (used Astaroth standalone)
-Asymptotic behaviour of galactic small-scale dynamos at modest magnetic Prandtl number
-SOMA: Observability, monitoring, and in situ analytics for exascale applications
-GPU acceleration of average gradient method for solving partial differential equations
+Interaction of large-and small-scale dynamos in isotropic turbulent flows from GPU-accelerated simulations [vaisala2021interaction]
+Scalable communication for high-order stencil computations using CUDA-aware MPI [pekkila2022scalable]
+Exploring the formation of resistive pseudodisks with the GPU code astaroth [vaisala2023exploring]
+Methods for compressible fluid simulation on GPUs using high-order finite differences [pekkila2017methods]
+Asymptotic behaviour of galactic small-scale dynamos at modest magnetic Prandtl number [gent2026asymptotic]
+SOMA: Observability, monitoring, and in situ analytics for exascale applications [yokelson2024soma]
+GPU acceleration of average gradient method for solving partial differential equations [puro2025gpu]
 
 
 
