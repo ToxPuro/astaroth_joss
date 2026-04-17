@@ -101,7 +101,7 @@ increase the number of people relying on `Astaroth` as the core execution engine
 
 List of papers: (if something is missing please add)
 
-Stencil computations on amd and nvidia graphics processors: Performance and tuning strategies
+Stencil computations on amd and nvidia graphics processors: Performance and tuning strategies [@pekkila2025stencil]
 Interaction of large-and small-scale dynamos in isotropic turbulent flows from GPU-accelerated simulations
 Scalable communication for high-order stencil computations using CUDA-aware MPI
 Exploring the formation of resistive pseudodisks with the GPU code astaroth
