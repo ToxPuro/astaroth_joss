@@ -71,38 +71,29 @@ Compared to the state of the field Astaroth excels in the robustness of the inte
 
 # Software design
 
-TODO: Based on Oskar's comments larger emphasis should be made here about the integration of Astaroth to existing codes.
-At the same time the granularity of the multi-layer approach could be cut down.
+`Astaroth`'s design is too expansive to cover fully here. Instead we give what we believe to be the four main principles of the design. For further information on the design the reader can refer to the documentation of `Astaroth`.
 
-
-`Astaroth`'s core design flows from the DSL and stencil computations and is multi-layered.
-A core design principle is that the whole library, including its runtime, is compiled based on the DSL written by the user.
-This allows `Astaroth` to make the usage experience as smooth as possible and at the same time optimize itself for the specific use case at hand. This principle is taken to the logical conclusion in the feature of runtime-compilation where the whole library is compiled from scratch at the runtime of the application after all possible information about the application are known. This is particularly important for large multi-physics PDE solvers which contain many control variables describing the simulation setup at hand.
-
-Depending on the users wants and needs `Astaroth` exposes multiple different layers from which the user can choose from.
-Importantly the layer of highest abstraction (the so called `Grid`-layer) is as descriptive as possible.
-In the DSL the user specifies what computation they want to perform on a structured grid by using stencils and the `Grid`-layer executes user's intent in as a streamlined way as possible.
-One example of this are `ComputeSteps`; The user describes steps of computations (kernel invocations) and `Astaroth` handles all execution details of performing the computations such as the required computation for multi-GPU stencil computations and reductions.
-This declarative nature allows `Astaroth` to automatically to handle the execution details and leaves enough freedom for `Astaroth` to choose the most performant way to perform the computations.
-Alternatively for use cases where the user wants granular control of every specific detail `Astaroth` exposes the `Device`-layer from which the user can configure details down to hardware settings.
-
-The external C-based API of `Astaroth` is kept as simple as possible allowing easy integration of it to existing codes.
-An important design choice with respect to this its global configuration structure which holds all of the important global state of `Astaroth`, which enables one to easily to transfer data from existing codes to `Astaroth`.
-
+1): Emphasis on inter-operability.
+`Astaroth`'s external API is mostly in C for easy interoperatibility from any programming language and has always been designed to be called from external applications. 
+2): Specialization to the use case at hand.
+The whole library is always compiled from scratch based on the user's DSL code, providing the largest amount of specialization to the use case at hand. This specialization enables high performance and an ergonomic API. This principle is taken further by compiling the library dynamically during the runtime of application, allowing specialization to dynamical situations. 
+3): Ergonomic and high performance via declarativity.
+While the DSL itself follows C/C++ closely, the most important objects, the stencils themselves, are declarative in nature. This makes their usage ergonomic and gives the compiler enough freedom to choose the most performant way to achieve the required computations.
+Similar design ethos carries to higher-level components of `Astaroth`.  A good example of this are `ComputeSteps`; The user describes steps of computations and `Astaroth` handles all execution details of performing the computations such as the required communications with multiple GPUs and chooses the most performant way to achieve the results.
+4): Multi-layered API.
+`Astaroth` has also more explicit APIs which the more declarative APIs take advantage of internally. This has been organized in a multi-layered approach where layers of lower abstraction are more explicit and give the user more control over small details and the layers of higher abstraction handle these details for the user. This is important so the user can choose the correct abstraction level for their use case and for `Astaroth` as a platform for performance research.
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been us as a platform for performance research [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
+`Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used as a platform for performance research [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
 Recently, the acceleration of `Pencil Code` [@brandenburg2020pencil] via `Astaroth` is expected to 
-increase the number of people relying on `Astaroth` as the core execution engine and is expected to enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos to the propagation and processes producing primordial gravitational waves.
-
-
+increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase will enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 # Acknowledgements
 
-We acknowledge the contributions of every committer to Astaroth and the early users of it who have been instrumental 
-in its evolution. (Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky, Hsien Shang, who else)?
+We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky and Hsien Shang.
 
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the Finite Differences -method.
+[^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém, Tzu-Chun Hsu and Jack Hsu.
