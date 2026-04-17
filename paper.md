@@ -44,7 +44,7 @@ bibliography: paper.bib
 
 Stencil computations[^stencil_footnote] are one the bedrocks of high performance scientific simulations,
 with them forming the core of a large number of partial differential equation (PDE) and numerical linear algebra solvers. 
-At the same time GPU computing is an ever increasing part of high performance computing given its speed and energy efficiency. 
+At the same time computing on graphics processing units (GPUs) is an ever increasing part of high performance computing given their speed and energy efficiency. 
 Thus GPU acceleration of stencil computations, and of the codes using them, is essential in the pursuit of increasingly large simulations, which are needed in ubiquitous scientific fields to push scientific knowledge forward.
 `Astaroth` is a GPU framework primarily for scientific computing and for acceleration of scientific software, which tries to solve this problem. Astaroth provides its own domain specific language (DSL) and a runtime for it, that allows
 one to easily express their required computations and leaving the details to the compiler and runtime.
@@ -52,7 +52,7 @@ While stencils are the core of `Astaroth`, it also accelerates other important o
 To further ease the development and acceleration of PDE solvers based on Finite Differences, `Astaroth` comes together with its own PDE solver and a standard library that has a large spectrum of different operators and functionality needed for PDE solvers.
 
 # Statement of need
-With its state-of-the-art performance [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves both as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it serves as a platform on which completely new highly performant simulations can be written.
+With its state-of-the-art performance [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it serves as a platform on which completely new highly performant simulations can be written.
 These performance increases enable larger simulations, narrowing the difference between simulations and nature.
 `Astaroth` can be also used for applications completely outside of simulations, like for performing image and signal processing.
 
