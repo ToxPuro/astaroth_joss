@@ -9,28 +9,22 @@ tags:
 authors:
   - name: Touko Puro
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     corresponding: true
     affiliation: 1 
   - name: Johannes Pekkilä
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     affiliation: 1 
   - name: Miikka Väisälä
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     affiliation: 2
   - name: Oskar Lappi 
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     affiliation: 3
   - name: Matthias Rheinhardt
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     affiliation: 1
   - name: Maarit Korpi-Lagg 
     orcid: 0000-0000-0000-0000
-    equal-contrib: true
     affiliation: 1
 
 affiliations:
