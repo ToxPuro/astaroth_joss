@@ -55,6 +55,7 @@ To further ease the development and acceleration of PDE solvers based on Finite 
 With its state-of-the-art performance [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it serves as a platform on which completely new highly performant simulations can be written.
 These performance increases enable larger simulations, narrowing the difference between simulations and nature.
 `Astaroth` can be also used for applications completely outside of simulations, like for performing image and signal processing.
+Lastly, its design and DSL language offer a platform on which to perform performance on stencil and GPU computing.
 
 # State of the field                                                                                                                  
 
@@ -79,7 +80,7 @@ Similar design ethos carries to higher-level components of `Astaroth`.  A good e
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used as a platform for performance research [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
+`Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings involving magnetohydrodynamic turbulence [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
 Recently, the acceleration of `Pencil Code` [@brandenburg2020pencil] via `Astaroth` is expected to 
 increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase will enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
