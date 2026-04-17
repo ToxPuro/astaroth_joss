@@ -94,21 +94,9 @@ An important design choice with respect to this its global configuration structu
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE solver, mainly in astrophysical settings, and in performance focused papers
-as a platform to study optimization techniques. Recently the acceleration of `Pencil Code` via `Astaroth` is expected to 
+`Astaroth` has already been used in many papers as the core PDE solver, mainly in astrophysical settings [@vaisala2021interaction; @vaisala2023exploring; @gen2026asymptotic], and in performance focused papers
+as a platform study optimization techniques [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil, @puro2025gpu]. Recently the acceleration of `Pencil Code` via `Astaroth` is expected to 
 increase the number of people relying on `Astaroth` as the core execution engine and is expected to enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos to the propagation and processes producing primordial gravitational waves.
-
-
-List of papers: (if something is missing please add)
-
-Stencil computations on amd and nvidia graphics processors: Performance and tuning strategies [@pekkila2025stencil]
-Interaction of large-and small-scale dynamos in isotropic turbulent flows from GPU-accelerated simulations [vaisala2021interaction]
-Scalable communication for high-order stencil computations using CUDA-aware MPI [pekkila2022scalable]
-Exploring the formation of resistive pseudodisks with the GPU code astaroth [vaisala2023exploring]
-Methods for compressible fluid simulation on GPUs using high-order finite differences [pekkila2017methods]
-Asymptotic behaviour of galactic small-scale dynamos at modest magnetic Prandtl number [gent2026asymptotic]
-SOMA: Observability, monitoring, and in situ analytics for exascale applications [yokelson2024soma]
-GPU acceleration of average gradient method for solving partial differential equations [puro2025gpu]
 
 
 
