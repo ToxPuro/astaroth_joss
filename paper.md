@@ -95,7 +95,7 @@ An important design choice with respect to this its global configuration structu
 # Research impact statement
 
 `Astaroth` has already been used in many papers as the core PDE solver, mainly in astrophysical settings [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], and in performance focused papers
-as a platform study optimization techniques [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil, @puro2025gpu]. Recently the acceleration of `Pencil Code` via `Astaroth` is expected to 
+as a platform study optimization techniques [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu]. Recently the acceleration of `Pencil Code` via `Astaroth` is expected to 
 increase the number of people relying on `Astaroth` as the core execution engine and is expected to enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos to the propagation and processes producing primordial gravitational waves.
 
 
