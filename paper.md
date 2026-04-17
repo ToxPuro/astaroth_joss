@@ -107,4 +107,4 @@ in its evolution. (Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopols
 
 # References
 
-[^stencil_footnote]: Stencil computations are computations on structured grids where only spatially close points are required for the update of a given point. Good examples are convolutions in image operations and convolutional neural networks, and different schemes for spatial derivatives like the Finite Differences -method.
+[^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where only spatially close points are required for the update at a given point. Good examples are convolutions in image operations and convolutional neural networks, and different schemes for spatial derivatives like the Finite Differences -method.
