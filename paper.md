@@ -55,7 +55,7 @@ Thus GPU acceleration of stencil computations, and of the codes using them, is e
 `Astaroth` is a GPU framework primarily for scientific computing and for acceleration of scientific software, which tries to solve this problem. Astaroth provides its own domain specific language (DSL) and a runtime for it, that allows
 one to easily express their required computations and leaving the details to the compiler and runtime.
 While stencils are the core of `Astaroth`, it also accelerates other important operations like reductions (e.g. sums), simple ray-tracing and has integrations for GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
-To further ease the development and acceleration of PDE solvers based on Finite Differences, `Astaroth` comes together with its own PDE solver and and a standard library that has a large spectrum of different operators and functionality needed of PDE solvers.
+To further ease the development and acceleration of PDE solvers based on Finite Differences, `Astaroth` comes together with its own PDE solver and a standard library that has a large spectrum of different operators and functionality needed for PDE solvers.
 
 # Statement of need
 With its state-of-the-art performance [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves both as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it serves as a platform on which completely new highly performant simulations can be written.
@@ -76,12 +76,12 @@ Compared to the state of the field Astaroth excels in the robustness of the inte
 1): Emphasis on inter-operability.
 `Astaroth`'s external API is mostly in C for easy interoperatibility from any programming language and has always been designed to be called from external applications. 
 2): Specialization to the use case at hand.
-The whole library is always compiled from scratch based on the user's DSL code, providing the largest amount of specialization to the use case at hand. This specialization enables high performance and an ergonomic API. This principle is taken further by compiling the library dynamically during the runtime of application, allowing specialization to dynamical situations. 
+The whole library is always compiled from scratch based on the user's DSL code, providing the largest amount of specialization to the use case at hand. This specialization enables high performance and an ergonomic API. This principle is taken further by compiling the library dynamically during the runtime of the application, allowing specialization to dynamical situations. 
 3): Ergonomic and high performance via declarativity.
-While the DSL itself follows C/C++ closely, the most important objects, the stencils themselves, are declarative in nature. This makes their usage ergonomic and gives the compiler enough freedom to choose the most performant way to achieve the required computations.
+While the DSL itself follows C/C++ closely, the most important objects, the stencils themselves, are declarative in nature. This makes their usage ergonomic and gives the compiler enough freedom to choose the most performant way to perform the required computations.
 Similar design ethos carries to higher-level components of `Astaroth`.  A good example of this are `ComputeSteps`; The user describes steps of computations and `Astaroth` handles all execution details of performing the computations such as the required communications with multiple GPUs and chooses the most performant way to achieve the results.
 4): Multi-layered API.
-`Astaroth` has also more explicit APIs which the more declarative APIs take advantage of internally. This has been organized in a multi-layered approach where layers of lower abstraction are more explicit and give the user more control over small details and the layers of higher abstraction handle these details for the user. This is important so the user can choose the correct abstraction level for their use case and for `Astaroth` as a platform for performance research.
+`Astaroth` has also more explicit APIs which the more declarative APIs take advantage of internally. This is important so the user can choose the correct abstraction level for their use case and for `Astaroth` as a platform for performance research.
 
 # Research impact statement
 
