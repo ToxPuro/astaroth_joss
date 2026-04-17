@@ -48,7 +48,7 @@ bibliography: paper.bib
 
 # Summary
 
-Stencil computations are one the bedrocks of high performance scientific simulations,
+Stencil computations[^stencil_footnote] are one the bedrocks of high performance scientific simulations,
 with them being the most important primitive for a large number of PDE and numerical linear algebra solvers. 
 At the same time GPU computing is an ever increasing part of high performance computing given its speed and energy efficiency. 
 Thus GPU acceleration of stencil computations, and of the codes using them, is essential in the pursuit of increasingly larger simulations, which are needed in ubiquitous scientific fields to push scientific knowledge forward.
@@ -106,3 +106,5 @@ We acknowledge the contributions of every committer to Astaroth and the early us
 in its evolution. (Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky, Hsien Shang, who else)?
 
 # References
+
+[^stencil_footnote]: Stencil computations are computations on structured grids where only spatially close points are required for the update of a given point. Good examples are convolutions in image operations and convolutional neural networks, and different schemes for spatial derivatives like the Finite Differences -method.
