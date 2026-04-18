@@ -1,5 +1,5 @@
 ---
-title: 'Astaroth: A scientific computing framework for accelerating stencil codes.'
+title: 'Astaroth: A scientific computing framework for accelerating stencil computations.'
 tags:
   - C/C++
   - scientific computing
