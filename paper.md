@@ -52,17 +52,17 @@ While stencils are the core of `Astaroth`, it also accelerates other important o
 To further ease the development and acceleration of PDE solvers based on Finite Differences, `Astaroth` comes together with its own PDE solver and a standard library that has a large spectrum of different operators and functionality needed for PDE solvers.
 
 # Statement of need
-With its state-of-the-art performance which scales to thousands of GPUs [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it serves as a platform on which completely new highly performant simulations can be written.
-These performance increases enable larger simulations, narrowing the difference between simulations and nature.
-`Astaroth` can be also used for applications completely outside of simulations, like for performing image and signal processing.
-Lastly, its design and DSL language offer a platform on which to perform performance on stencil and GPU computing.
+With its state-of-the-art performance, which scales to thousands of GPUs [@pekkila2022scalable; @pekkila2025stencil], ergonomic DSL and a focus on inter-operability with existing codes, `Astaroth` serves as a tool for existing codes to achieve crucial speedups from GPU acceleration. At the same time it hosts its standalone PDE solver, on which completely new highly performant simulations can be written.
+The achieved performance increases enable larger simulations, narrowing the difference between simulations and nature.
+`Astaroth` can be also used for applications completely outside of simulations, like for image and signal processing.
+Lastly, its design and DSL language offer a platform on which to perform performance reserach on stencil and GPU computing.
 
 # State of the field                                                                                                                  
 
 Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained[^cache_def] computations required for 3D multi-physics simulations, which run out of the required cache due to the need of having many interdependent values in working memory at the same time.
 
 Some other common tools for acceleration of scientific tools include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
-Compared to these, `Astaroth` gives more control to the user, and especially when compared to the directive based approaches of `OpenMP` and `OpenACC`, it is less of black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like handling the required communications for multi-process applications and automatic scheduling of computational tasks. Compared to the C++ based approaches of `Kokkos` and `Raja`, `Astaroth` exposes a more language agnostic API, extending the range of applications which can take advantage of `Astaroth`. Furthermore, all of these approaches are general frameworks while `Astaroth` tries to modify itself to the application at hand to the best of its abilities. Similarly `Astaroth` is more explicit in its focus on scientific computing, showcased for example by its standard library.
+Compared to these, `Astaroth` gives more control to the user, and especially when compared to the directive based approaches of `OpenMP` and `OpenACC`, it is less of a black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like handling the required communications for multi-process applications and automatic scheduling of computational tasks. Compared to the C++ based approaches of `Kokkos` and `Raja`, `Astaroth` exposes a more language agnostic API, extending the range of applications which can take advantage of `Astaroth`. Furthermore, all of these approaches are general frameworks while `Astaroth` tries to modify itself to the application at hand to the best of its abilities. Lastly, `Astaroth` is more explicit in its focus on scientific computing, showcased for example by its standard library, which streamlines its use.
 
 # Software design
 
