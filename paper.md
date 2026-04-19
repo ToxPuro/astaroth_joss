@@ -42,29 +42,27 @@ bibliography: paper.bib
 
 # Summary
 
-Stencil computations[^stencil_footnote] are one of the bedrocks of high performance scientific simulations, forming the core of partial differential equation (PDE) and numerical linear algebra solvers. 
+Stencil computations[^stencil_footnote] are one of the bedrocks of high performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
 In recent years, GPUs have become the primary compute platform for high-performance computing, and it is difficult to run large simulations without them.
 `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
-It has primarily been used in the context of astrophysical plasma simulations.
 
-Astaroth provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
-`Astaroth` can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
-While stencils are the core of `Astaroth`, it also accelerates other important operations like reductions (e.g. sums), simple ray-tracing and has library integrations for performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
+`Astaroth` provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
+It can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
+While stencils are the core of `Astaroth`, it also accelerates other operations like reductions (e.g. sums), simple ray-tracing and has library integrations for performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
 To further ease the development and acceleration of PDE solvers based on the finite-difference method, `Astaroth` comes together with its own PDE solver and a standard library with support for a variety of PDE-solver functionality.
+`Astaroth` has primarily been used for turbulent astrophysical plasma simulations.
 
 # Statement of need
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales to thousands of GPUs [@pekkila2022scalable; @pekkila2025stencil], and has an ergonomic DSL that can be used to rewrite existing PDE solvers.
+`Astaroth` scales to thousands of GPUs [@pekkila2022scalable], and has an ergonomic DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
 
-`Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
-In this domain, the state-of-the-art CPU framework is the Pencil Code [@brandenburg2020pencil], a finite difference solver written in Fortran.
-`Astaroth` has successfully been used to move these plasma simulations from CPUs to GPUs, with speedups of 20-60x [@TODOCITATION] TODOCITATION!!!.
-Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and `Astaroth` is not limited to PDE's.
-As an example, many image processing techniques are traditionally expressed using stencils, e.g., edge detection, convolutions, etc.
-
-`Astaroth` separates the front-end (DSL) from the back-end (compiler and runtime), `Astaroth` also provides researchers with a platform for performance research.
+One of the predecessors of `Astaroth` is the Pencil Code [@brandenburg2020pencil], which is a widely used modular PDE solver for compressible hydrodynamics.
+`Astaroth` has successfully been used to accelerate it [@puro2023programmatic], with speedups of 20-60x [@pekkila2022scalable].
+Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
+As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
+`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
 
 # State of the field                                                                                                                  
 
@@ -90,8 +88,7 @@ Similar design ethos carries to higher-level components of `Astaroth`.  A good e
 # Research impact statement
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings involving magnetohydrodynamic turbulence [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
-Recently, the acceleration of `Pencil Code` [@brandenburg2020pencil] via `Astaroth` is expected to 
-increase the number of people relying on `Astaroth` as the core execution engine. `Pencil Code` has been measured to be 20-60 times faster when accelerated via `Astaroth`. This performance increase will enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+The aforementioned acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase will enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 # Acknowledgements
 
