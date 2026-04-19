@@ -45,12 +45,12 @@ bibliography: paper.bib
 Stencil computations[^stencil_footnote] are one of the bedrocks of high performance scientific simulations, forming the core of partial differential equation (PDE) and numerical linear algebra solvers. 
 In recent years, GPUs have become the primary compute platform for high-performance computing, and it is difficult to run large simulations without them.
 `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
-It has primarily been used in the context of Astrophysical plasma simulations.
+It has primarily been used in the context of astrophysical plasma simulations.
 
 Astaroth provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
 `Astaroth` can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
 While stencils are the core of `Astaroth`, it also accelerates other important operations like reductions (e.g. sums), simple ray-tracing and has library integrations for performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
-To further ease the development and acceleration of PDE solvers based on the finite difference method, `Astaroth` comes together with its own PDE solver and a standard library with support for a variety of PDE-solver functionality.
+To further ease the development and acceleration of PDE solvers based on the finite-difference method, `Astaroth` comes together with its own PDE solver and a standard library with support for a variety of PDE-solver functionality.
 
 # Statement of need
 
@@ -101,6 +101,6 @@ Would Maarit know the best which funding sources to cite for the development of 
 
 # References
 
-[^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the Finite Differences -method.
+[^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
 [^cache_def]: For the uninitiated cache refers to the memory closest to the execution units of computers, used to store frequently accessed data. The handling of it often becomes the most peformance-sensitive part of computations, due to the slowness of memory reads to slower memory.
 [^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém, Tzu-Chun Hsu and Jack Hsu.
