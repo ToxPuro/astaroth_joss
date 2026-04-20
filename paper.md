@@ -23,6 +23,9 @@ authors:
   - name: Matthias Rheinhardt
     orcid: 0000-0000-0000-0000
     affiliation: 1
+  - name: Hsien Shang
+    orcid: 0000-0000-0000-0000
+    affiliation: 4
   - name: Maarit Korpi-Lagg 
     orcid: 0000-0000-0000-0000
     affiliation: 1
@@ -34,8 +37,10 @@ affiliations:
    index: 2
  - name:  University of Helsinki, Finland 
    index: 3
+ - name:  Academia Sinica Institute of Astronomy and Astrophysics, Taiwan
+   index: 4
  
-date: 15 April 2026
+date: 20 April 2026
 bibliography: paper.bib
 
 ---
@@ -93,7 +98,7 @@ The aforementioned acceleration of `Pencil Code`  is expected to increase the nu
 
 # Acknowledgements
 
-We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky and Hsien Shang.
+We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky.
 
 Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
