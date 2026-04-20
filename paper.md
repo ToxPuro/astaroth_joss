@@ -61,7 +61,7 @@ To further ease the development and acceleration of PDE solvers based on the fin
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales to thousands of GPUs [@pekkila2022scalable], and has an ergonomic DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+`Astaroth` scales to thousands of GPUs [@pekkila2022scalable], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
 
 `Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
 A widely used library for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular PDE solver for compressible hydrodynamics.
@@ -90,6 +90,7 @@ As stencils are declarative, their implementation is left up to `Astaroth`'s DSL
 This frees the user from understanding how to optimize stencil data access operations on GPUs.
 The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
 The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
+Additionally the DSL has a declarative syntax for performing reductions, which hides the multi-step logics of performing reductions across multiple GPUs. The generated reduction operations have been specifically designed to be optimized alongsize stencil computations.
 
 To achieve good performance it is important that for each kernel it is known which stencils are called and how are they called. 
 This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
