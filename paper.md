@@ -79,17 +79,36 @@ Compared to these `Astaroth` gives more control to the user, and especially when
 
 # Software design
 
-`Astaroth`'s design is too expansive to cover here fully. Instead we give what we believe to be the four main principles of the design. For further information on the design the reader can refer to the documentation of `Astaroth`.
+`Astaroth` consists of four main components: 1) a domain-specific language (DSL) for defining stencil computations, 2) an API for executing them on multi-GPU platforms, and 3) a standalone solver for running programs written using the DSL.
+Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
-1): Emphasis on inter-operability.
-`Astaroth`'s external API is mostly in C for easy interoperatibility from any programming language and has always been designed to be called from external applications. 
-2): Specialization to the use case at hand.
-The whole library is always compiled from scratch based on the user's DSL code, providing the largest amount of specialization to the use case at hand. This specialization enables high performance and an ergonomic API. This principle is taken further by compiling the library dynamically during the runtime of the application, allowing specialization to complex dynamical situations. As much as possible, this specialization is driven by automatic inference done by the DSL compiler and runtime. This allows `Astaroth` to uncover important optimizations in large code-bases achieving close to hand-tuned performance in cases where the amount of code prohibits specialization done by the user.
-3): Ergonomic and high performance via declarativity.
-While the DSL itself follows C/C++ closely, the most important objects, the stencils themselves, are declarative in nature. This makes their usage ergonomic and gives the compiler enough freedom to choose the most performant way to perform the required computations.
-Similar design ethos carries to higher-level components of `Astaroth`.  A good example of this are `ComputeSteps`; The user describes steps of computations and `Astaroth` handles all execution details of performing the computations such as the required communications with multiple GPUs and chooses the most performant way to achieve the results.
-4): Multi-layered API.
-`Astaroth` has also more explicit APIs which the more declarative APIs take advantage of internally. This is important so the user can choose the correct abstraction level for their use case and for `Astaroth` as a platform for performance research.
+## DSL compiler and runtime API
+
+`Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
+Stencils are written in a declarative syntax, and compute kernels that use them are written in an imperative syntax.
+As stencils are declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized stencil optimizations.
+This frees the user from understanding how to optimize stencil data access operations on GPUs.
+The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
+The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution,
+
+## Multi-GPU runtime API
+
+`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of compute kernels, halo exchange operations, boundary conditions, and special operations such as reductions.
+These DAGs are called `TaskGraphs` internally.
+A task scheduler executes any number of iterations of the `TaskGraph` as data dependencies are satisfied.
+GPU-to-GPU remote direct memory access (RDMA) is used for faster data transfer.
+For platforms that do not support GPU-to-GPU RDMA, a slower CPU-to-CPU communication method is also provided.
+
+`Astaroth` provides an API with foreign function interoperability for accessing this runtime.
+The API is organized into two layers: the `Device` layer and the `Grid` layer.
+The `Device` layer provides access to single-GPU functionality, such as loading and storing data, launching kernels, applying boundary conditions, and loading/storing snapshots from disk.
+The `Grid` layer provides access to multi-GPU functionality, such as running `TaskGraphs`, distributed initialization, and distributed loading/storing of snapshots.
+Other special functionality is also provided through the API, such as fourier transforms, reduction operations, and 2D-slice output.
+
+## Solver
+
+ - `Astaroth` also includes a standalone solvera
+ - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
 
 # Research impact statement
 
