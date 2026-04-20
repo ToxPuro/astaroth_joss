@@ -74,8 +74,8 @@ As an example, many image processing techniques, like edge detection and convolu
 
 Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained computations required for 3D multi-physics simulations, which run out of the available cache due to the need of having many interdependent values in working memory at the same time.
 
-Some other common tools for acceleration of scientific codes include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
-Compared to these `Astaroth` gives more control to the user, and especially when compared to the directive based approaches of `OpenMP` and `OpenACC`, it is less of a black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like handling the required communications for multi-process applications and automatic scheduling of computational tasks. Compared to the C++ based approaches of `Kokkos` and `Raja` `Astaroth` exposes a more language agnostic API, extending the range of applications which can take advantage of `Astaroth`. Furthermore, all of these approaches are general frameworks while `Astaroth` tries to modify itself to the application at hand to the best of its abilities, as expanded upon on later. 
+Some other common tools used by computational physicists for acceleration of scientific codes include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
+Compared to these `Astaroth` gives more control to the user and is less of a black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like performing the required communications, and is specifically specialized for stencil computation. 
 
 # Software design
 
@@ -91,6 +91,7 @@ This frees the user from understanding how to optimize stencil data access opera
 The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
 The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 Additionally the DSL has a declarative syntax for performing reductions, which hides the multi-step logics of performing reductions across multiple GPUs. The generated reduction operations have been specifically designed to be optimized alongsize stencil computations.
+Lastly, the DSL supports distibuted ray-tracing along integer coordinate lines, as needed for simulations including radiative transfer [@heinemann2006radiative].
 
 To achieve good performance it is important that for each kernel it is known which stencils are called and how are they called. 
 This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
@@ -106,7 +107,7 @@ For fast data transfers and to support all possible hardware, both GPU-to-GPU re
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as loading and storing data, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as running `TaskGraphs`, distributed initialization, and distributed loading/storing of snapshots.
-Other special functionality is also provided through the API, such as Fourier transforms and 2D-slice output.
+Other special functionality is also provided through the API, such as distributed Fourier transforms.
 
 ## Solver
 
