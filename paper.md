@@ -79,40 +79,45 @@ Compared to these `Astaroth` gives more control to the user, and especially when
 
 # Software design
 
-`Astaroth` consists of four main components: 1) a domain-specific language (DSL) for defining stencil computations, 2) an API for executing them on multi-GPU platforms, and 3) a standalone solver for running programs written using the DSL.
+`Astaroth` consists of three main components: 1) a domain-specific language (DSL) for defining stencil computations, 2) an API for executing them on multi-GPU platforms, and 3) a standalone solver for running programs written using the DSL.
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
 ## DSL compiler and runtime API
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-Stencils are written in a declarative syntax, and compute kernels that use them are written in an imperative syntax.
+Stencils are written in a declarative syntax, and kernels that use them are written in an imperative syntax.
 As stencils are declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized stencil optimizations.
 This frees the user from understanding how to optimize stencil data access operations on GPUs.
 The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
-The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution,
+The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
+
+To achieve good performance it is important that for each kernel which stencils are called and how are they called. 
+This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
+Additionally, because of this `acc` provides code elimination which removes unused control-flow by leveraging the known values of the variables.
 
 ## Multi-GPU runtime API
 
-`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of compute kernels, halo exchange operations, boundary conditions, and special operations such as reductions.
-These DAGs are called `TaskGraphs` internally.
-A task scheduler executes any number of iterations of the `TaskGraph` as data dependencies are satisfied.
-GPU-to-GPU remote direct memory access (RDMA) is used for faster data transfer.
-For platforms that do not support GPU-to-GPU RDMA, a slower CPU-to-CPU communication method is also provided.
+`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions. These DAGs, which are called `TaskGraphs`, are defined as ordered steps to be performed in the language construct called `ComputeSteps`. Only the kernel calls and which boundary conditions to be applied are specified and everything else is deduced from the dependencies. Thus, similar to stencils the syntax is declarative, which enables `Astaroth` to handle the details and to apply any possible optimizations.
+A task scheduler executes any number of iterations of the `TaskGraphs` as data dependencies are satisfied, which enables an increased amount of overlap of communication and computation.
+For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
 `Astaroth` provides an API with foreign function interoperability for accessing this runtime.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
-The `Device` layer provides access to single-GPU functionality, such as loading and storing data, launching kernels, applying boundary conditions, and loading/storing snapshots from disk.
+The `Device` layer provides access to single-GPU functionality, such as loading and storing data, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as running `TaskGraphs`, distributed initialization, and distributed loading/storing of snapshots.
-Other special functionality is also provided through the API, such as fourier transforms, reduction operations, and 2D-slice output.
+Other special functionality is also provided through the API, such as Fourier transforms and 2D-slice output.
 
 ## Solver
 
- - `Astaroth` also includes a standalone solvera
+`Astaroth` also includes a standalone solver, which can be used to write new simulations and to get familiar with `Astaroth`.
+`acc-runtime/samples/mhd_modular` contains a baseline MHD solver, which can either be used as is or be extended to cover more physics.
+
  - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
+ - TP: yes this is the standalone solver. The source code is horribly out of dat,e but it is not as limited as the source code makes it out to be. And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE-solver, mainly in astrophysical settings involving magnetohydrodynamic turbulence [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
+`Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
 The aforementioned acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase will enable more realistic astrophysical simulations in a wide range of scientific applications from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 # Acknowledgements
