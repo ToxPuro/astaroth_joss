@@ -107,11 +107,11 @@ Below, we present a quick overview of these components. More extensive documenta
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
 Stencils are written in a declarative syntax, and kernels that use them are written in an imperative syntax.
-Additionally the DSL has support for special operations often used in stencil-based solvers.
+Additionally the DSL has support for additional common and specialized operations used in stencil-based solvers.
 Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements.
-The DSL also supports distibuted ray-tracing along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+The DSL also supports distibuted ray-tracing, similarly in a declarative manner, along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
-As stencils and reductions are declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations.
+With the operations being declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations.
 Abstracting away the optimization of these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
@@ -141,7 +141,7 @@ Needs cleanup.**
 
 `Astaroth` has a multi-GPU runtime supporting directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
 A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to impose.
-These compute steps are decomposed into data regions, with spatial data dependencies from stencils.
+These compute steps are decomposed into data regions, with spatial data dependencies coming from the used stencils.
 A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
 This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts \cite{lappi2021task}.
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
