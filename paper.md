@@ -204,10 +204,10 @@ A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying w
 A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
-`Astaroth` provides an API with foreign function interoperability for accessing this runtime.
+`Astaroth`'s runtime API has full foreign function interoperability.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
-The `Device` layer provides access to single-GPU functionality, such as loading and storing data, launching kernels, and loading/storing snapshots from disk.
-The `Grid` layer provides access to multi-GPU functionality, such as running `TaskGraphs`, distributed initialization, and distributed loading/storing of snapshots.
+The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
+The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
 Other special functionality is also provided through the API, such as distributed Fourier transforms.
 
 ## Solver
