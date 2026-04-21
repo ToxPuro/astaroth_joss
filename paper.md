@@ -95,9 +95,17 @@ Additionally the DSL has support for certain special operations.
 Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements, and are optimized along the stencil computations.
 The DSL also supports distibuted ray-tracing along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
+
+
 To achieve good performance it is important that for each kernel it is known which stencils are called and how are they called. 
 This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
 Additionally, because of this `acc` provides code elimination which removes unused control-flow by leveraging the known values of the variables.
+
+### COMMENT (Oskar): the above paragraph is a bit confusing, I would like to edit it for readability, but I'm not sure what it is trying to say.
+
+**Is the paragraph talking about data dependencies? ("each kernel ... [knows] which stencils are called and how") or constant folding and conditional compilation? ("large amount of control-flow", "`acc` provides code elimination which removes unused control-flow").
+Needs cleanup.**
+
 
 ## Multi-GPU runtime API
 
