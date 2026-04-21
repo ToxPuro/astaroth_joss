@@ -90,8 +90,10 @@ As stencils are declarative, their implementation is left up to `Astaroth`'s DSL
 This frees the user from understanding how to optimize stencil data access operations on GPUs.
 The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
 The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
-Additionally the DSL has a declarative syntax for performing reductions, which hides the multi-step logics of performing reductions across multiple GPUs. The generated reduction operations have been specifically designed to be optimized alongsize stencil computations.
-Lastly, the DSL supports distibuted ray-tracing along integer coordinate lines, as needed for simulations including radiative transfer [@heinemann2006radiative].
+
+Additionally the DSL has support for certain special operations.
+Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements, and are optimized along the stencil computations.
+The DSL also supports distibuted ray-tracing along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
 To achieve good performance it is important that for each kernel it is known which stencils are called and how are they called. 
 This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
