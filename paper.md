@@ -125,43 +125,6 @@ Astaroth also incorporates other key functionalities for computational sciences,
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time.
 > JP comment in source below (bibliography additions)
 <!--
-@article{sujeeth_delitecompiler_2014,
- author = {Sujeeth, A. K. and Brown, K. J. and Lee, H. and Rompf, T. and Chafi, H. and Odersky, M. and Olukotun, K.},
- doi = {10.1145/2584665},
- journal = {{ACM} Transactions on Embedded Computing Systems},
- number = {4s},
- pages = {1--25},
- title = {Delite: A Compiler Architecture for Performance-Oriented Embedded Domain-Specific Languages},
- volume = {13},
- year = {2014}
-}
-@inproceedings{steuwer_liftfunctional_2017,
- author = {Steuwer, M. and Remmelg, T. and Dubach, C.},
- booktitle = {Proceedings of the 2017 {IEEE}/{ACM} International Symposium on Code Generation and Optimization},
- doi = {10.1109/CGO.2017.7863730},
- pages = {74--85},
- publisher = {{IEEE}},
- title = {{LIFT}: A Functional Data-Parallel {IR} for High-Performance {GPU} Code Generation},
- year = {2017}
-}
-@inproceedings{callahan_cascadehigh_2004,
- author = {Callahan, D. and Chamberlain, B. L. and Zima, H. P.},
- booktitle = {Proceedings of the Ninth International Workshop on High-Level Parallel Programming Models and Supportive Environments, 2004. Proceedings.},
- doi = {10.1109/HIPS.2004.1299190},
- pages = {52--60},
- publisher = {{IEEE}},
- title = {The Cascade High Productivity Language},
- year = {2004}
-}
-@inproceedings{kale_charmportable_1993,
- author = {Kal{\'e}, L. V. and Krishnan, S.},
- booktitle = {Proceedings of the Eighth Annual Conference on Object-Oriented Programming Systems, Languages, and Applications},
- doi = {10.1145/165854.165874},
- pages = {91--108},
- publisher = {{ACM}},
- title = {{CHARM}++: A Portable Concurrent Object Oriented System Based on {C}++},
- year = {1993}
-}
 %%%% JP revised suggestion END
 -->
 
