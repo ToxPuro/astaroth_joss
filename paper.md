@@ -72,6 +72,60 @@ As an example, many image processing techniques, like edge detection and convolu
 
 # State of the field                                                                                                                  
 
+%%%% JP revised suggestion START
+Methods to achieve performance portability in stencil computations have been widely studied.
+Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[@mullapudi2015polymage].
+Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
+More generalized software projects that provide the building blocks for domain-specialized libraries have also been proposed.
+Delite[@sujeeth_delitecompiler_2014] and Lift[@steuwer_liftfunctional_2017] provide intermediate languages as targets for domain-specific languages. % JP (can be left out if no room)
+Kokkos[@trott2021kokkos] and RAJA[@beckingsale2019raja] provide abstraction layers for parallel computational patterns but focus on single-node computations.
+The Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] provide programming models for parallel and distributed computations.
+In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational science tasks.
+We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
+
+Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement and uses Kokkos as the backend for intra-node computations.
+However, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus with a focus on structured-grid computations.
+Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and different physics cases in a modular manner.
+A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time.
+@article{sujeeth_delitecompiler_2014,
+ author = {Sujeeth, A. K. and Brown, K. J. and Lee, H. and Rompf, T. and Chafi, H. and Odersky, M. and Olukotun, K.},
+ doi = {10.1145/2584665},
+ journal = {{ACM} Transactions on Embedded Computing Systems},
+ number = {4s},
+ pages = {1--25},
+ title = {Delite: A Compiler Architecture for Performance-Oriented Embedded Domain-Specific Languages},
+ volume = {13},
+ year = {2014}
+}
+@inproceedings{steuwer_liftfunctional_2017,
+ author = {Steuwer, M. and Remmelg, T. and Dubach, C.},
+ booktitle = {Proceedings of the 2017 {IEEE}/{ACM} International Symposium on Code Generation and Optimization},
+ doi = {10.1109/CGO.2017.7863730},
+ pages = {74--85},
+ publisher = {{IEEE}},
+ title = {{LIFT}: A Functional Data-Parallel {IR} for High-Performance {GPU} Code Generation},
+ year = {2017}
+}
+@inproceedings{callahan_cascadehigh_2004,
+ author = {Callahan, D. and Chamberlain, B. L. and Zima, H. P.},
+ booktitle = {Proceedings of the Ninth International Workshop on High-Level Parallel Programming Models and Supportive Environments, 2004. Proceedings.},
+ doi = {10.1109/HIPS.2004.1299190},
+ pages = {52--60},
+ publisher = {{IEEE}},
+ title = {The Cascade High Productivity Language},
+ year = {2004}
+}
+@inproceedings{kale_charmportable_1993,
+ author = {Kal{\'e}, L. V. and Krishnan, S.},
+ booktitle = {Proceedings of the Eighth Annual Conference on Object-Oriented Programming Systems, Languages, and Applications},
+ doi = {10.1145/165854.165874},
+ pages = {91--108},
+ publisher = {{ACM}},
+ title = {{CHARM}++: A Portable Concurrent Object Oriented System Based on {C}++},
+ year = {1993}
+}
+%%%% JP revised suggestion END
+
 Methods to accelerate and improve perfomance-portability and productivity of stencil computations are widely studied. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
 There are widely used lower-level tools such as OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos] and Raja[@beckingsale2019raja] which provide abstraction layers for parallel computational patterns, but which still leave e.g. performing the required communications to the user. 
 Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
