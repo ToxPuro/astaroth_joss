@@ -71,11 +71,20 @@ As an example, many image processing techniques, like edge detection and convolu
 `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
 
 # State of the field                                                                                                                  
+
+Methods to accelerate and improve perfomance-portability and productivity of stencil computations are widely studied. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
+There are widely used lower-level tools such as OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos] and Raja[@beckingsale2019raja] which provide abstraction layers for parallel computational patterns, but which still leave e.g. performing the required communications to the user. 
+Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
+Closest to Astaroth are domain-specialized frameworks providing the building blocks for computational physics, such as Cactus[@goodale_cactusframework_2003] and Parthenon[@grete_parthenonperformance_2023].
+Compared to these projects, `Astaroth` uses a DSL, resembling the approaches of Halide, Polymage, and Patus for their domains.
+Distinctively to existing approaches, `Astaroth` specializes, and has extensive optimizations, for cache-constrained use cases, such as multiphysics simulations which need many interdepent values in working memory at the same time. Additionally, `Astaroth` incorporates other needed operations, like reductions, together with stencils to cover use cases that are not fully stencil-based.
+
+
 %%%%% JP START: added bullet points of things %%%%%%%%%%%%%
 - methods to accelerate and improve perfomance-portability and productivity Stencil computations widely studied: numerous software projects at different levels of abstractions. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
 - Low-level generalized approaches suitable for implementing stencil solvers for graphics processors include CUDA and HIP [@nvidia_cudac_2025;@amd_hipdocumentation_2024] (computation) and GPU-aware MPI[messagepassinginterfaceforum_openmpi_2025;argonnenationallaboratoryandmississippistateuniversity_mpich_2026] (communication).
 - OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos], Raja[@beckingsale2019raja] provide abstractions and portability layers for parallel computational patterns and are suitable for implementing domain-specialized solvers on shared-memory systems.
-- Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks includes Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
+- Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
 - Closest to Astaroth are domain-specialized frameworks providing the building blocks for computational physics, such as Cactus[@goodale_cactusframework_2003] and Parthenon[@grete_parthenonperformance_2023].
 - Closest to our work is the Parthenon, which provides a framework for distributed computations of  adaptive mesh refinement, utilizing Kokkos as the backend for shared-memory computation.
 - Like these projects, Astaroth provides ready-made components for implementing computation and communication for their domain-specialized case.
@@ -84,11 +93,10 @@ As an example, many image processing techniques, like edge detection and convolu
 
 %%%%%%%%%%%%%%%%%%%%%% JP END
 
+### COMMENT (Touko)
 
-Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained computations required for 3D multi-physics simulations, which run out of the available cache due to the need of having many interdependent values in working memory at the same time.
+**Made now a draft of the body text based on Johannes' bullet points. Johannes, thoughts? Please edit if you don't like it.**
 
-Some other common technologies used by computational scientists to add GPU support include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
-Compared to these technologies, `Astaroth` is specialized for a particular problem (stencil computation). Because of this more constrained domain, `Astaroth` can take care of stencil optimization, communication, scheduling, and autotuning.
 
 # Software design
 
