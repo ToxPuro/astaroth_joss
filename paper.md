@@ -115,9 +115,9 @@ Abstracting away the optimization of these distributed GPU-application optimizat
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
-Sometimes configuration variables change the branches taken in a particular kernel, or even which stencils a kernel accesses.
-For this reason, `Astaroth` supports run-time compilation.
-The run-time compilation happens exactly once at the start of an execution, and eliminates unused branches and stencils.
+
+Sometimes values of variables change the branches taken in a particular kernel. Not knowing the values of these variables limits `Astaroth`'s ability to optimize the code severely.
+For this reason, `Astaroth` supports run-time compilation, which also eliminates unused code.
 
 ### COMMENT (Touko)
 
@@ -135,6 +135,13 @@ The run-time compilation happens exactly once at the start of an execution, and 
 
 **To summarize: Data about stencil usage in kernels is used for conditional compilation. I assume by "execution information" you mean data dependencies deduced from the stencils.**
 **I rewrote the paragraph based on this understanding, let me know if I missed something. I left out the detail about improved CUDA/HIP compilation performance, as that feels like a technical detail. I also feel like raising attention to a problem that users would expect to be solved (long compilation times) doesn't particularly help sell Astaroth either**
+
+### COMMENT (Touko) 
+
+**By execution information I mean information gathered by executing a specialized CPU analysis version of the code**
+**This information is used quite extensively for any possible purposes: stencils,reductions,ray-tracing,communication,optimizing variables out etc..**
+**Tried to reword the paragraph to capture this more general fact**
+
 
 
 ## Multi-GPU runtime API
