@@ -213,6 +213,7 @@ Modified so the text explains this more directly.
 
 `Astaroth` has a multi-GPU runtime supporting directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
 A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to impose.
+Thus they are declarative, which again leaves freedom for `Astaroth` to perform any possible optimizations.
 These compute steps are decomposed into data regions, with spatial data dependencies coming from the used stencils.
 A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
 This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts \cite{lappi2021task}.
