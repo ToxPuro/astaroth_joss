@@ -110,7 +110,7 @@ The DSL also supports distibuted ray-tracing along integer coordinate lines, whi
 
 
 In able to generate performant GPU code `Astaroth` requires to know at compile-time how stencils are called.
-This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports runtime-compilation of the whole library, which makes all required information available at compile-time.
+This is restrictive for simulation codes having a large amount of control-flow which is not know at compile-time. Thus `Astaroth` supports runtime-compilation of the whole library, which makes all required information available at compile-time.
 Additionally, to e.g. speedup compilation `acc` performs code elimination by removing unused control paths, based on the extra information gathered at runtime.
 
 ### COMMENT (Oskar)
