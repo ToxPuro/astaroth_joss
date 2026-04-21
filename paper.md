@@ -225,6 +225,10 @@ For this reason, `Astaroth` supports run-time compilation, which also eliminates
 <!--
 - unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
 -->
+> TP answer to above
+<!--
+  We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
+-->
 
 ### COMMENT (Touko)
 
