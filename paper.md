@@ -71,6 +71,95 @@ As an example, many image processing techniques, like edge detection and convolu
 `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
 
 # State of the field                                                                                                                  
+%%%%% JP START: added bullet points of things %%%%%%%%%%%%%
+- methods to accelerate and improve perfomance-portability and productivity Stencil computations widely studied: numerous software projects at different levels of abstractions. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
+- Low-level generalized approaches suitable for implementing stencil solvers for graphics processors include CUDA and HIP [@nvidia_cudac_2025;@amd_hipdocumentation_2024] (computation) and GPU-aware MPI[messagepassinginterfaceforum_openmpi_2025;argonnenationallaboratoryandmississippistateuniversity_mpich_2026] (communication).
+- OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos], Raja[@beckingsale2019raja] provide abstractions and portability layers for parallel computational patterns and are suitable for implementing domain-specialized solvers on shared-memory systems.
+- Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks includes Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
+- Closest to Astaroth are domain-specialized frameworks providing the building blocks for computational physics, such as Cactus[@goodale_cactusframework_2003] and Parthenon[@grete_parthenonperformance_2023].
+- Closest to our work is the Parthenon, which provides a framework for distributed computations of  adaptive mesh refinement, utilizing Kokkos as the backend for shared-memory computation.
+- Like these projects, Astaroth provides ready-made components for implementing computation and communication for their domain-specialized case.
+- Compared to these projects, Astaroth uses a domain-specific language that is lowered into platform-portable autotuned CUDA/HIP code to implement efficient stencil computations, resembling the approaches of Halide, Polymage, and Patus for their domains.
+- The distinctive feature of Astaroth is that it specializes in cache-constrained computations on structured grids especially in multiphysics simulations, where the coupling of physical fields, the use of large stencils, and the use of double-precision arithmetic. These requirements result in prohibitively large working sets in on-chip memory for obtaining sufficient levels of reuse to break through the memory bandwidth bound. Astaroth implements a code generator for unrolling and reordering the stencil computations to reduce instruction counts, improve the locality of memory accesses, and ensuring sufficient instruction-level parallelism to obtain improved latency-hiding at low occupancy due to high register allocation per thread to improve the reuse of intermediate values.
+
+@phdthesis{pekkila_graphicsprocessors_2026,
+ address = {Espoo, Finland},
+ author = {Pekkilä, Johannes},
+ keywords = {Graphics processors, high-performance computing, computational astrophysics},
+ note = {\url{https://urn.fi/URN:ISBN:978-952-64-3160-4}},
+ school = {Aalto University School of Science},
+ title = {Graphics processors in high-performance computing: Practice and experience in the simulation of astrophysical magnetohydrodynamics and turbulence},
+ year = {2026}
+}
+@manual{nvidia_cudac_2025,
+ author = {{Nvidia}},
+ edition = {V12.4},
+ note = {\url{https://web.archive.org/web/20240521004520/https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf}},
+ title = {{CUDA} {C}++ Programming Guide},
+ year = {2025}
+}
+@manual{amd_hipdocumentation_2024,
+ author = {{AMD}},
+ edition = {V6.1.0},
+ note = {\url{https://web.archive.org/web/20240529081240/https://rocm.docs.amd.com/_/downloads/HIP/en/docs-6.1.0/pdf/}},
+ title = {{HIP} Documentation},
+ year = {2024}
+}
+@manual{messagepassinginterfaceforum_openmpi_2025,
+ author = {Message Passing Interface Forum},
+ edition = {V5.0.9},
+ note = {\url{https://web.archive.org/web/20260212014306/https://docs.open-mpi.org/en/v5.0.9/}},
+ title = {Open {MPI}},
+ year = {2025}
+}
+@manual{argonnenationallaboratoryandmississippistateuniversity_mpich_2026,
+ author = {Argonne National Laboratory and Mississippi State University},
+ edition = {V5.0.0},
+ note = {\url{https://web.archive.org/web/20260316064836/https://github.com/pmodels/mpich}},
+ title = {{MPICH}},
+ year = {2026}
+}
+@inproceedings{christen_patuscode_2011,
+ author = {Christen, M. and Schenk, O. and Burkhart, H.},
+ booktitle = {Proceedings of the 2011 {IEEE} International Parallel \& Distributed Processing Symposium},
+ doi = {10.1109/IPDPS.2011.70},
+ pages = {676--687},
+ publisher = {{IEEE}},
+ title = {{PATUS}: A Code Generation and Autotuning Framework for Parallel Iterative Stencil Computations on Modern Microarchitectures},
+ year = {2011}
+}
+@article{lutz_partansautotuning_2013,
+ author = {Lutz, T. and Fensch, C. and Cole, M.},
+ doi = {10.1145/2400682.2400718},
+ journal = {{ACM} Transactions on Architecture and Code Optimization},
+ number = {4},
+ pages = {59:1--59:24},
+ title = {{PARTANS}: An Autotuning Framework for Stencil Computation on Multi-{GPU} Systems},
+ volume = {9},
+ year = {2013}
+}
+@incollection{goodale_cactusframework_2003,
+ author = {Goodale, T. and Allen, G. and Lanfermann, G. and Mass{\'o}, J. and Radke, T. and Seidel, E. and Shalf, J.},
+ booktitle = {High Performance Computing for Computational Science --- {VECPAR} 2002},
+ doi = {10.1007/3-540-36569-9_13},
+ editor = {Goos, G. and Hartmanis, J. and Van Leeuwen, J. and Palma, J. M. L. M. and Sousa, A. A. and Dongarra, J. and Hern{\'a}ndez, V.},
+ pages = {197--227},
+ publisher = {{Springer}},
+ title = {The Cactus Framework and Toolkit: Design and Applications},
+ year = {2003}
+}
+@article{grete_parthenonperformance_2023,
+ author = {Grete, P. and Dolence, J. C. and Miller, J. M. and Brown, J. and Ryan, B. and Gaspar, A. and Glines, F. and Swaminarayan, S. and Lippuner, J. and Solomon, C. J. and Shipman, G. and Junghans, C. and Holladay, D. and Stone, J. M. and Roberts, L. F.},
+ doi = {10.1177/10943420221143775},
+ journal = {The International Journal of High Performance Computing Applications},
+ number = {5},
+ pages = {465--486},
+ title = {Parthenon---a Performance Portable Block-Structured Adaptive Mesh Refinement Framework},
+ volume = {37},
+ year = {2023}
+}
+%%%%%%%%%%%%%%%%%%%%%% JP END
+
 
 Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained computations required for 3D multi-physics simulations, which run out of the available cache due to the need of having many interdependent values in working memory at the same time.
 
