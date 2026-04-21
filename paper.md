@@ -74,8 +74,8 @@ As an example, many image processing techniques, like edge detection and convolu
 
 Compared to existing DSL approaches for stencil computations [@ragan2013halide; mullapudi2015polymage] `Astaroth` specializes in cache-constrained computations required for 3D multi-physics simulations, which run out of the available cache due to the need of having many interdependent values in working memory at the same time.
 
-Some other common tools used by computational physicists for acceleration of scientific codes include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
-Compared to these `Astaroth` gives more control to the user and is less of a black-box solution. Furthermore, `Astaroth` handles a larger scope of responsibilities for the application codes, like performing the required communications, and is specifically specialized for stencil computation. 
+Some other common technologies used by computational scientists to add GPU support include `Kokkos` [@trott2021kokkos], `Raja` [@beckingsale2019raja], `OpenMP` [@dagum1998openmp] and `OpenACC` [@openacc2025spec]. 
+Compared to these technologies, `Astaroth` is specialized for a particular problem (stencil computation). Because of this more constrained domain, `Astaroth` can take care of stencil optimization, communication, scheduling, and autotuning.
 
 # Software design
 
