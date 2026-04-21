@@ -96,12 +96,13 @@ Reductions, which usually require multiple steps to perform across multiple GPUs
 The DSL also supports distibuted ray-tracing along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
 
-
 To achieve good performance it is important that for each kernel it is known which stencils are called and how are they called. 
 This is restrictive for simulation codes having a large amount of control-flow which depends on dynamically chosen variables. Thus `Astaroth` supports dynamic compilation of the whole library, thanks to which the dynamic variables can be treated as if they were known at compile-time.
 Additionally, because of this `acc` provides code elimination which removes unused control-flow by leveraging the known values of the variables.
 
-### COMMENT (Oskar): the above paragraph is a bit confusing, I would like to edit it for readability, but I'm not sure what it is trying to say.
+### COMMENT (Oskar)
+
+**The above paragraph is a bit confusing, I would like to edit it for readability, but I'm not sure what it is trying to say.**
 
 **Is the paragraph talking about data dependencies? ("each kernel ... [knows] which stencils are called and how") or constant folding and conditional compilation? ("large amount of control-flow", "`acc` provides code elimination which removes unused control-flow").
 Needs cleanup.**
@@ -109,8 +110,9 @@ Needs cleanup.**
 
 ## Multi-GPU runtime API
 
-`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions. These DAGs, which are called `TaskGraphs`, are defined as ordered steps to be performed in the language construct called `ComputeSteps`. Only the kernel calls and which boundary conditions to be applied are specified and everything else is deduced from the dependencies. Thus, similar to stencils the syntax is declarative, which enables `Astaroth` to handle the details and to apply any possible optimizations.
-A task scheduler executes any number of iterations of the `TaskGraphs` as data dependencies are satisfied, which enables an increased amount of overlap of communication and computation.
+`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
+A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to perform.
+A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
 `Astaroth` provides an API with foreign function interoperability for accessing this runtime.
