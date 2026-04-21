@@ -107,25 +107,17 @@ Below, we present a quick overview of these components. More extensive documenta
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
 Stencils are written in a declarative syntax, and kernels that use them are written in an imperative syntax.
-Additionally the DSL has support for additional common and specialized operations used in stencil-based solvers.
-Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements.
-The DSL also supports distibuted ray-tracing, similarly in a declarative manner, along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+Additionally the DSL has support for additional common and specialized operations used in stencil-based solvers, written as declarative specifications.
+These include reductions -- which usually require multiple steps to perform across multiple GPUs -- and distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
 With the operations being declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations.
 Abstracting away the optimization of these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
-In able to generate performant GPU code `Astaroth` requires to know at compile-time how stencils are called.
-This is restrictive for simulation codes having a large amount of control-flow which is not know at compile-time. Thus `Astaroth` supports runtime-compilation of the whole library, which makes all required information available at compile-time.
-Additionally, to e.g. speedup compilation `acc` performs code elimination by removing unused control paths, based on the extra information gathered at runtime.
-
-### COMMENT (Oskar)
-
-**The above paragraph is a bit confusing, I would like to edit it for readability, but I'm not sure what it is trying to say.**
-
-**Is the paragraph talking about data dependencies? ("each kernel ... [knows] which stencils are called and how") or constant folding and conditional compilation? ("large amount of control-flow", "`acc` provides code elimination which removes unused control-flow").
-Needs cleanup.**
+Sometimes configuration variables change the branches taken in a particular kernel, or even which stencils a kernel accesses.
+For this reason, `Astaroth` supports run-time compilation.
+The run-time compilation happens exactly once at the start of an execution, and eliminates unused branches and stencils.
 
 ### COMMENT (Touko)
 
@@ -135,6 +127,14 @@ Needs cleanup.**
 **The issue is two-fold: Firstly, Astaroth needs to know which stencils are called at compile-time since it takes each stencil and writes out the computation in full at the start of the kernels. This does not play nicely with conditionals for two reasons: either redundant computations will be performed or even more catastrophically some stencils are missed to be generated all together. This is because Astaroth uses execution information to gather information about which stencils are called. The second issue is less of a showstopper but still needs to be addressed: too much code. Translating PC to Astaroth will produce kernels with > 10,000 lines of code. Much of this code is redundant since we know, since we now know the values of all relevant variables, that a large majority of the code is never executed. So we eliminate this. One could think that it would be sufficient to make all the variables constexpr and let the CUDA/HIP-compilers handle it but that at least the drawback that it makes compilation take in the order of one hour which is somewhat ridiculous (okay this experiment was some time ago so might not be exactly true anymore, but you get the gist)**
 
 **So these two problems motivate runtime-compilation.**
+
+
+### COMMENT (Oskar) (Deleted the previous comment for brevity)
+
+**Ok, it seems like both points are about conditional compilation**
+
+**To summarize: Data about stencil usage in kernels is used for conditional compilation. I assume by "execution information" you mean data dependencies deduced from the stencils.**
+**I rewrote the paragraph based on this understanding, let me know if I missed something. I left out the detail about improved CUDA/HIP compilation performance, as that feels like a technical detail. I also feel like raising attention to a problem that users would expect to be solved (long compilation times) doesn't particularly help sell Astaroth either**
 
 
 ## Multi-GPU runtime API
