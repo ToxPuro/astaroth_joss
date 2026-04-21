@@ -47,13 +47,14 @@ bibliography: paper.bib
 
 # Summary
 
-Stencil computations[^stencil_footnote] are one of the bedrocks of high performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
-In recent years, GPUs have become the primary compute platform for data-parallel applications high-performance computing, and it is ~~difficult to run large simulations without them~~.
+Stencil computations[^stencil_footnote] are one of the bedrocks of high-performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
+In recent years, GPUs have become the primary compute platform for data-parallel applications in high-performance computing, and it is difficult to run large simulations without them.
 > JP comment in source below
 <!--
 - JP: "difficult" -> can also run large simulations with CPUs. Suggest something like "the leap in parallel throughput is needed to reach state-of-the-art accuracy in computational physics simulations"
+- TP: I would agree with Oskar's wording that difficult is an apt phrasing. GPUs are never strictly needed, but clearly it is easier to run larger simulations with them.
 -->
-`Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
+To address this, `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
 
 `Astaroth` provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
 It can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
