@@ -180,8 +180,8 @@ This frees the user from understanding how to optimize stencil data access opera
 The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
 The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
-Additionally the DSL has support for certain special operations.
-Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements, and are optimized along the stencil computations.
+Additionally the DSL has support for certain operations needed alongside stencils.
+Reductions, which usually require multiple steps to perform across multiple GPUs, are written as declarative statements, and are optimized to be performed in conjuction with the stencil computations.
 The DSL also supports distibuted ray-tracing along integer coordinate lines, which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
 
@@ -199,12 +199,12 @@ Needs cleanup.**
 
 ## Multi-GPU runtime API
 
-`Astaroth` has a multi-GPU runtime which supports defining directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
-A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to perform.
-A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
+`Astaroth` has a multi-GPU runtime which supports defining and executing directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
+A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to impose.
+A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated. This approach is taken to enable more overlap of communication and computation \cite{lappi2021task}.
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
-`Astaroth`'s runtime API has full foreign function interoperability.
+`Astaroth`'s runtime API has full foreign function interoperability and has been designed to be called from external applications.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
@@ -212,9 +212,8 @@ Other special functionality is also provided through the API, such as distribute
 
 ## Solver
 
-`Astaroth` also includes a standalone solver, which can be used to write new simulations and to get familiar with `Astaroth`.
+`Astaroth` also includes a standalone solver, which can be used to write new simulations and as a simple test case for performance research.
 `acc-runtime/samples/mhd_modular` contains a baseline MHD solver, which can either be used as is or be extended to cover more physics.
-It also works as a simple test case for performing performance research.
 
  - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
  - TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
