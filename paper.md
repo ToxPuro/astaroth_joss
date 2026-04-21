@@ -226,7 +226,7 @@ Other special functionality is also provided through the API, such as distribute
 
 ## Solver
 
-`Astaroth` also includes a standalone solver, which can be used to write new simulations and as a simple test case for performance research.
+`Astaroth` also includes a standalone solver, which can be used to write new simulations and works as a simple test case for performance research.
 `acc-runtime/samples/mhd_modular` contains a baseline MHD solver, which can either be used as is or be extended to cover more physics.
 
  - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
