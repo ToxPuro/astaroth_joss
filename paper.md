@@ -92,10 +92,10 @@ Compared to these technologies, `Astaroth` is specialized for a particular probl
 
 # Software design
 
-`Astaroth` consists of three main components: 1) a domain-specific language (DSL) for defining stencil computations, 2) an API for executing them on multi-GPU platforms, and 3) a standalone solver for running programs written using the DSL.
+`Astaroth` consists of three main components: 1) `acc`, a compiler and runtime for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
-## DSL compiler and runtime API
+## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
 Stencils are written in a declarative syntax, and kernels that use them are written in an imperative syntax.
@@ -105,8 +105,8 @@ The DSL also supports distibuted ray-tracing along integer coordinate lines, whi
 
 As stencils and reductions are declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations.
 Abstracting away the optimization of these distributed GPU-application optimizations reduces the complexity at the DSL source level.
-The DSL compiler transpiles the DSL source into CUDA or HIP source, which is compiled into machine code using a native CUDA or HIP compiler.
-The program produced by the DSL compiler is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
+`acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
+The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
 In able to generate performant GPU code `Astaroth` requires to know at compile-time how stencils are called.
 This is restrictive for simulation codes having a large amount of control-flow which is not know at compile-time. Thus `Astaroth` supports runtime-compilation of the whole library, which makes all required information available at compile-time.
@@ -127,7 +127,6 @@ Needs cleanup.**
 **The issue is two-fold: Firstly, Astaroth needs to know which stencils are called at compile-time since it takes each stencil and writes out the computation in full at the start of the kernels. This does not play nicely with conditionals for two reasons: either redundant computations will be performed or even more catastrophically some stencils are missed to be generated all together. This is because Astaroth uses execution information to gather information about which stencils are called. The second issue is less of a showstopper but still needs to be addressed: too much code. Translating PC to Astaroth will produce kernels with > 10,000 lines of code. Much of this code is redundant since we know, since we now know the values of all relevant variables, that a large majority of the code is never executed. So we eliminate this. One could think that it would be sufficient to make all the variables constexpr and let the CUDA/HIP-compilers handle it but that at least the drawback that it makes compilation take in the order of one hour which is somewhat ridiculous (okay this experiment was some time ago so might not be exactly true anymore, but you get the gist)**
 
 **So these two problems motivate runtime-compilation.**
-
 
 
 ## Multi-GPU runtime API
