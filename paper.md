@@ -204,23 +204,25 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-Stencils are written in a ~~declarative syntax, and kernels that use them are written in an imperative syntax~~.
+The main operations, like stencils, are **declarative**, meaning only the desired results are specified and ther implementations is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. Rest of the code using these operations is imperative.
 > JP comment in source below
 <!--
 %JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
 %JP: Could also consider specifying our use of declarative/imperative in this context first if the word count is not a limit or moving the "..their implementation is left up..." paragraph up.
 -->
-Additionally the DSL has support for additional common and specialized operations used in stencil-based solvers, written as declarative specifications.
-These include reductions -- which usually require multiple steps to perform across multiple GPUs -- and distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+> TP answer to above
+<!--
+TP: agreed. Moved the section now up.
+-->
+In addition to stencils the DSL supports reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs -- and distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
-With the operations being declarative, their implementation is left up to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations.
-Abstracting away the optimization of these distributed GPU-application optimizations reduces the complexity at the DSL source level.
+Abstracting away these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
 
 Sometimes values of variables change the branches taken in a particular kernel. Not knowing which branches are taken limits `Astaroth`'s ability to optimize the code severely.
-For this reason, `Astaroth` supports run-time compilation, which also eliminates unused code and variables.
+To know which branches are taken, `Astaroth` supports run-time compilation, which is also used to eliminate unused code and variables.
 > JP comment in source below
 <!--
 - unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
@@ -228,6 +230,7 @@ For this reason, `Astaroth` supports run-time compilation, which also eliminates
 > TP answer to above
 <!--
   We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
+Modified so the text explains this more directly.
 -->
 
 ### COMMENT (Touko)
