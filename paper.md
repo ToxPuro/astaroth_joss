@@ -239,7 +239,7 @@ The aforementioned acceleration of `Pencil Code`  is expected to increase the nu
 
 # Acknowledgements
 
-We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das, Ruben Krasnopolsky.
+We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das and Ruben Krasnopolsky.
 
 Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
