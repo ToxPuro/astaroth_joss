@@ -66,13 +66,15 @@ To further ease the development and acceleration of PDE solvers based on the fin
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` ~~scales~~ to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+`Astaroth` scales (> 90% weak scaling efficiency) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
 > JP comment in source below
 <!--
 %JP: 
 **scales**
 - better to use the thesis (2022 paper only goes up to 64 devices, in the thesis we do 4096).
 - "scales" -> has been demonstrated to scale weakly at ?% efficiency to 64 devices in MHD simulations (2022 paper, could leave this out and focus on the TFM case). Has been demonstrated to scale weakly at 93% efficiency to 4096 devices in computations with the test-field method. 
+%TP:
+Made the statement now more precise by having the weak scaling efficiency in brackets. What do you think does that suffice? If the reader cares about details they can lookup Johannes' thesis.
 -->
 
 > JP comment in source below
@@ -89,21 +91,6 @@ A widely used library for astophysical plasma simulations is the Pencil Code [@b
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
 `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
-
-> JP comment in source below
-<!--
-%JP SOME REFERENCES START
-@phdthesis{vaisala_magneticphenomena_2017,
- address = {Helsinki, Finland},
- author = {V{\"a}is{\"a}l{\"a}, M. S.},
- note = {\url{https://urn.fi/URN:ISBN:978-951-51-2778-5}},
- school = {University of Helsinki},
- title = {Magnetic Phenomena of the Interstellar Medium in Theory and Observation},
- year = {2017}
-}
-% Väisälä, Miikka S., et al. “Interaction of Large- and Small-Scale Dynamos in Isotropic Turbulent Flows from GPU-Accelerated Simulations.” The Astrophysical Journal, vol. 907, no. 2, Feb. 2021, p. 83. DOI.org (Crossref), https://doi.org/10.3847/1538-4357/abceca.
-%%%%%%%%%%%%%%%%%%%%%%%%%% JP SOME REFERENCES END
--->
 
 # State of the field                                                                                                                  
 > JP comment in source below
