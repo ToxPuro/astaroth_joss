@@ -117,7 +117,7 @@ The program thus produced is executed in the `acc-runtime`, which further optimi
 
 
 Sometimes values of variables change the branches taken in a particular kernel. Not knowing the values of these variables limits `Astaroth`'s ability to optimize the code severely.
-For this reason, `Astaroth` supports run-time compilation, which also eliminates unused code.
+For this reason, `Astaroth` supports run-time compilation, which also eliminates unused code and variables.
 
 ### COMMENT (Touko)
 
