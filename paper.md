@@ -48,7 +48,11 @@ bibliography: paper.bib
 # Summary
 
 Stencil computations[^stencil_footnote] are one of the bedrocks of high performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
-In recent years, GPUs have become the primary compute platform for high-performance computing, and it is difficult to run large simulations without them.
+In recent years, GPUs have become the primary compute platform for data-parallel applications high-performance computing, and it is ~~difficult to run large simulations without them~~.
+> JP comment in source below
+<!--
+- JP: "difficult" -> can also run large simulations with CPUs. Suggest something like "the leap in parallel throughput is needed to reach state-of-the-art accuracy in computational physics simulations"
+-->
 `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
 
 `Astaroth` provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
@@ -61,8 +65,23 @@ To further ease the development and acceleration of PDE solvers based on the fin
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales to thousands of GPUs [@pekkila2022scalable], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+`Astaroth` ~~scales~~ to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+> JP comment in source below
+<!--
+%JP: 
+**scales**
+- better to use the thesis (2022 paper only goes up to 64 devices, in the thesis we do 4096).
+- "scales" -> has been demonstrated to scale weakly at ?% efficiency to 64 devices in MHD simulations (2022 paper, could leave this out and focus on the TFM case). Has been demonstrated to scale weakly at 93% efficiency to 4096 devices in computations with the test-field method. 
+-->
 
+> JP comment in source below
+<!--
+%JP: some notes if we're going to include history and our prior work
+% Astaroth Code: hard-coded compressible hydrodynamics 2014-2019[@vaisala_magneticphenomena_2017;pekkila_methodscompressible_2017]
+% Astaroth: generalized stencil framework 2019- (DSL V1, single-gpu) [@pekkila_masters_2019], rewritten DSL V2 grammar and code generator [@pekkila_stencilcomputations_2025]
+% Astaroth: single-node multi-gpu[@vaisala_interactionlarge_2021], general MPI halo exchange communication and Z-order [@pekkila2022scalable], distributed reductions(lappi, not sure if mentioned in the thesis) and task system[@lappi], topology-aware domain decomposition and mapping and communication optimizations (fused packing) and TFM[@pekkila_graphicsprocessors_2026]
+% Astaroth: CPU, PC-A, DSL improvements, ray tracing, and other contributions [@Touko'sWork]
+-->
 `Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
 A widely used library for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular PDE solver for compressible hydrodynamics.
 `Astaroth` has successfully been used to accelerate it [@puro2023programmatic], with speedups of 20-60x [@pekkila2022scalable].
@@ -70,23 +89,42 @@ Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither i
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
 `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
 
-# State of the field                                                                                                                  
+> JP comment in source below
+<!--
+%JP SOME REFERENCES START
+@phdthesis{vaisala_magneticphenomena_2017,
+ address = {Helsinki, Finland},
+ author = {V{\"a}is{\"a}l{\"a}, M. S.},
+ note = {\url{https://urn.fi/URN:ISBN:978-951-51-2778-5}},
+ school = {University of Helsinki},
+ title = {Magnetic Phenomena of the Interstellar Medium in Theory and Observation},
+ year = {2017}
+}
+% Väisälä, Miikka S., et al. “Interaction of Large- and Small-Scale Dynamos in Isotropic Turbulent Flows from GPU-Accelerated Simulations.” The Astrophysical Journal, vol. 907, no. 2, Feb. 2021, p. 83. DOI.org (Crossref), https://doi.org/10.3847/1538-4357/abceca.
+%%%%%%%%%%%%%%%%%%%%%%%%%% JP SOME REFERENCES END
+-->
 
+# State of the field                                                                                                                  
+> JP comment in source below
+<!--
 %%%% JP revised suggestion START
+-->
 Methods to achieve performance portability in stencil computations have been widely studied.
 Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[@mullapudi2015polymage].
 Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
 More generalized software projects that provide the building blocks for domain-specialized libraries have also been proposed.
-Delite[@sujeeth_delitecompiler_2014] and Lift[@steuwer_liftfunctional_2017] provide intermediate languages as targets for domain-specific languages. % JP (can be left out if no room)
+Delite[@sujeeth_delitecompiler_2014] and Lift[@steuwer_liftfunctional_2017] provide intermediate languages as targets for domain-specific languages. <!--% JP (can be left out if no room) -->
 Kokkos[@trott2021kokkos] and RAJA[@beckingsale2019raja] provide abstraction layers for parallel computational patterns but focus on single-node computations.
 The Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] provide programming models for parallel and distributed computations.
 In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational science tasks.
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
 
-Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement and uses Kokkos as the backend for intra-node computations.
+Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 However, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus with a focus on structured-grid computations.
 Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and different physics cases in a modular manner.
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time.
+> JP comment in source below (bibliography additions)
+<!--
 @article{sujeeth_delitecompiler_2014,
  author = {Sujeeth, A. K. and Brown, K. J. and Lee, H. and Rompf, T. and Chafi, H. and Odersky, M. and Olukotun, K.},
  doi = {10.1145/2584665},
@@ -125,7 +163,11 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
  year = {1993}
 }
 %%%% JP revised suggestion END
+-->
 
+> JP comment in source below
+<!--
+% JP: commented out the previous version
 Methods to accelerate and improve perfomance-portability and productivity of stencil computations are widely studied. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
 There are widely used lower-level tools such as OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos] and Raja[@beckingsale2019raja] which provide abstraction layers for parallel computational patterns, but which still leave e.g. performing the required communications to the user. 
 Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
@@ -150,6 +192,8 @@ Distinctively to existing approaches, `Astaroth` specializes, and has extensive 
 ### COMMENT (Touko)
 
 **Made now a draft of the body text based on Johannes' bullet points. Johannes, thoughts? Please edit if you don't like it.**
+**JP:** OK. Revised above (the uncommented one).
+-->
 
 
 # Software design
@@ -160,7 +204,12 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-Stencils are written in a declarative syntax, and kernels that use them are written in an imperative syntax.
+Stencils are written in a ~~declarative syntax, and kernels that use them are written in an imperative syntax~~.
+> JP comment in source below
+<!--
+%JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
+%JP: Could also consider specifying our use of declarative/imperative in this context first if the word count is not a limit or moving the "..their implementation is left up..." paragraph up.
+-->
 Additionally the DSL has support for additional common and specialized operations used in stencil-based solvers, written as declarative specifications.
 These include reductions -- which usually require multiple steps to perform across multiple GPUs -- and distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 
@@ -172,6 +221,10 @@ The program thus produced is executed in the `acc-runtime`, which further optimi
 
 Sometimes values of variables change the branches taken in a particular kernel. Not knowing which branches are taken limits `Astaroth`'s ability to optimize the code severely.
 For this reason, `Astaroth` supports run-time compilation, which also eliminates unused code and variables.
+> JP comment in source below
+<!--
+- unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
+-->
 
 ### COMMENT (Touko)
 
