@@ -48,6 +48,8 @@ bibliography: paper.bib
 # Summary
 > READ THIS!!: Software design-section is under the dictatorship of Oskar, so please do not directly edit it. Instead if you want to propose changes add them in comments like this. The other sections are under the tentative dictatorship of Touko, who is fine with you editing the text directly, but who might revert your edits if they make the text worse.
 
+> OL: Remember to leave a line gap between comments like this, so that they are not smushed together
+
 Stencil computations[^stencil_footnote] are one of the bedrocks of high-performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
 In recent years, GPUs have become the primary compute platform for data-parallel applications in high-performance computing, and it is difficult to run large simulations without them.
 > JP comment in source below
@@ -172,12 +174,16 @@ Not knowing which branches are taken severely limits `Astaroth`'s ability to opt
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
+
 > JP: unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
+
 > TP: We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
 Modified so the text explains this more directly.
+
 > TP: Is the meaning of what is a configuration variable the clearest? That's why I took the word configuration earlier away but it is clear that a variable on its own is too vague. Any ideas what would be a more apt naming?
 
 >OL: what is the "execution information"
+
 >TP: By execution information I mean information gathered by executing a specialized CPU analysis version of the code
 >This information is used quite extensively for any possible purposes: stencils,reductions,ray-tracing,communication,optimizing variables out etc..
 >Tried to reword the paragraph to capture this more general fact
@@ -194,6 +200,7 @@ This improves performance in communication-bound cases, especially for higher pr
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
 > TP:By optimizations in the ComputeSteps I mean operations like optimizations kernel fusion and minimized amount of communication that go beyondthe TaskGraphs as they are. It would be nice to incorporate the existence of these into the text, but given we are limited for space maybe there simply is not enough space.
+
 > OL: Added a sentence about the optimizations, is that good or is it too vague? The only thing I'm worried about is the communication pattern minimization. As a reader I would be unsure of why this is necessary. Why would we generate unnecessary commnunication tasks?
 
 This runtime system can be accessed through `Astaroth`s runtime API.
@@ -216,8 +223,11 @@ It is also built to react to a number of events, such as NaNs, simulation time l
 >OL: TODO: write about MHD, TFM, features
 
  > OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
+
  > TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
+
 > TP: Oskar, if you include something about TFM you should refer the reader to samples/tfm-mpi where the TFM solver is.
+
 > JP comment in source below
 <!--
 %JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
