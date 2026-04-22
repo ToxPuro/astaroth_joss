@@ -218,7 +218,7 @@ The solver can, however be modified to solve any similar problem by modifying th
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 The solver can also be configured for run-time compilation, and to periodically write out snapshots or slices of the data cube.
-It is also built to react to a number of events, such as NaNs, simulation time limits, and a stop signal given through the file system.
+It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 
 > OL: TODO: write about MHD, TFM, features
 
