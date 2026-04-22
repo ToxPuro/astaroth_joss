@@ -155,80 +155,49 @@ Below, we present a quick overview of these components. More extensive documenta
 
 ## `acc` compiler and runtime
 
-`Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. Thus, their implementations are left to `Astaroth`'s DSL compiler `acc`, which has the freedom to apply a number of specialized optimizations. 
-> JP comment in source below
-<!--
-%JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
-%JP: Could also consider specifying our use of declarative/imperative in this context first if the word count is not a limit or moving the "..their implementation is left up..." paragraph up.
--->
-> TP answer to above
-<!--
-TP: agreed. Moved the section now up.
--->
-In addition to stencils the DSL supports reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs -- and distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+`Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
+The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax.
+Thus, their implementation is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
+In addition to stencils the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+
+> OL: removed some old comments here between Johannes and Touko, to summarize: "imperative" and "declarative" might be considered jargon. I think this is a case of "Google is your friend" for readers, but would be ok with a footnote.
+> Please yell at me if you disagree.
 
 Abstracting away these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
-The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
+The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
+Certain changes to the run-time configuration may change the branches taken in a particular kernel.
+Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 
-Configuration variables can influence the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
-To know which branches are taken, `Astaroth` supports run-time compilation, which is also used to eliminate unused code and variables.
-> JP comment in source below
-<!--
-- unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
--->
-> TP answer to above
-<!--
-  We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
+> OL: removed some previous comments, leaving some by Touko and Johannes for context
+> JP: unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
+> TP: We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
 Modified so the text explains this more directly.
--->
-> TP comment on configuration variables
-<!--
-Is the meaning of what is a configuration variable the clearest? That's why I took the word configuration earlier away but it is clear that a variable on its own is too vague. Any ideas what would be a more apt naming?
--->
+> TP: Is the meaning of what is a configuration variable the clearest? That's why I took the word configuration earlier away but it is clear that a variable on its own is too vague. Any ideas what would be a more apt naming?
 
-### COMMENT (Touko)
-
-**Agreed. Tried to reword it now to be more concise and clear**
-
-**Will expand here on the issue so maybe we come to conclusion how to further improve it.**
-**The issue is two-fold: Firstly, Astaroth needs to know which stencils are called at compile-time since it takes each stencil and writes out the computation in full at the start of the kernels. This does not play nicely with conditionals for two reasons: either redundant computations will be performed or even more catastrophically some stencils are missed to be generated all together. This is because Astaroth uses execution information to gather information about which stencils are called. The second issue is less of a showstopper but still needs to be addressed: too much code. Translating PC to Astaroth will produce kernels with > 10,000 lines of code. Much of this code is redundant since we know, since we now know the values of all relevant variables, that a large majority of the code is never executed. So we eliminate this. One could think that it would be sufficient to make all the variables constexpr and let the CUDA/HIP-compilers handle it but that at least the drawback that it makes compilation take in the order of one hour which is somewhat ridiculous (okay this experiment was some time ago so might not be exactly true anymore, but you get the gist)**
-
-**So these two problems motivate runtime-compilation.**
-
-
-### COMMENT (Oskar) (Deleted the previous comment for brevity)
-
-**Ok, it seems like both points are about conditional compilation**
-
-**To summarize: Data about stencil usage in kernels is used for conditional compilation. I assume by "execution information" you mean data dependencies deduced from the stencils.**
-**I rewrote the paragraph based on this understanding, let me know if I missed something. I left out the detail about improved CUDA/HIP compilation performance, as that feels like a technical detail. I also feel like raising attention to a problem that users would expect to be solved (long compilation times) doesn't particularly help sell Astaroth either**
-
-### COMMENT (Touko) 
-
-**By execution information I mean information gathered by executing a specialized CPU analysis version of the code**
-**This information is used quite extensively for any possible purposes: stencils,reductions,ray-tracing,communication,optimizing variables out etc..**
-**Tried to reword the paragraph to capture this more general fact**
-
-
+>OL: what is the "execution information"
+>TP: By execution information I mean information gathered by executing a specialized CPU analysis version of the code
+>This information is used quite extensively for any possible purposes: stencils,reductions,ray-tracing,communication,optimizing variables out etc..
+>Tried to reword the paragraph to capture this more general fact
 
 ## Multi-GPU runtime API
 
-`Astaroth` has a multi-GPU runtime supporting directed acyclic graphs (DAGs) of kernel calls, halo exchange operations and boundary conditions.
-A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to impose.
-These compute steps are decomposed into data regions, with spatial data dependencies coming from the used stencils.
-A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
-This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
+In the DSL, users can define an iteration of their program using a `ComputeSteps` declaration.
+The `ComputeSteps` declaration consists of a list of steps, specifying which kernels to run, and which boundary conditions to impose. 
+`Astaroth`'s runtime constructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into tasks with fine-grained dependency relations.
+The decomposition into tasks is based on the overall domain decomposition (necessary in a multi-GPU context), and the stencils' data access patterns.
+Optimizations are also applied at this stage: kernels may be fused together if the stencils they access a common set of stencils, and a minimal communication pattern is deduced.
+`Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
+This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
+> TP:By optimizations in the ComputeSteps I mean operations like optimizations kernel fusion and minimized amount of communication that go beyondthe TaskGraphs as they are. It would be nice to incorporate the existence of these into the text, but given we are limited for space maybe there simply is not enough space.
+> OL: Added a sentence about the optimizations, is that good or is it too vague? The only thing I'm worried about is the communication pattern minimization. As a reader I would be unsure of why this is necessary. Why would we generate unnecessary commnunication tasks?
 
-### COMMENT (Touko) 
-
-**By optimizations in the ComputeSteps I mean operations like optimizations kernel fusion and minimized amount of communication that go beyondthe TaskGraphs as they are. It would be nice to incorporate the existence of these into the text, but given we are limited for space maybe there simply is not enough space.**
-
-`Astaroth`'s runtime API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
+This runtime system can be accessed through `Astaroth`s runtime API.
+The API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
@@ -236,12 +205,18 @@ Other special functionality is also provided through the API, such as distribute
 
 ## Solver
 
-`Astaroth` also includes a standalone solver, which can be used to write new simulations and works as a simple test case for performance research.
-`acc-runtime/samples/mhd_modular` contains a baseline MHD solver, which can either be used as is or be extended to cover more physics.
+`Astaroth` also includes a standalone finite-difference solver, which can be used to write new simulations and works as a simple test case for performance research.
+This solver has been written mostly with astrophysical MHD in mind, using the DSL code in `acc-runtime/samples/mhd_modular` as a base.
+The solver can, however be modified to solve any similar problem by modifying the DSL source.
 
- - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
- - TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
+The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
+The solver can also be configured for run-time compilation, and to periodically write out snapshots or slices of the data cube.
+It is also built to react to a number of events, such as NaNs, simulation time limits, and a stop signal given through the file system.
 
+>OL: TODO: write about MHD, TFM, features
+
+ > OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
+ > TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
 > TP: Oskar, if you include something about TFM you should refer the reader to samples/tfm-mpi where the TFM solver is.
 > JP comment in source below
 <!--
