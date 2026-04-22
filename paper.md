@@ -155,7 +155,7 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-The main operations, like stencils, are **declarative**, meaning only the desired results are specified and ther implementations is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. Rest of the code using these operations is imperative.
+The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. By declarative syntax we mean that the user specifies what operations they want to apply, but not how the results should be achieved. Thus, their implementations are left to `Astaroth`'s DSL compiler `acc`, which has the freedom to apply a number of specialized optimizations. 
 > JP comment in source below
 <!--
 %JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
@@ -172,7 +172,7 @@ Abstracting away these distributed GPU-application optimizations reduces the com
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
 
-Sometimes values of variables change the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+In general, configuration variables can influence the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
 To know which branches are taken, `Astaroth` supports run-time compilation, which is also used to eliminate unused code and variables.
 > JP comment in source below
 <!--
@@ -182,6 +182,10 @@ To know which branches are taken, `Astaroth` supports run-time compilation, whic
 <!--
   We do run-time compilation exactly so we do not have to assume all ifs are true (this is hardly the case for large simulation codes). Also the CPU analysis code is recompiled so it can known which branches to take. Recompilation is triggered explicitly by the user by an API function.
 Modified so the text explains this more directly.
+-->
+> TP comment on configuration variables
+<!--
+Is the meaning of what is a configuration variable the clearest? That's why I took the word configuration earlier away but it is clear that a variable on its own is too vague. Any ideas what would be a more apt naming?
 -->
 
 ### COMMENT (Touko)
