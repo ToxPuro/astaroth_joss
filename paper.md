@@ -66,7 +66,7 @@ To further ease the development and acceleration of PDE solvers based on the fin
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales (> 90% weak scaling efficiency) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+`Astaroth` scales (with a weak scaling efficiency of greater than 90%) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
 > JP comment in source below
 <!--
 %JP: 
@@ -155,7 +155,7 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. By declarative syntax we mean that the user specifies what operations they want to apply, but not how the results should be achieved. Thus, their implementations are left to `Astaroth`'s DSL compiler `acc`, which has the freedom to apply a number of specialized optimizations. 
+The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. Thus, their implementations are left to `Astaroth`'s DSL compiler `acc`, which has the freedom to apply a number of specialized optimizations. 
 > JP comment in source below
 <!--
 %JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
@@ -172,7 +172,7 @@ Abstracting away these distributed GPU-application optimizations reduces the com
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
 
-In general, configuration variables can influence the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+Configuration variables can influence the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
 To know which branches are taken, `Astaroth` supports run-time compilation, which is also used to eliminate unused code and variables.
 > JP comment in source below
 <!--
@@ -219,7 +219,7 @@ Is the meaning of what is a configuration variable the clearest? That's why I to
 A DAG can be defined in the DSL using a `ComputeSteps` declaration, specifying which kernels to call, and which boundary conditions to impose.
 These compute steps are decomposed into data regions, with spatial data dependencies coming from the used stencils.
 A task scheduler executes any number of iterations of the DAG as data dependencies are satisfied, and is free to reorder the operations as long as dependency relationships are not violated.
-This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts \cite{lappi2021task}.
+This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
 
@@ -241,23 +241,27 @@ Other special functionality is also provided through the API, such as distribute
  - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
  - TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
 
+> TP: Oskar, if you include something about TFM you should refer the reader to samples/tfm-mpi where the TFM solver is.
 > JP comment in source below
 <!--
 %JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
 %
 %JP: Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).
+%TP: agree on these but to me it sounds like they would best go to the solver. 
+     and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compated to it Astraroth does not seem that modular.
 -->
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
-The aforementioned acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+`Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers on performance optimizations[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and on other topics [@yokelson2024soma; @puro2025gpu].
+The acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 > JP comment in source below
 <!--
 %JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
 %JP: "At it's current state, Astaroth provides a production-ready toolkit (API+DSL+toolbox for reductions, IO, etc) for implementing various computational physics simulations based on structured grids. By providing efficient performance and weak scaling, astaroth enables extremely high-resolution simulations on exascale systems and further research in computational astrophysics, etc, etc, what is already mentioned at the end of the current version".
 -->
+> TP: answer to Johannes' suggestions. In short I would not try to sell the features of Astaroth here again but simply make sure it is visible that Astaroth has been used, is used and will be used for example by the PC community
 
 > JP comment in source below
 <!--
