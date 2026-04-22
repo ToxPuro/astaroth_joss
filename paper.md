@@ -155,7 +155,7 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to deal with technical implementation details.
-The main operations, like stencils, are **declarative**, meaning only the desired results are specified and their implementations are left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. Rest of the code using these operations is imperative.
+The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. By declarative syntax we mean that the user specifies what operations they want to happen, but not how they should be achieved. Thus, their implementations are left to `Astaroth`'s DSL compiler `acc`, which has the freedom to apply a number of specialized optimizations. 
 > JP comment in source below
 <!--
 %JP: declarative/imperative ambiguous and hard to understand here. Suggest: "imperative stream programming language with reduced/simplified/minimal syntax with a language feature for specifying coefficients for linear stencil operations" or similar
