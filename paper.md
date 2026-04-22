@@ -218,6 +218,11 @@ A task scheduler executes any number of iterations of the DAG as data dependenci
 This asynchronous scheduling improves performance in communication-bound cases, especially for higher process counts \cite{lappi2021task}.
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
+
+### COMMENT (Touko) 
+
+**By optimizations in the ComputeSteps I mean operations like optimizations kernel fusion and minimized amount of communication that go beyondthe TaskGraphs as they are. It would be nice to incorporate the existence of these into the text, but given we are limited for space maybe there simply is not enough space.**
+
 `Astaroth`'s runtime API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
