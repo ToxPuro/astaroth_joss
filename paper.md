@@ -237,16 +237,46 @@ Other special functionality is also provided through the API, such as distribute
  - OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
  - TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
 
+> JP comment in source below
+<!--
+%JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
+%
+%JP: Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).
+-->
+
 # Research impact statement
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers focusing on performance [@pekkila2022scalable; @pekkila2017methods; @yokelson2024soma; @pekkila2025stencil; @puro2025gpu].
 The aforementioned acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+
+> JP comment in source below
+<!--
+%JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
+%JP: "At it's current state, Astaroth provides a production-ready toolkit (API+DSL+toolbox for reductions, IO, etc) for implementing various computational physics simulations based on structured grids. By providing efficient performance and weak scaling, astaroth enables extremely high-resolution simulations on exascale systems and further research in computational astrophysics, etc, etc, what is already mentioned at the end of the current version".
+-->
+
+> JP comment in source below
+<!--
+%JP: also worth noting here or the solver section: 10x speedup in TFM performance compared to PC and 93% weak scaling to 4096 MI250X GCDs[@pekkila_graphicsprocessors_2026].
+-->
+
 
 # Acknowledgements
 
 We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das and Ruben Krasnopolsky.
 
 Would Maarit know the best which funding sources to cite for the development of Astaroth??
+
+
+> JP comment in source below
+<!--
+%JP: here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)
+This project has received funding from the Academy of Finland, ReSoLVE Centre of Excellence, Grant/Award Number: 307411;
+The European Research Council, the European Union's Horizon 2020 research and innovation program, project UniSDyn, Grant/Award Number: 818665; KAUTE Foundation, Grant/Award Numbers: 20240173 and 20250154.
+We acknowledge the computational resources provided by CSC — IT Center for Science, the Aalto Science-IT project, and resources from LUMI-G through the Euro-HPC join undertaking.
+
+%JP: Could also add Frontier computer resource acknowledgement
+-->
 
 # References
 
