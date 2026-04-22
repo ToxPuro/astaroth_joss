@@ -172,7 +172,7 @@ Abstracting away these distributed GPU-application optimizations reduces the com
 The program thus produced is executed in the `acc-runtime`, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 
 
-Sometimes values of variables change the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+In general, configuration variables can influence the branches taken in a particular kernel. Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
 To know which branches are taken, `Astaroth` supports run-time compilation, which is also used to eliminate unused code and variables.
 > JP comment in source below
 <!--
