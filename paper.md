@@ -179,6 +179,8 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 
 > OL: => to me, they are conceptually the same. If they are not, we need to clarify how the "knowing which branches are taken" is taken into account, other than to eliminate branches.
 
+> TP: => the branches which are taken is used to know which code is executed. This is used to e.g. to know which stencil computations to generate, to deduce the communication patterns, to generate the right reduction operations etc.
+
 
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
 
