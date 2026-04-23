@@ -175,6 +175,11 @@ Not knowing which branches are taken severely limits `Astaroth`'s ability to opt
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 > TP: (edit suggestion use it and remove it or keep it): "..., which is also used ...", i.e. add the word also. Would like to make it even more clear that the fundamental need of run-time compilation is the need to know which branches are taken and that code and variable elimination are additional operations enabled by runtime-compilation.
 
+> OL: I'm not sure I understand, surely branches can be compiled as branches. The effect of run-time compilation is to remove the code (stencils, kernels, variables) needed to run the untaked branches. 
+
+> OL: => to me, they are conceptually the same. If they are not, we need to clarify how the "knowing which branches are taken" is taken into account, other than to eliminate branches.
+
+
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
 
 > JP: unclear how run-time compilation and branches are related. We do the CPU compilation first and assume all ifs are true. Is there some other mechanism that triggers recompilation during the actual simulation?
