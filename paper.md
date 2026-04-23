@@ -183,6 +183,8 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 
 > OL: Right. This still feels like it goes under "eliminating unused code and variables". Because nothing is generated for the untaken branches. Is there something I'm missing?
 
+> TP: Ah now I see your point: skipping code generation is the same as eliminating existing code by the user, fair enough. I would see them to be sufficiently different, but that is subjective. The wording still does not cover some small details, but that is fine. So the wording is then okay for me, but would like to hear what Matthias and Maarit think on the matter.
+
 
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
 
