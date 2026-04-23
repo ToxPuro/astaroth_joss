@@ -173,6 +173,7 @@ The program thus produced is executed in the `acc` runtime, which further optimi
 Certain changes to the run-time configuration may change the branches taken in a particular kernel.
 Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
+> TP: (edit suggestion use it and remove it or keep it): "..., which is also used ...", i.e. add the word also. Would like to make it even more clear that the fundamental need of run-time compilation is the need to know which branches are taken and that code and variable elimination are additional operations enabled by runtime-compilation.
 
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
 
