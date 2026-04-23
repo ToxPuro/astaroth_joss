@@ -164,6 +164,7 @@ In addition to stencils the DSL supports two other operations: 1) reductions -- 
 
 > OL: removed some old comments here between Johannes and Touko, to summarize: "imperative" and "declarative" might be considered jargon. I think this is a case of "Google is your friend" for readers, but would be ok with a footnote.
 > Please yell at me if you disagree.
+> TP: agreed, but lets see what our domain scientists say.
 
 Abstracting away these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 `acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
@@ -195,13 +196,16 @@ The `ComputeSteps` declaration consists of a list of steps, specifying which ker
 `Astaroth`'s runtime constructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into tasks with fine-grained dependency relations.
 The decomposition into tasks is based on the overall domain decomposition (necessary in a multi-GPU context), and the stencils' data access patterns.
 Optimizations are also applied at this stage: kernels may be fused together if the stencils they access a common set of stencils, and a minimal communication pattern is deduced.
+> TP: Suggestion for small rewrite (remove this and include the edit or keep it if you disagree with the edit) for clarity and to be precise: "... kernels may be fused together whenever fusing them reduces the amount memory reads and is allowed by the data dependencies ...".  This is the high-level rule of when fusing is allowed and potentially worthwhile, so only in these case does fusion happen. Describing the rules in any more detail will take clearly too much text. For example any complete description has to differentiate between kernel A uses stencil on F and writes to F. kernel B uses stencil on F and writes to H. No fusion possible. kernel A uses stencil on F and writes to F. kernel B reads F and writes to H. Fusion possible. And the description would also have to cover the triviably fusable kernels like stencil on F and write to H and stencil on F and write to G. So IMO my suggested admittedly vague (but correct) description is for the best.
+
 `Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
-> TP:By optimizations in the ComputeSteps I mean operations like optimizations kernel fusion and minimized amount of communication that go beyondthe TaskGraphs as they are. It would be nice to incorporate the existence of these into the text, but given we are limited for space maybe there simply is not enough space.
 
 > OL: Added a sentence about the optimizations, is that good or is it too vague? The only thing I'm worried about is the communication pattern minimization. As a reader I would be unsure of why this is necessary. Why would we generate unnecessary commnunication tasks?
+
+> TP: Agree that unnecessary communication does not make sense, but it is worth stressing that the code can deduce the minimal communication pattern, this is not all obvious. I am happy with your wording of it.
 
 This runtime system can be accessed through `Astaroth`s runtime API.
 The API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
@@ -220,6 +224,8 @@ The solver takes care of distributed initial conditions, domain decomposition, s
 The solver can also be configured for run-time compilation, and to periodically write out snapshots or slices of the data cube.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 
+> TP: suggested edit (again if you agree with the edit do it and remove this, if not keep this comment): would not think it is that important to explicitly mention the support for run-time compilation of the standalone-solver: any Astaroth based code can easily ,not trivially but still easily, be run with run-time compilation so would not stress this. Also maybe my brain is stuck on the solvers I know, but would 100% assume any solver periodically writes out snapshots or slices without the text explicit mentioning this fact. So in summary: would simply remove the second sentence all together. The reactivity is certainly nice to mention since most codes I know are not as clean in this regard as the standalone solver.
+
 > OL: TODO: write about MHD, TFM, features
 
 > OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
@@ -233,7 +239,7 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 >JP: Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).
 
 >TP: agree on these but to me it sounds like they would best go to the solver.
-> and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compated to it Astraroth does not seem that modular.
+> and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compared to it Astraroths solver does not seem that modular.
 
 # Research impact statement
 
