@@ -181,6 +181,8 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 
 > TP: => the branches which are taken is used to know which code is executed. This is used to e.g. to know which stencil computations to generate, to deduce the communication patterns, to generate the right reduction operations etc. As a concrete example if Astaroth does not which stencils are used or not(which is dependent on control-flow i.e. branches) it cannot generate efficient code for them.
 
+> OL: Right. This still feels like it goes under "eliminating unused code and variables". Because nothing is generated for the untaken branches. Is there something I'm missing?
+
 
 > OL: removed some previous comments, leaving some by Touko and Johannes for context
 
