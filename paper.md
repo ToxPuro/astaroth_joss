@@ -68,8 +68,17 @@ To further ease the development and acceleration of PDE solvers based on the fin
 # Statement of need
 
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
-`Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales (with a weak scaling efficiency of greater than 90%) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers as well as to write completely new ones.
+`Astaroth` has been developed to solve this problem for the subset of scientific software that relies on stencil computations.
+`Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write completely new ones.
+As an example, `Astaroth` has been used to scale an astrophysical plasma simulation to thousands of GPUs with a weak scaling efficiency \>90% [@pekkila_graphicsprocessors_2026]. 
+
+Accelerating such simulations was the original reason for the creation of `Astaroth`.
+A widely used framework for them is the Pencil Code [@brandenburg2020pencil], which is a modular multiphysics PDE solver.
+The early stages of `Astaroth` development focused on implementing the high-order stencil methods employed by Pencil Code for isothermal hydrodynamics [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
+With later revisions `Astaroth` has successfully been used to accelerate Pencil Code [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
+Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
+As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
+`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
 
 > OL: suggest moving the bracketed phrase to the end of the sentence for better flow, also suggest reordering the three points about stencil computations, DSL, and scalability to make a stronger argument: Problem -> Solution -> Result.
 
@@ -78,7 +87,6 @@ Much of the software used for scientific computing is written for CPUs, and has 
 > Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
 > `Astaroth` has been developed to solve this problem for the subset of scientific software that relies on stencil computations.
 > `Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write completely new ones.
-> As an example, `Astaroth` has been used to scale an astrophsyical MHD solver to thousands of GPUs with a weak scaling efficiency \>90% [@pekkila_graphicsprocessors_2026].
 
 > END edit proposal
 
@@ -102,14 +110,6 @@ Much of the software used for scientific computing is written for CPUs, and has 
 > Astaroth: CPU, PC-A, DSL improvements, ray tracing, and other contributions [@Touko'sWork]
 
 > MV: I have edited this to be able to properly include my thesis work as the context within the codes development history. 
-
-`Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
-A widely used framework for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular multiphysics PDE solver.
-The early stages of `Astaroth` development focused on implementing the Pencil Code high-order stencil method for isothermal hydrodynamics [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
-With later revisions `Astaroth` has successfully been used to accelerate it [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
-Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
-As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
-`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
 
 # State of the field                                                                                                                  
 > JP revised suggestion START
