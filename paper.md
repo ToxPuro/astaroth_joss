@@ -15,7 +15,7 @@ authors:
     orcid: 0000-0000-0000-0000
     affiliation: 1 
   - name: Miikka Väisälä
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-8782-4664
     affiliation: 2
   - name: Oskar Lappi 
     orcid: 0000-0000-0000-0000
