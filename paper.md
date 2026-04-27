@@ -170,7 +170,8 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 # Software design
 
 `Astaroth` consists of three main components: 1) `acc`, a compiler and runtime for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
->MR: runtime -> runtime system; the API is not only for executing stencil operations
+> MR: runtime -> runtime system; the API is not only for executing stencil operations
+
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
 ## `acc` compiler and runtime system
@@ -180,6 +181,7 @@ The main operations, like stencils, are written in a declarative syntax, and the
 Thus, their implementation is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to be performed across multiple GPUs, and 2) distributed ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 > MR: integer coordinate lines - not clear enough
+
 > OL: removed some old comments here between Johannes and Touko, to summarize: "imperative" and "declarative" might be considered jargon. I think this is a case of "Google is your friend" for readers, but would be ok with a footnote.
 > Please yell at me if you disagree.
 > TP: agreed, but lets see what our domain scientists say.
@@ -187,9 +189,11 @@ In addition to stencils, the DSL supports two other operations: 1) reductions --
 
 Abstracting from these distributed GPU-application optimizations reduces the complexity at the DSL source level.
 > MR: What does "these" refer to?
+
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime system, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
 > MR: isn't it thread block size?
+
 Certain changes to the run-time configuration may change the program branches taken in a particular kernel.
 Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the kernel code.
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
@@ -227,13 +231,17 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 
 In the DSL, users can define an iteration of their program using a `ComputeSteps` declaration.
 > MR: "iteration of their program" incomprehensible
+
 The `ComputeSteps` declaration consists of a list of steps, specifying which kernels to run, and which boundary conditions to impose. 
 `Astaroth`'s runtime system onstructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into tasks with fine-grained dependency relations.
 > MR: it should be said that the tasks are either computation or communication ones (or are there more?)
+
 The decomposition into tasks is based on the overall domain decomposition (necessary in a multi-GPU context), and the stencils' data access patterns.
 > MR: better "inherent to a multi-GPU context"? and no brackets
+
 Optimizations are also applied at this stage: a minimal communication pattern is deduced, and kernels may be fused together to reduce memory reads.
 > MR: I would not know in what sense "minimal".
+
 `Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
@@ -241,6 +249,7 @@ For fast data transfers and to support all possible hardware, both GPU-to-GPU re
 This runtime system can be accessed through `Astaroth`s runtime API.
 The API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
 > MR: "external" dispensable
+
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
