@@ -178,6 +178,7 @@ The main operations, like stencils, are written in a declarative syntax, and the
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through neighbouring grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+
 > OL: imperative and declarative, TODO: write a footnote
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
@@ -186,10 +187,24 @@ Certain changes to the run-time configuration may change the branches taken in a
 Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 
+
+> OL: RE: branching. There was some confusion about this. Maybe it is better to talk directly about conditional compilation, as that is what is being discussed here. The following edit suggestion would replace the last three sentences.
+
+> OL: What do you think? I know I'm the "dictator" of this section, but would like some consensus, since we've already discussed this part of the text quite a bit.
+
+> OL: BEGIN EDIT SUGGESTION
+
+> `Astaroth` also supports conditional compilation, only compiling code related to those kernels that are actually executed at run-time.
+> This can also be done based on config variables, which may affect conditional statements in the code, through run-time compilation.
+> This does require an extra compilation step at the start of run-time, but is a significant performance optimization, and is recommended especially when running very large problem sizes.
+
+> OL: END EDIT SUGGESTION
+
+
 ## Multi-GPU runtime API
 
-In the DSL, users can define a list of `ComputeSteps`, specifying which kernels to run, and which boundary conditions to impose. 
-`Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the `ComputeSteps`, where each step is decomposed into computation and communication tasks.
+In the DSL, users can define a list of compute steps specifying which kernels to run and which boundary conditions to impose.
+`Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the compute steps, where each step is decomposed into computation and communication tasks.
 The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns, which also determines dependency relations between the tasks.
 As an optimization, kernels may be fused together to reduce memory reads.
 
@@ -198,8 +213,10 @@ As an optimization, kernels may be fused together to reduce memory reads.
 
 > OL: agree that it is not meaningful. Removed references to iterations, and focused more on ComputeSteps as the mental model of the user.
 > TP: The wording is still not totally correct. ComputeSteps refers to the whole list, and now the wording means the user would specify a list of these lists. Maybe something like: "define a list of steps, ..., which are called `ComputeSteps`.
+> OL: I see, you see the `ComputeSteps` is a proper noun for the language feature. I have now replaced it with a natural language concept, and left out the keyword from the paper.
+> As the paper itself is not in-depth documentation, I think this is enough, as users can look up DSL syntax/keywords in the docs.
 
-`Astaroth`'s task scheduler can then run the `ComputeSteps`, potentially over multiple iterations, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
+`Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
