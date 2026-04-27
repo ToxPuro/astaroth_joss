@@ -70,7 +70,21 @@ To further ease the development and acceleration of PDE solvers based on the fin
 Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
 > MR: software expressed as stencil computations - sounds strange
+
 `Astaroth` scales (with a weak scaling efficiency of greater than 90%) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers as well as to write completely new ones.
+
+> OL: suggest moving the bracketed phrase to the end of the sentence for better flow, also suggest reordering the three points about stencil computations, DSL, and scalability to make a stronger argument: Problem -> Solution -> Result.
+
+> BEGIN edit proposal (no changes to the first two sentences here)
+
+> Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
+> `Astaroth` has been developed to solve this problem for the subset of scientific software that uses stencil computations.
+> `Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write completely new ones.
+> As an example, `Astaroth` has been used to scale an astrophsyical MHD solver to thousands of GPUs with a weak scaling efficiency \>90% [@pekkila_graphicsprocessors_2026].
+
+> END edit proposal
+
+
 > JP: **scales**
 
 > - better to use the thesis (2022 paper only goes up to 64 devices, in the thesis we do 4096).
