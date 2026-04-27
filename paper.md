@@ -189,16 +189,17 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 
 ## Multi-GPU runtime API
 
-In the DSL, users can define a list of `ComputeSteps`.
-The `ComputeSteps` declaration consists of a list of steps, specifying which kernels to run, and which boundary conditions to impose. 
-`Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into computation and communication tasks with fine-grained dependency relations.
-The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns.
+In the DSL, users can define a list of `ComputeSteps`, specifying which kernels to run, and which boundary conditions to impose. 
+`Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the `ComputeSteps`, where each step is decomposed into computation and communication tasks.
+The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns, which also determines dependency relations between the tasks.
 As an optimization, kernels may be fused together to reduce memory reads.
 
 > TP: A list of `ComputeSteps` is not meaningful, sorry if I was unclear about this. Would suggest the edit: "In the DSL, user can declare lists of steps, specifying which kernels to run, and which boundary conditions to impose, which are called `ComputeSteps`.
 > TP: ... (DAG) of the steps in an iteration... ", would drop the word iteration since it makes the text harder to understand and as discussed `ComputeSteps` can be something you invoke only once. IMO it would be more clear Steps ---> DAG and the iteration point of view comes from the when the scheduler executes it, as you have no written later.
 
-`Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
+> OL: agree that it is not meaningful. Removed references to iterations, and focused more on ComputeSteps as the mental model of the user.
+
+`Astaroth`'s task scheduler can then run the `ComputeSteps`, potentially over multiple iterations, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
