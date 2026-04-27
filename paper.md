@@ -197,6 +197,7 @@ As an optimization, kernels may be fused together to reduce memory reads.
 > TP: ... (DAG) of the steps in an iteration... ", would drop the word iteration since it makes the text harder to understand and as discussed `ComputeSteps` can be something you invoke only once. IMO it would be more clear Steps ---> DAG and the iteration point of view comes from the when the scheduler executes it, as you have no written later.
 
 > OL: agree that it is not meaningful. Removed references to iterations, and focused more on ComputeSteps as the mental model of the user.
+> TP: The wording is still not totally correct. ComputeSteps refers to the whole list, and now the wording means the user would specify a list of these lists. Maybe something like: "define a list of steps, ..., which are called `ComputeSteps`.
 
 `Astaroth`'s task scheduler can then run the `ComputeSteps`, potentially over multiple iterations, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
