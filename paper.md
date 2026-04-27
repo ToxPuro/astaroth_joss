@@ -101,9 +101,12 @@ Much of the software used for scientific computing is written for CPUs, and has 
 
 > Astaroth: CPU, PC-A, DSL improvements, ray tracing, and other contributions [@Touko'sWork]
 
+> MV: I have edited this to be able to properly include my thesis work as the context within the codes development history. 
+
 `Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
 A widely used framework for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular multiphysics PDE solver.
-`Astaroth` has successfully been used to accelerate it [@puro2023programmatic], with speedups of 20-60x [@pekkila2022scalable].
+The early stages of `Astaroth` development focused on implementing the Pencil Code high-order stencil method for isothermal hydrodynamics [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
+With later revisions `Astaroth` has successfully been used to accelerate it [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
 `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
@@ -236,7 +239,10 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 # Research impact statement
 
-`Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala_magneticphenomena_2017; @vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. Additionally it has been used in different methods papers on performance optimizations[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and on other topics [@yokelson2024soma; @puro2025gpu].
+> MV: I moved the mention of my PhD thesis to earlier part of the text. This is because at the thesis I just present the first attempt at Astaroth. At the time of my thesis we were not yet able to do physics with it beyond simple tests. [@vaisala2021interaction] was the first real paper to present Astaroth based physics results. 
+
+`Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
+Additionally it has been used in different methods papers on performance optimizations[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and on other topics [@yokelson2024soma; @puro2025gpu].
 The acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 > JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
@@ -257,6 +263,7 @@ We acknowledge the contributions of every committer and code contributor to Asta
 
 > TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
+> MV: Good question! What is the policy here? How far we should go? Like should I mention Wihuri and SKR because I got funding from then for my PhD?
 
 > JP: here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)
 > This project has received funding from the Academy of Finland, ReSoLVE Centre of Excellence, Grant/Award Number: 307411;
