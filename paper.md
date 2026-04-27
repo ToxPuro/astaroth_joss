@@ -172,8 +172,9 @@ Below, we present a quick overview of these components. More extensive documenta
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax.
-The implementation is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
-In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
+Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
+In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to be performed across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 > MR: integer coordinate lines - not clear enough
 > OL: imperative and declarative, TODO: write a footnote
 
@@ -190,6 +191,9 @@ The `ComputeSteps` declaration consists of a list of steps, specifying which ker
 `Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into computation and communication tasks with fine-grained dependency relations.
 The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns.
 As an optimization, kernels may be fused together to reduce memory reads.
+
+> TP: A list of `ComputeSteps` is not meaningful, sorry if I was unclear about this. Would suggest the edit: "In the DSL, user can declare lists of steps, specifying which kernels to run, and which boundary conditions to impose, which are called `ComputeSteps`.
+> TP: ... (DAG) of the steps in an iteration... ", would drop the word iteration since it makes the text harder to understand and as discussed `ComputeSteps` can be something you invoke only once. IMO it would be more clear Steps ---> DAG and the iteration point of view comes from the when the scheduler executes it, as you have no written later.
 
 `Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
