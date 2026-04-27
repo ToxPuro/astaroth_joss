@@ -177,7 +177,7 @@ Below, we present a quick overview of these components. More extensive documenta
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax.
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
-In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to be performed across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 > MR: integer coordinate lines - not clear enough
 > OL: imperative and declarative, TODO: write a footnote
 
