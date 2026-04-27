@@ -93,7 +93,7 @@ Much of the software used for scientific computing is written for CPUs, and has 
 
 > JP: some notes if we're going to include history and our prior work
 
-> Astaroth Code: hard-coded compressible hydrodynamics 2014-2019[@vaisala_magneticphenomena_2017;pekkila_methodscompressible_2017]
+> Astaroth Code: hard-coded compressible hydrodynamics 2014-2019[@vaisala_magneticphenomena_2017;@pekkila2017methods]
 
 > Astaroth: generalized stencil framework 2019- (DSL V1, single-gpu) [@pekkila_masters_2019], rewritten DSL V2 grammar and code generator [@pekkila_stencilcomputations_2025]
 
