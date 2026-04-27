@@ -67,9 +67,10 @@ To further ease the development and acceleration of PDE solvers based on the fin
 
 # Statement of need
 
-Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems.
+Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
 `Astaroth` has been developed to solve this problem for the subset of scientific software that can be expressed as stencil computations.
-`Astaroth` scales (with a weak scaling efficiency of greater than 90%) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers and to write completely new ones.
+> MR: software expressed as stencil computations - sounds strange
+`Astaroth` scales (with a weak scaling efficiency of greater than 90%) to thousands of GPUs [@pekkila_graphicsprocessors_2026], and has a high-level DSL that can be used to rewrite existing PDE solvers as well as to write completely new ones.
 > JP: **scales**
 
 > - better to use the thesis (2022 paper only goes up to 64 devices, in the thesis we do 4096).
@@ -90,10 +91,11 @@ Much of the software used for scientific computing is written for CPUs, and has 
 
 `Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
 A widely used library for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular PDE solver for compressible hydrodynamics.
+> MR: library -> code/platform/framework; compressible hydrodynamics -> multiphysics
 `Astaroth` has successfully been used to accelerate it [@puro2023programmatic], with speedups of 20-60x [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
-`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime), which also provides researchers with a platform for performance research.
+`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
 
 # State of the field                                                                                                                  
 > JP revised suggestion START
@@ -153,25 +155,28 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 # Software design
 
 `Astaroth` consists of three main components: 1) `acc`, a compiler and runtime for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
+>MR: runtime -> runtime system; the API is not only for executing stencil operations
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
-## `acc` compiler and runtime
+## `acc` compiler and runtime system
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax.
 Thus, their implementation is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
-In addition to stencils the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distibuted ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
-
+In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to be performed across multiple GPUs, and 2) distributed ray-tracing along integer coordinate lines -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+> MR: integer coordinate lines - not clear enough
 > OL: removed some old comments here between Johannes and Touko, to summarize: "imperative" and "declarative" might be considered jargon. I think this is a case of "Google is your friend" for readers, but would be ok with a footnote.
 > Please yell at me if you disagree.
 > TP: agreed, but lets see what our domain scientists say.
+> MR: declarative vs. imperative indeed too much CS: for the reader it is relevant that the stencils are written in a compact form
 
-Abstracting away these distributed GPU-application optimizations reduces the complexity at the DSL source level.
-`acc` transpiles the DSL source into CUDA or HIP source, which is further compiled into machine code using a native CUDA or HIP compiler.
-The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
-
-Certain changes to the run-time configuration may change the branches taken in a particular kernel.
-Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+Abstracting from these distributed GPU-application optimizations reduces the complexity at the DSL source level.
+> MR: What does "these" refer to?
+`acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
+The program thus produced is executed in the `acc` runtime system, which further optimizes the kernels by autotuning the thread group sizes for kernel execution.
+> MR: isn't it thread block size?
+Certain changes to the run-time configuration may change the program branches taken in a particular kernel.
+Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the kernel code.
 Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 > TP: (edit suggestion use it and remove it or keep it): "..., which is also used ...", i.e. add the word also. Would like to make it even more clear that the fundamental need of run-time compilation is the need to know which branches are taken and that code and variable elimination are additional operations enabled by runtime-compilation.
 
@@ -201,20 +206,26 @@ Therefore `Astaroth` also supports run-time compilation, which is used to elimin
 >This information is used quite extensively for any possible purposes: stencils,reductions,ray-tracing,communication,optimizing variables out etc..
 >Tried to reword the paragraph to capture this more general fact
 
+> MR: unused branches and variables enough I think
+
 ## Multi-GPU runtime API
 
 In the DSL, users can define an iteration of their program using a `ComputeSteps` declaration.
+> MR: "iteration of their program" incomprehensible
 The `ComputeSteps` declaration consists of a list of steps, specifying which kernels to run, and which boundary conditions to impose. 
-`Astaroth`'s runtime constructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into tasks with fine-grained dependency relations.
+`Astaroth`'s runtime system onstructs a directed acyclic graph (DAG) of the steps in an iteration, where the steps are decomposed into tasks with fine-grained dependency relations.
+> MR: it should be said that the tasks are either computation or communication ones (or are there more?)
 The decomposition into tasks is based on the overall domain decomposition (necessary in a multi-GPU context), and the stencils' data access patterns.
+> MR: better "inherent to a multi-GPU context"? and no brackets
 Optimizations are also applied at this stage: a minimal communication pattern is deduced, and kernels may be fused together to reduce memory reads.
-
+> MR: I would not know in what sense "minimal".
 `Astaroth`'s task scheduler can then iterate the `ComputeSteps` any number of times, asynchronously launching tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
 
 This runtime system can be accessed through `Astaroth`s runtime API.
 The API is C-ABI compatible, supporting foreign function interfaces in external applications written in any programming language.
+> MR: "external" dispensable
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
 The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
 The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
@@ -246,6 +257,7 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 >TP: agree on these but to me it sounds like they would best go to the solver.
 > and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compared to it Astraroths solver does not seem that modular.
+> MR: if there is no better place, this isection should say someth about the built-in entities (operators, grid-related stuff etc.)
 
 # Research impact statement
 
@@ -266,7 +278,7 @@ The acceleration of `Pencil Code`  is expected to increase the number of people 
 
 # Acknowledgements
 
-We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution, who include Jörn Warnecke, Frederick Gent, Indrani Das and Ruben Krasnopolsky.
+We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Indrani Das and Ruben Krasnopolsky.
 
 > TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
