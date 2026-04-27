@@ -106,6 +106,7 @@ Much of the software used for scientific computing is written for CPUs, and has 
 `Astaroth` was originally created to run astrophysical plasma simulations on GPUs.
 A widely used library for astophysical plasma simulations is the Pencil Code [@brandenburg2020pencil], which is a modular PDE solver for compressible hydrodynamics.
 > MR: library -> code/platform/framework; compressible hydrodynamics -> multiphysics
+
 `Astaroth` has successfully been used to accelerate it [@puro2023programmatic], with speedups of 20-60x [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
