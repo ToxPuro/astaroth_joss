@@ -8,26 +8,26 @@ tags:
 
 authors:
   - name: Touko Puro
-    orcid: 0000-0000-0000-0000
+    orcid: 0009-0008-8632-0385
     corresponding: true
     affiliation: 1 
   - name: Johannes Pekkilä
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-1974-7150
     affiliation: 1 
   - name: Miikka Väisälä
     orcid: 0000-0002-8782-4664
     affiliation: 2
   - name: Oskar Lappi 
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0003-3182-8161
     affiliation: 3
   - name: Matthias Rheinhardt
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-9840-5986
     affiliation: 1
   - name: Hsien Shang
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0001-8385-9838
     affiliation: 4
   - name: Maarit Korpi-Lagg 
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-9614-2200
     affiliation: 1
 
 affiliations:
