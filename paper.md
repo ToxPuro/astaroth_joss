@@ -178,7 +178,7 @@ The main operations, like stencils, are written in a declarative syntax, and the
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through neighbouring grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
-Additionally, `Astaroth` comes with its own standard library for the DSL, which, in addition to other functionality, provides derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian,spherical and cylindrical grids and Poisson solvers needed for e.g. self-gravity.
+Additionally, `Astaroth` comes with its own standard library for the DSL, which, in addition to other functionality, provides derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian,spherical and cylindrical grids, and Poisson solvers needed for e.g. self-gravity.
 
 > OL: imperative and declarative, TODO: write a footnote
 
