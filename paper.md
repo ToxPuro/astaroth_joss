@@ -161,11 +161,7 @@ The decomposition into tasks is based on the overall domain decomposition, and t
 As an optimization, kernels may be fused together to reduce memory reads.
 
 > TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary calls are dropped and kernels may be fused together to reduce memory reads."
-
-
-> OL: I see, you see the `ComputeSteps` as a proper noun for the language feature. I have now replaced it with a natural language concept, and left out the keyword from the paper.
-> As the paper itself is not in-depth documentation, I think this is enough, as users can look up DSL syntax/keywords in the docs.
-> TP: Yes, that is how it is used in the documentation and in the DSL. I agree on the second point, but in principle it is of course nicer if we can use the same terminology as the code and documentation, but this is now fine by me..
+> OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
@@ -203,14 +199,25 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 > TP: dropped the seismology module: there indeed is no such module. They have made a PR for solving the wave equation, which is a long way from a proper third-party module for earthquake simulations. It is correct that Astaroth has been used in seismology but not that there is a module for it.
 
+> OL: ah, shame. It's not a module, but could it be argued that it is a "setup"? We could also talk about work-in-progress on a third party module and reference the paper.
+
 # Research impact statement
 
 > MV: I moved the mention of my PhD thesis to earlier part of the text. This is because at the thesis I just present the first attempt at Astaroth. At the time of my thesis we were not yet able to do physics with it beyond simple tests. [@vaisala2021interaction] was the first real paper to present Astaroth based physics results. 
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
-The acceleration of `Pencil Code` with `Astaroth` is expected to increase the number of people relying on `Astaroth` as the core execution engine.
+We expect that the acceleration of `Pencil Code` with `Astaroth` will increase the number of `Astaroth` users.
 The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+
+> OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
+
+> OL: BEGIN OLD SENTENCE
+
+> The acceleration of `Pencil Code` with `Astaroth` is expected to increase the number of people relying on `Astaroth` as the core execution engine.
+
+> OL: END OLD SENTENCE
+
 
 > JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
 
@@ -229,6 +236,8 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > OL: The pencil code accelleration is mentioned without explanation of the PCA setup. I read it as referring to this development, it should be expanded to explain this to the reader (not a lot of text, just one or two sentences).
 
 > TP: Do you mean we have to repeat that PC was accelerated with PC? Now I changed "Acceleration of Pencil Code ---> Acceleration of Pencil Code with Astaroth". And if you mean that the text would read like that the acceleration of PC is what is described here I would not be sure since in this section we give anyways use cases of Astaroth so then it would simply one use case among others. What more should we say and do you think we could make the line more clear?
+
+> OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
 
 
 # Acknowledgements
