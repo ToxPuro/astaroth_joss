@@ -175,7 +175,7 @@ The samples directory also includes other production-ready setups, e.g. `tfm-mpi
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
-There is a collection of Python and (experimental) Julia code in `analysis/`, which can be used to process and work with the data produced by the standalone solver. 
+`analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
 > JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
 
