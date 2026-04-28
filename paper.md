@@ -142,6 +142,7 @@ This does require an extra compilation step at the start of run-time, but is a s
 
 > OL: I checked dictionaries and encyclopedias, and there is no such more verbose as "branches of execution". There is a slightly more technical term: "conditional branches". If you don't like the version above I'm ok with the old one as well. The reason for the suggestion is that I feel that the old version is written from an Astaroth developers POV, rather than the users POV. If you insist we keep the old version, then we keep the old version.
 > TP: I would not insist on anything, simply think the older one is superior for the outlined reasons, and thus would prefer it. On the branch-issue: wording we can use to get rid of the word branches: "Changes to run-time configuration may change the code executed in a particular kernel. Not knowing what code gets executed severely limits `Astaroth`'s ability to optimize the code." the last sentence the same as before. Has the same meaning while avoiding the problem word.
+> OL: I think "changes" is too vague. We need to talk about either branches or conditions (i.e. conditional execution, and from conditional execution we have a nice segue to or from conditional compilation).
 
 > OL: BEGIN OLD VERSION 
 
@@ -213,6 +214,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 
 > OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
 > TP: Yes agree that wording was fuzzy. The reason why I did not use the word users was that I was not 100% sure what constitutes a user of Astaroth when they do not directly interact with it, or are not necessarily are aware of its existence, but maybe my worry was overblown.
+> OL: Ok, so then this sentence is indeed about the PCA interface. In that case I feel we really do need to mention it. Because otherwise, if e.g. a pencil code user reads this paper, the only reference to solvers is the standalone solver, and I think that is unhelpful. It can be mentioned as work in progress.
 
 > OL: BEGIN OLD SENTENCE
 
