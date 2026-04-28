@@ -78,18 +78,10 @@ The early stages of `Astaroth` development focused on implementing the high-orde
 With later revisions `Astaroth` has successfully been used to accelerate Pencil Code [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
-`Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
 
-> OL: suggest moving the bracketed phrase to the end of the sentence for better flow, also suggest reordering the three points about stencil computations, DSL, and scalability to make a stronger argument: Problem -> Solution -> Result.
+> `Astaroth` enables this task by cleanly separating the front-end (DSL) from the back-end (compiler and runtime system), which also provides researchers with a platform for performance research.
 
-> BEGIN edit proposal (no changes to the first two sentences here)
-
-> Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
-> `Astaroth` has been developed to solve this problem for the subset of scientific software that relies on stencil computations.
-> `Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write completely new ones.
-
-> END edit proposal
-
+> OL: commented out this last sentence above. It is explained better elsewhere in the text, and is not really part of the paragraph (Astaroth's historical and potential use cases) or the section (statement of need). Yell at me if you disagree.
 
 > JP: **scales**
 
