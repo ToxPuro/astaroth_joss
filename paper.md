@@ -260,7 +260,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 
 # Acknowledgements
 
-We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Indrani Das and Ruben Krasnopolsky.
+We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li and Indrani Das.
 
 > TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
@@ -276,5 +276,6 @@ We acknowledge the contributions of every committer and code contributor to Asta
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
-[^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém, Tzu-Chun Hsu and Jack Hsu.
+> MV: Jack Hsu and Tzu-Chun Hsu is the same person. He is one of my former ASIAA summer students.
+[^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém and Tzu-Chun Hsu. 
 [^paradigm_footnote]: In declarative programming, computation are defined by describing what the results look like; in imperative programming, by describing the steps to perform.
