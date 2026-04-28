@@ -52,12 +52,11 @@ bibliography: paper.bib
 
 Stencil computations[^stencil_footnote] are one of the bedrocks of high-performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
 In recent years, GPUs have become the primary compute platform for data-parallel applications in high-performance computing, and it is difficult to run large simulations without them.
+`Astaroth` is a GPU framework for stencil computations, that has been developed to address this problem of scalable scientific computing.
 
-> JP:"difficult" -> can also run large simulations with CPUs. Suggest something like "the leap in parallel throughput is needed to reach state-of-the-art accuracy in computational physics simulations"
+> OL: cleaned up the last sentences broken grammar, old sentence below
 
-> TP: I would agree with Oskar's wording that difficult is an apt phrasing. GPUs are never strictly needed, but clearly it is easier to run larger simulations with them.
-
-To address this, `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
+> To address this, `Astaroth` is a GPU framework for stencil computations, that has been developed with scalable scientific computing in mind.
 
 `Astaroth` provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
 It can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
@@ -83,13 +82,7 @@ As an example, many image processing techniques, like edge detection and convolu
 
 > OL: commented out this last sentence above. It is explained better elsewhere in the text, and is not really part of the paragraph (Astaroth's historical and potential use cases) or the section (statement of need). Yell at me if you disagree.
 
-> JP: **scales**
-
-> - better to use the thesis (2022 paper only goes up to 64 devices, in the thesis we do 4096).
-
-> - "scales" -> has been demonstrated to scale weakly at ?% efficiency to 64 devices in MHD simulations (2022 paper, could leave this out and focus on the TFM case). Has been demonstrated to scale weakly at 93% efficiency to 4096 devices in computations with the test-field method. 
-
->TP: Made the statement now more precise by having the weak scaling efficiency in brackets. What do you think does that suffice? If the reader cares about details they can lookup Johannes' thesis.
+> OL: cleaned up comments on scalability. Is this discussion below about history resolved? Most of Johannes' suggestions are not in the text.
 
 > JP: some notes if we're going to include history and our prior work
 
@@ -166,32 +159,29 @@ Below, we present a quick overview of these components. More extensive documenta
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
-The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax.
+The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays are restricted to move through neighbouring grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 Additionally, `Astaroth` comes with its own standard library for the DSL, which, in addition to other functionality, provides derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian,spherical and cylindrical grids, and Poisson solvers needed for e.g. self-gravity.
 
-> OL: imperative and declarative, TODO: write a footnote
-
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
-Certain changes to the run-time configuration may change the branches taken in a particular kernel.
-Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
-Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
+`Astaroth` also supports conditional compilation, only compiling code related to those kernels that are actually executed at run-time.
+This can also be done based on config variables, which may affect conditional statements in the code, through run-time compilation.
+This does require an extra compilation step at the start of run-time, but is a significant performance optimization, and is recommended especially when running very large problem sizes.
 
+> OL: RE: branching. There was some confusion about this. Maybe it is better to talk directly about conditional compilation, as that is what is being discussed here. I've replaced the paragraph in the source. The old one is below.
 
-> OL: RE: branching. There was some confusion about this. Maybe it is better to talk directly about conditional compilation, as that is what is being discussed here. The following edit suggestion would replace the last three sentences.
+> OL: BEGIN OLD VERSION 
 
-> OL: What do you think? I know I'm the "dictator" of this section, but would like some consensus, since we've already discussed this part of the text quite a bit.
+> `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
+> The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
+> Certain changes to the run-time configuration may change the branches taken in a particular kernel.
+> Not knowing which branches are taken severely limits `Astaroth`'s ability to optimize the code.
+> Therefore `Astaroth` also supports run-time compilation, which is used to eliminate unused code and variables.
 
-> OL: BEGIN EDIT SUGGESTION
-
-> `Astaroth` also supports conditional compilation, only compiling code related to those kernels that are actually executed at run-time.
-> This can also be done based on config variables, which may affect conditional statements in the code, through run-time compilation.
-> This does require an extra compilation step at the start of run-time, but is a significant performance optimization, and is recommended especially when running very large problem sizes.
-
-> OL: END EDIT SUGGESTION
+> OL: END OLD VERSION
 
 
 ## Multi-GPU runtime API
@@ -206,7 +196,7 @@ As an optimization, kernels may be fused together to reduce memory reads.
 
 > OL: agree that it is not meaningful. Removed references to iterations, and focused more on ComputeSteps as the mental model of the user.
 > TP: The wording is still not totally correct. ComputeSteps refers to the whole list, and now the wording means the user would specify a list of these lists. Maybe something like: "define a list of steps, ..., which are called `ComputeSteps`.
-> OL: I see, you see the `ComputeSteps` is a proper noun for the language feature. I have now replaced it with a natural language concept, and left out the keyword from the paper.
+> OL: I see, you see the `ComputeSteps` as a proper noun for the language feature. I have now replaced it with a natural language concept, and left out the keyword from the paper.
 > As the paper itself is not in-depth documentation, I think this is enough, as users can look up DSL syntax/keywords in the docs.
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
@@ -222,23 +212,14 @@ Other special functionality is also provided through the API, such as distribute
 
 ## Solver
 
-`Astaroth` also includes a standalone finite-difference solver, which can be used to write new simulations and works as a simple test case for performance research.
-This solver has been written mostly with astrophysical MHD in mind, using the DSL code in `acc-runtime/samples/mhd_modular` as a base.
-The solver can, however be modified to solve any similar problem by modifying the DSL source.
+`Astaroth` also includes a standalone finite-difference solver, which takes full advantage of the DSL and runtime API, and can be used to write new simulations.
+It also works as a testbed for performance research.
+This solver uses an astrophysical MHD example (`acc-runtime/samples/mhd_modular`) by default, but can be configured to run any DSL code.
+The samples directory also includes other production-ready samples, e.g. `tfm-mpi` for test-field methods.
+Third-party modules for earthquake simulations have also been developed together with !!!!NAME!!!! !!! AND SOURCE MISSING!!!.
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
-The solver can also be configured for run-time compilation, and to periodically write out snapshots or slices of the data cube.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
-
-> TP: suggested edit (again if you agree with the edit do it and remove this, if not keep this comment): would not think it is that important to explicitly mention the support for run-time compilation of the standalone-solver: any Astaroth based code can easily ,not trivially but still easily, be run with run-time compilation so would not stress this. Also maybe my brain is stuck on the solvers I know, but would 100% assume any solver periodically writes out snapshots or slices without the text explicit mentioning this fact. So in summary: would simply remove the second sentence all together. The reactivity is certainly nice to mention since most codes I know are not as clean in this regard as the standalone solver.
-
-> OL: TODO: write about MHD, TFM, features
-
-> OL: is this the `standalone_mpi` solver? I read through the source, and it only supports four hard coded simulation cases: MHD, shock, hydro_heatduct, and bound_test. If this is what is meant by the standalone solver, I think a better case is madwe by focusing either on the MHD solver specifically, or mention the PCA work.
-
-> TP: yes this is the standalone solver. The source code is horribly out of date but it is not as limited as the source code makes it out to be (the PhysicsSimulation Enums do not need to be used). And can be relatively easily extended to cover more cases, which exactly what we are doing with the Taiwanese.
-
-> TP: Oskar, if you include something about TFM you should refer the reader to samples/tfm-mpi where the TFM solver is.
 
 > JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
 
@@ -246,6 +227,9 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 >TP: agree on these but to me it sounds like they would best go to the solver.
 > and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compared to it Astraroths solver does not seem that modular.
+
+> OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now. 
+
 > MR: if there is no better place, this isection should say someth about the built-in entities (operators, grid-related stuff etc.)
 
 # Research impact statement
@@ -254,7 +238,8 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
-The acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine. The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+The acceleration of `Pencil Code`  is expected to increase the number of people relying on `Astaroth` as the core execution engine.
+The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 > JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
 
@@ -267,6 +252,11 @@ The acceleration of `Pencil Code`  is expected to increase the number of people 
 > OL: I agree with Johannes about more references, but don't really care which way they are listed. Either way is fine, although I think the gravitational waves paper was PC not Astaroth.
 
 > TP: I have tried to give all references that now come to mind, including those in Johannes' suggestion. If you spot one is missing please simply add it. Yes, the gravitational waves paper is for PC and to showcase what will be done in the future with PC.
+
+> OL: should there be more highlights on the domain science side? Currently the only highlight is the performance
+
+> OL: The pencil code accelleration is mentioned without explanation of the PCA setup. I read it as referring to this development, it should be expanded to explain this to the reader (not a lot of text, just one or two sentences).
+
 
 # Acknowledgements
 
@@ -287,3 +277,4 @@ We acknowledge the contributions of every committer and code contributor to Asta
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
 [^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém, Tzu-Chun Hsu and Jack Hsu.
+[^paradigm_footnote]: In declarative programming, computation are defined by describing what the results look like; in imperative programming, by describing the steps to perform.
