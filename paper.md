@@ -60,17 +60,29 @@ While stencils are the core of `Astaroth`, it also accelerates other operations 
 
 # Statement of need
 
-Much of the software used for scientific computing is written for CPUs, and has to be ported to GPUs to run larger problems with decent times-to-solution.
-`Astaroth` has been developed to solve this problem for the subset of scientific software that relies heavily on stencil computations.
-`Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write completely new ones.
-As an example, `Astaroth` has been used to write a PDE solver for astrophysical plasma simulations, which scales to thousands of GPUs with a weak scaling efficiency \>90% [@pekkila_graphicsprocessors_2026]. 
+Much of the software used for scientific computing is written for CPUs, and has
+to be ported to GPUs to run larger problems with decent times-to-solution.
+`Astaroth` has been developed to solve this problem for the subset of
+scientific software that relies heavily on stencil computations.
+`Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write
+completely new ones.
+As an example, `Astaroth` has been used to write a PDE solver for astrophysical
+plasma simulations, which scales to thousands of GPUs with a weak scaling
+efficiency \>90% [@pekkila_graphicsprocessors_2026]. 
 
-Accelerating such simulations was the original reason for the creation of `Astaroth`.
-A widely used framework for them is the Pencil Code [@brandenburg2020pencil], which is a modular multiphysics PDE solver.
-The early stages of `Astaroth` development focused on implementing the high-order stencil methods employed by Pencil Code for isothermal hydrodynamics [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
-With later revisions `Astaroth` has successfully been used to accelerate Pencil Code [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
-Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither is `Astaroth` limited to PDE's.
-As an example, many image processing techniques, like edge detection and convolutions, are traditionally expressed using stencils.
+Accelerating such simulations was the original reason for the creation of
+`Astaroth`.
+A widely used framework for them is the Pencil Code [@brandenburg2020pencil],
+which is a modular multiphysics PDE solver.
+The early stages of `Astaroth` development focused on implementing the
+high-order stencil methods employed by Pencil Code for isothermal hydrodynamics
+[@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
+With later revisions `Astaroth` has successfully been used to accelerate Pencil
+Code [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
+Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
+is `Astaroth` limited to PDE's.
+As an example, many image processing techniques, like edge detection and
+convolutions, are traditionally expressed using stencils.
 
 
 > TP: reworded the text about the scalability to make the text go together with the mentioning of Astaroth's PDE solver, which was not clearly defined before.
@@ -78,6 +90,7 @@ As an example, many image processing techniques, like edge detection and convolu
 > MV: I have edited this to be able to properly include my thesis work as the context within the codes development history. 
 > OL: cleaned up comments on scalability. Is this discussion below about history resolved? Most of Johannes' suggestions are not in the text.
 > TP: Johannes and Miikka are you now happy with the history point of view? I would be. I understood Johannes' notes to simply to something to use for writing: we don't have the space to document the history of the code in real detail and it is not IMO interesting to the reader.
+> MV: I think the general content is ok. Excuse me for making the text better readable for a text editor. I do not know what editor you guys are using, but reading the document on Neovim is horrible because of how the text is laid out.
 
 
 # State of the field                                                                                                                  
