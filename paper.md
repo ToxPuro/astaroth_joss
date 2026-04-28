@@ -239,6 +239,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 
 > OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
 
+> MV: I believe that the future of standalone solver is in the Python interface. However, even though with Ondrej's thesis work will like do a lot for to become reality, it is maybe too new development to be feature in this paper yet. What do you think? 
 
 # Acknowledgements
 
