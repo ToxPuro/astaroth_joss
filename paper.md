@@ -141,6 +141,7 @@ This does require an extra compilation step at the start of run-time, but is a s
 > TP: I think this change makes the text worse and less accurate. `Astaroth` does indeed not have precognition to know which kernels will be executed at run-time so it has to compile any kernel that could be executed, even those which are not. I think using a term like conditional compilation is harder to grasp then the wording we used before. Run-time compilation is needed also for small setups because stencil generation etc. will not be correct because of branches without it, and the full stencil generation configuration of Astaroth is basically unusable because the compilation times blow up and other operations have only the slimmed generation versions. The compilation step does not necessary happen only at the start of run-time  and can happen multiple times at the execution of the simulation, which the wording would now go against. I went away from the meeting with the understanding that the only confusion about branching was what word to use for branches and if we would use the slightly more verbose "branches of execution" in place of "branches" we would have been fine. Could we do that?
 
 > OL: I checked dictionaries and encyclopedias, and there is no such more verbose as "branches of execution". There is a slightly more technical term: "conditional branches". If you don't like the version above I'm ok with the old one as well. The reason for the suggestion is that I feel that the old version is written from an Astaroth developers POV, rather than the users POV. If you insist we keep the old version, then we keep the old version.
+> TP: I would not insist on anything, simply think the older one is superior for the outlined reasons, and thus would prefer it. On the branch-issue: wording we can use to get rid of the word branches: "Changes to run-time configuration may change the code executed in a particular kernel. Not knowing what code gets executed severely limits `Astaroth`'s ability to optimize the code." the last sentence the same as before. Has the same meaning while avoiding the problem word.
 
 > OL: BEGIN OLD VERSION 
 
@@ -211,6 +212,7 @@ We expect that the acceleration of `Pencil Code` with `Astaroth` will increase t
 The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 > OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
+> TP: Yes agree that wording was fuzzy. The reason why I did not use the word users was that I was not 100% sure what constitutes a user of Astaroth when they do not directly interact with it, or are not necessarily are aware of its existence, but maybe my worry was overblown.
 
 > OL: BEGIN OLD SENTENCE
 
@@ -239,7 +241,9 @@ The associated performance increase of 20-60x will enable more realistic astroph
 
 > OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
 
-> MV: I believe that the future of standalone solver is in the Python interface. However, even though with Ondrej's thesis work will like do a lot for to become reality, it is maybe too new development to be feature in this paper yet. What do you think? 
+> MV: I believe that the future of standalone solver is in the Python interface. However, even though with Ondrej's thesis work will like do a lot for it to become reality, it is maybe too new development to be feature in this paper yet. What do you think? 
+
+> TP: Yes, surely it will be important and a great advance but given that the work is just starting I would not include it yet, since the reader would get the impression that the Python interface work is further along than it is.
 
 # Acknowledgements
 
