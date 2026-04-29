@@ -87,9 +87,12 @@ convolutions, are traditionally expressed using stencils.
 
 > TP: reworded the text about the scalability to make the text go together with the mentioning of Astaroth's PDE solver, which was not clearly defined before.
 
-> MV: I have edited this to be able to properly include my thesis work as the context within the codes development history. 
+> MV: I have edited this to be able to properly include my thesis work as the context within the codes development history.
+
 > OL: cleaned up comments on scalability. Is this discussion below about history resolved? Most of Johannes' suggestions are not in the text.
+
 > TP: Johannes and Miikka are you now happy with the history point of view? I would be. I understood Johannes' notes to simply to something to use for writing: we don't have the space to document the history of the code in real detail and it is not IMO interesting to the reader.
+
 > MV: I think the general content is ok. Excuse me for making the text better readable for a text editor. I do not know what editor you guys are using, but reading the document on Neovim is horrible because of how the text is laid out.
 
 
@@ -140,6 +143,8 @@ The information thus gained also allows `Astaroth` to optimize runtime behaviour
 > OL: removed discussion as it was resolved, except for this one point
 
 > TP: The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
+
+> MV: I am fine with the text here. I think however Sienny insights could be helpful here, as she is less familiar with the intimate details of how this all works. My view might be "contaminanted" by the discussion we already had. 
 
 
 ## Multi-GPU runtime API
@@ -233,6 +238,8 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > MV: I believe that the future of standalone solver is in the Python interface. However, even though with Ondrej's thesis work will like do a lot for it to become reality, it is maybe too new development to be feature in this paper yet. What do you think? 
 
 > TP: Yes, surely it will be important and a great advance but given that the work is just starting I would not include it yet, since the reader would get the impression that the Python interface work is further along than it is.
+
+> MV: That is fine. Here we can only focus on thing that actually exist. 
 
 # Acknowledgements
 
