@@ -85,10 +85,6 @@ As an example, many image processing techniques, like edge detection and
 convolutions, are traditionally expressed using stencils.
 
 
-> TP: reworded the text about the scalability to make the text go together with the mentioning of Astaroth's PDE solver, which was not clearly defined before.
-
-> MV: I have edited this to be able to properly include my thesis work as the context within the codes development history.
-
 > OL: cleaned up comments on scalability. Is this discussion below about history resolved? Most of Johannes' suggestions are not in the text.
 
 > TP: Johannes and Miikka are you now happy with the history point of view? I would be. I understood Johannes' notes to simply to something to use for writing: we don't have the space to document the history of the code in real detail and it is not IMO interesting to the reader.
@@ -114,11 +110,11 @@ Astaroth also incorporates other key functionalities for computational sciences,
 
 > TP: We have tried to remove words we can not defend or quantify like "ergonomic" and "compact". I would say now the word "modular" is one such word again. What do you think? I would be fine also with dropping this sentence since also we should not advertise different physics cases Astaroth comes since IMO they are not modular or expansive enough to advertise.
 
+> OL: I think modular is arguably ok, if it can be shown. Unlike ergonomic or compact, modular has an objective definition: something that consists of modules which can be combined to form a working system. If example modules are listed and how they work together is explained, that would justify the term, IMO. But we may of course run up against the word count...
+
+> OL: but maybe a better solution would be to talk about the components as "modules" (i.e. "different physics modules". "IO module"? "reduction module"?, idk which components are covered by the "modular") instead of describing the overall structure of the system as "modular"
+
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their interplay with other operations.
-
-
-
-
 
 # Software design
 
@@ -175,9 +171,6 @@ It also works as a testbed for performance research.
 This solver uses an astrophysical magnetohydrodynamical setup (`acc-runtime/samples/mhd_modular`) by default, but can be configured to run any DSL code.
 The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@johannes_paper].
 
->TP: Changed MHD ---> magnetohydrodynamical since we have not defined MHD. And example --- > setup. Example IMO invokes that it is only for e.g. learning.
->TP: samples ---> setups, IMO setup is easier to grasp for outside reader than sample. 
-
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
@@ -197,8 +190,6 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 
 # Research impact statement
 
-> MV: I moved the mention of my PhD thesis to earlier part of the text. This is because at the thesis I just present the first attempt at Astaroth. At the time of my thesis we were not yet able to do physics with it beyond simple tests. [@vaisala2021interaction] was the first real paper to present Astaroth based physics results. 
-
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
 We expect that the acceleration of `Pencil Code` with `Astaroth` will increase the number of `Astaroth` users.
@@ -207,13 +198,6 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
 > TP: Yes agree that wording was fuzzy. The reason why I did not use the word users was that I was not 100% sure what constitutes a user of Astaroth when they do not directly interact with it, or are not necessarily are aware of its existence, but maybe my worry was overblown.
 > OL: Ok, so then this sentence is indeed about the PCA interface. In that case I feel we really do need to mention it. Because otherwise, if e.g. a pencil code user reads this paper, the only reference to solvers is the standalone solver, and I think that is unhelpful. It can be mentioned as work in progress.
-
-> OL: BEGIN OLD SENTENCE
-
-> The acceleration of `Pencil Code` with `Astaroth` is expected to increase the number of people relying on `Astaroth` as the core execution engine.
-
-> OL: END OLD SENTENCE
-
 
 > JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
 
@@ -257,6 +241,8 @@ We acknowledge the contributions of every committer and code contributor to Asta
 > We acknowledge the computational resources provided by CSC — IT Center for Science, the Aalto Science-IT project, and resources from LUMI-G through the Euro-HPC joint undertaking.
 
 > JP: Could also add Frontier computer resource acknowledgement
+
+> OL: Do we want to acknowledge help from CSC? E.g. Robertsen?
 
 # References
 
