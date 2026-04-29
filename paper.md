@@ -133,8 +133,8 @@ Additionally, `Astaroth` comes with its own standard library for the DSL, which,
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
-`Astaroth` also supports conditional compilation, only compiling code related to those kernels that are actually executed at run-time.
-This can also be done based on config variables, which may affect conditional statements in the code, through run-time compilation.
+`Astaroth` also supports conditional compilation based on the conditional branches in the DSL source[^branch_footnote] --- only compiling code that is actually executed at run-time.
+Because configuration variables may affect conditional branches taken in the code, `Astaroth` also supports run-time compilation.
 This does require an extra compilation step at the start of run-time, but is a significant performance optimization, and is recommended especially when running very large problem sizes.
 
 > OL: RE: branching. There was some confusion about this. Maybe it is better to talk directly about conditional compilation, as that is what is being discussed here. I've replaced the paragraph in the source. The old one is below.
@@ -144,6 +144,10 @@ This does require an extra compilation step at the start of run-time, but is a s
 > TP: I would not insist on anything, simply think the older one is superior for the outlined reasons, and thus would prefer it. On the branch-issue: wording we can use to get rid of the word branches: "Changes to run-time configuration may change the code executed in a particular kernel. Not knowing what code gets executed severely limits `Astaroth`'s ability to optimize the code." the last sentence the same as before. Has the same meaning while avoiding the problem word.
 > OL: I think "changes" is too vague. We need to talk about either branches or conditions (i.e. conditional execution, and from conditional execution we have a nice segue to or from conditional compilation).
 > TP: I see. What about "Values of the run-time configuration determine through conditional statements what code gets executed in a particular kernel. Not knowing what code gets executed ...." or the somewhat verbose "Values of the run-time configuration determine values in conditional statements and thus what codes gets executed. Not knowing ..."? Would still avoid the word conditional compilation since IMO it can invoke wrong interpretations like "compilation is conditional itself i.e. is sometimes done and sometimes not" and if one googles the term they will find examples of preprocessor defines and flags given to build systems, which is not what we are talking about here so would IMO confuse the reader for no added gain.
+
+> OL: RE: conditional compilation is confusing:  What we're doing is conditional compilation. The preprocessor #if, a C++ if constexpr, and the if/switch statements in Astaroth are all examples of branches that are eliminated through conditional compilation. The flags given to the build system are the "values that change" in the preprocessor example, in the Astaroth example the "values that change" are the config values. But they are the same procedure, just with different syntax and interfaces.
+
+> OL: RE: the suggested sentence is better, but it is still very verbose. I took some of the suggestions and added them to the new paragraph above. I also tried to rework in more clearly that we're dealing with branches, now using the full "conditional branch" term. I also added a footnote to explain branching to readers who are unfamiliar.
 
 > OL: BEGIN OLD VERSION 
 
@@ -268,8 +272,9 @@ We acknowledge the contributions of every committer and code contributor to Asta
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
-[^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém and Tzu-Chun Hsu. 
 [^paradigm_footnote]: In declarative programming, computations are defined by describing what the results look like; in imperative programming, by describing the steps to perform.
+[^branch_footnote]: Conditionally branching programming constructs are if-statements and switch-statements.
+[^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém and Tzu-Chun Hsu. 
 
 # Notes 
 
