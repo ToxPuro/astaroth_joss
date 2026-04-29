@@ -157,6 +157,8 @@ and is recommended especially when running very large problem sizes.
 
 > OL: good points! I've tried to add your suggestions above, let me know if this is good. And I think the text was very unclear before this last edit, so it is good that you challenged it. It is indeed much better now.
 
+> TP: I like it, I think you managed to instill everything quite nicely! The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
+
 > OL: BEGIN OLD VERSION 
 
 > `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
