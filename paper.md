@@ -133,24 +133,29 @@ Additionally, `Astaroth` comes with its own standard library for the DSL, which,
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
-`Astaroth` also supports conditional compilation based on the conditional branches in the DSL source[^branch_footnote] --- only compiling code that is actually executed at run-time.
-Because configuration variables may affect conditional branches taken in the code, `Astaroth` also supports run-time compilation.
-This does require an extra compilation step at the start of run-time, but is a significant performance optimization, and is recommended especially when running very large problem sizes.
+`acc` also supports conditional compilation based on the conditional statements in the DSL source --- only compiling code that is actually executed at run-time.
+Further, `acc` supports run-time compilation, because run-time configuration variables may change the evaluation of those conditional statements.
+The information thus gained also allows `Astaroth` to optimize runtime behaviour more precisely, e.g. memory allocations or communication patterns.
+
+and is recommended especially when running very large problem sizes.
 
 > OL: RE: branching. There was some confusion about this. Maybe it is better to talk directly about conditional compilation, as that is what is being discussed here. I've replaced the paragraph in the source. The old one is below.
-> OL: RE: conditional compilation is confusing:  What we're doing is conditional compilation. The preprocessor #if, a C++ if constexpr, and the if/switch statements in Astaroth are all examples of branches that are eliminated through conditional compilation. The flags given to the build system are the "values that change" in the preprocessor example, in the Astaroth example the "values that change" are the config values. But they are the same procedure, just with different syntax and interfaces.
-
-> OL: RE: the suggested sentence is better, but it is still very verbose. I took some of the suggestions and added them to the new paragraph above. I also tried to rework in more clearly that we're dealing with branches, now using the full "conditional branch" term. I also added a footnote to explain branching to readers who are unfamiliar.
 
 > TP: Edit suggestion: "...based on the conditional branches in the DSL source ..." --> "based on the conditional statements in the DSL source ...", conditional statement should be clear for every reader and we skip the need for a footnote.
 
 > TP: In short: I believe for the user POV (and at least from my POV) preprocessor statements, build flags and so on are quite different entities than say the amount of rotation of the coordinate frame omega, which would be one of the config variables dictating control-flow. But we luckily do not have to give our viewpoints, so this is not important.
+
+> OL: RE: conditional compilation is confusing:  What we're doing is conditional compilation. The preprocessor #if, a C++ if constexpr, and the if/switch statements in Astaroth are all examples of branches that are eliminated through conditional compilation. The flags given to the build system are the "values that change" in the preprocessor example, in the Astaroth example the "values that change" are the config values. But they are the same procedure, just with different syntax and interfaces.
+
+> OL: RE: the suggested sentence is better, but it is still very verbose. I took some of the suggestions and added them to the new paragraph above. I also tried to rework in more clearly that we're dealing with branches, now using the full "conditional branch" term. I also added a footnote to explain branching to readers who are unfamiliar.
 
 > TP: On conditional compilation: Sorry it took for me so long to see your point but your point was that you want to clearly showcases these orthogonal features of conditional and run-time compilation, I get it now. That is actually quite nice in the text! Sorry again for being a bit stubborn, but the final text is now nice! 
 
 > TP: We should still improve the last sentence: runtime-compilation happens not only at the start of the run-time and as I stated earlier it is needed regardless of the size of the setup if the user would like to use for example `stdlib/general_operators.h`, now the text would give the wrong idea that one can not use it for small setups, but it is more about what features they want to use and depending on what very large is understood to mean I would not say the setup has to be very large. In the end is this sentence giving any new information to the reader: runtime-compilation already means extra processing has to happen at run-time and it is an optimization and those are naturally more important at large sizes and as said the optimization viewpoint is not totally accurate.
 
 > TP: At the cost of nice conciseness and directeness (the text is indeed very nice) we have lost some information on how execution information is used for other optimizations than code elimination like in tasks and for memory allocations and communication, which are not about code size. Would be nice if we could get that viewpoint back to the text. Maybe replacing the last sentence with something like. "These together allow `Astaroth` to know what code will get executed and to use this for further optimizations  when e.g. allocating memory and forming communication patterns."
+
+> OL: good points! I've tried to add your suggestions above, let me know if this is good. And I think the text was very unclear before this last edit, so it is good that you challenged it. It is indeed much better now.
 
 > OL: BEGIN OLD VERSION 
 
