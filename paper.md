@@ -133,7 +133,7 @@ The main operations, like stencils, are written in a declarative syntax, and the
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
-Additionally, `Astaroth` comes with its own standard library for the DSL, which, in addition to other functionality, provides derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian,spherical and cylindrical grids, and Poisson solvers needed for e.g. self-gravity.
+Additionally, `Astaroth` comes with its own standard library for the DSL: It provised, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
@@ -179,7 +179,7 @@ The samples directory also includes other production-ready setups, e.g. `tfm-mpi
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
-`analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
+The folder `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
 > JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
 
