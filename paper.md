@@ -67,7 +67,7 @@ scientific software that relies heavily on stencil computations.
 `Astaroth`'s DSL can be used to rewrite existing PDE solvers or to write
 completely new ones.
 As an example, `Astaroth` has been used to write a PDE solver for astrophysical
-plasma simulations, which scales to thousands of GPUs with a weak scaling
+plasma simulations [@vaisala2023exploring], which scales to thousands of GPUs with a weak scaling
 efficiency \>90% [@pekkila_graphicsprocessors_2026]. 
 
 Accelerating such simulations was the original reason for the creation of
@@ -77,7 +77,7 @@ which is a modular multiphysics PDE solver.
 The early stages of `Astaroth` development focused on implementing the
 high-order stencil methods of Pencil Code for isothermal hydrodynamics
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
-With later revisions `Astaroth` has successfully been used to accelerate Pencil
+With later revisions, `Astaroth` has successfully been used to accelerate Pencil
 Code [@puro2023programmatic] with speedups of 20-60x [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDE's.
@@ -119,7 +119,7 @@ Astaroth also incorporates other key functionalities for computational sciences,
 > TP: Right, you guys make good points. Although I still have a worry about is saying the physics features are modular. If there are not developments I am not aware of the physics choices are driven by the macro flags. This makes the implementation clearly switchable, but not sure can we call it modular. Modules are strongly about interfaces and hiding implementation details to have interchangeable implementations that one can choose between. The switch based implementation neither hides details or has well defined interfaces that enable switchable implementations. (And not having really options to choose between many of the physics aspects like equation of state furthers my worry, but this maybe is asking for too much for something to be modular). I have now tentatively dropped the word
 
 
-A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their interplay with other operations.
+A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel.
 
 # Software design
 
