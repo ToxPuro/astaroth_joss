@@ -106,7 +106,7 @@ We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on th
 
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 However, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus with a focus on structured-grid computations.
-Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and different physics cases in a modular manner.
+Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and supports different physics cases.
 
 > TP: We have tried to remove words we can not defend or quantify like "ergonomic" and "compact". I would say now the word "modular" is one such word again. What do you think? I would be fine also with dropping this sentence since also we should not advertise different physics cases Astaroth comes since IMO they are not modular or expansive enough to advertise.
 
@@ -116,7 +116,7 @@ Astaroth also incorporates other key functionalities for computational sciences,
 
 > MV: Yes I agree with OL here. Some specificity can be a benefit. Astaroth has a number of different component both in and outside what is done in DSL. Now due to my work in AI I also tent to speak more about stuff in terms or "orchestration" and "workflow" too with respect to utilizing varius code components. Not sure if those word would be useful in this text. Here I am merely thinking out loud.   
 
-> TP: Right, you guys make good points. Although I still have a worry about is saying the physics features are modular. If there are not developments I am not aware of the physics choices are driven by the macro flags. This makes the implementation clearly switchable, but not sure can we call it modular. Modules are strongly about interfaces and hiding implementation details to have interchangeable implementations that one can choose between. The switch based implementation neither hides details or has well defined interfaces that enable switchable implementations. (And not having really options to choose between many of the physics aspects like equation of state furthers my worry, but this maybe is asking for too much for something to be modular).
+> TP: Right, you guys make good points. Although I still have a worry about is saying the physics features are modular. If there are not developments I am not aware of the physics choices are driven by the macro flags. This makes the implementation clearly switchable, but not sure can we call it modular. Modules are strongly about interfaces and hiding implementation details to have interchangeable implementations that one can choose between. The switch based implementation neither hides details or has well defined interfaces that enable switchable implementations. (And not having really options to choose between many of the physics aspects like equation of state furthers my worry, but this maybe is asking for too much for something to be modular). I have now tentatively dropped the word
 
 
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their interplay with other operations.
