@@ -114,6 +114,8 @@ Astaroth also incorporates other key functionalities for computational sciences,
 
 > OL: but maybe a better solution would be to talk about the components as "modules" (i.e. "different physics modules". "IO module"? "reduction module"?, idk which components are covered by the "modular") instead of describing the overall structure of the system as "modular"
 
+> MV: Yes I agree with OL here. Some specificity can be a benefit. Astaroth has a number of different component both in and outside what is done in DSL. Now due to my work in AI I also tent to speak more about stuff in terms or "orchestration" and "workflow" too with respect to utilizing varius code components. Not sure if those word would be useful in this text. Here I am merely thinking out loud.   
+
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their interplay with other operations.
 
 # Software design
@@ -243,6 +245,10 @@ We acknowledge the contributions of every committer and code contributor to Asta
 > JP: Could also add Frontier computer resource acknowledgement
 
 > OL: Do we want to acknowledge help from CSC? E.g. Robertsen?
+
+> MV: To me that would sound very good thing to do. I would definitely add CSC and relevant people to Acknowledgements. 
+
+> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC ?  Or notable funding sources. 
 
 # References
 
