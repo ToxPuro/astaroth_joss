@@ -105,7 +105,7 @@ In a more specialized approach, the Cactus framework[@goodale_cactusframework_20
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
 
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
-However, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus with a focus on structured-grid computations.
+In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus with a focus on structured-grid computations.
 Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and supports different physics cases.
 
 > TP: We have tried to remove words we can not defend or quantify like "ergonomic" and "compact". I would say now the word "modular" is one such word again. What do you think? I would be fine also with dropping this sentence since also we should not advertise different physics cases Astaroth comes since IMO they are not modular or expansive enough to advertise.
