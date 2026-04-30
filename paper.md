@@ -116,6 +116,9 @@ Astaroth also incorporates other key functionalities for computational sciences,
 
 > MV: Yes I agree with OL here. Some specificity can be a benefit. Astaroth has a number of different component both in and outside what is done in DSL. Now due to my work in AI I also tent to speak more about stuff in terms or "orchestration" and "workflow" too with respect to utilizing varius code components. Not sure if those word would be useful in this text. Here I am merely thinking out loud.   
 
+> TP: Right, sure you guys make good points. Although I still have a worry about is saying the physics features are modular. If there are not developments I am not aware of the physics choices are driven by the macro flags. This makes the implementation clearly switchable, but not sure can we call it modular. Modules are strongly about interfaces and hiding implementation details to have interchangeable implementations that one can choose between. The switch based implementation neither hides details or has well defined interfaces that enable switchable implementations. (And not having really options to choose between many of the physics aspects like equation of state furthers my worry, but this maybe is asking for too much for something to be modular).
+
+
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where interdependent values need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their interplay with other operations.
 
 # Software design
@@ -152,8 +155,9 @@ In the DSL, users can define a list of compute steps specifying which kernels to
 The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns, which also determines dependency relations between the tasks.
 As an optimization, kernels may be fused together to reduce memory reads.
 
-> TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary calls are dropped and kernels may be fused together to reduce memory reads."
+> TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and kernels may be fused together to reduce memory reads."
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
+> TP: Yes, calls to kernels. Modified the suggestion to reflect this
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
@@ -189,6 +193,8 @@ It is also built to react to a number of events, such as NaNs in the simulation 
 > TP: dropped the seismology module: there indeed is no such module. They have made a PR for solving the wave equation, which is a long way from a proper third-party module for earthquake simulations. It is correct that Astaroth has been used in seismology but not that there is a module for it.
 
 > OL: ah, shame. It's not a module, but could it be argued that it is a "setup"? We could also talk about work-in-progress on a third party module and reference the paper.
+
+> TP: Calling it a setup would IMO fair. But what is public, (here is the PR https://bitbucket.org/jpekkila/astaroth/pull-requests/65) is quite sparse and I would not like to ovesell it and I think what we say in the research impact statement about is sufficient.
 
 # Research impact statement
 
@@ -230,6 +236,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 # Acknowledgements
 
 We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li and Indrani Das.
+We acknowledge the computational resources provided by CSC — IT Center for Science, the Aalto Science-IT project, and resources from LUMI-G through the Euro-HPC joint undertaking. Furthermore, we acknowledge the important technical assistance provided by CSC, by people like Fredrik Robertsén and others.
 
 > TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
@@ -240,11 +247,13 @@ We acknowledge the contributions of every committer and code contributor to Asta
 > JP: here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)
 > This project has received funding from the Academy of Finland, ReSoLVE Centre of Excellence, Grant/Award Number: 307411;
 > The European Research Council, the European Union's Horizon 2020 research and innovation program, project UniSDyn, Grant/Award Number: 818665; KAUTE Foundation, Grant/Award Numbers: 20240173 and 20250154.
-> We acknowledge the computational resources provided by CSC — IT Center for Science, the Aalto Science-IT project, and resources from LUMI-G through the Euro-HPC joint undertaking.
+> 
 
 > JP: Could also add Frontier computer resource acknowledgement
 
 > OL: Do we want to acknowledge help from CSC? E.g. Robertsen?
+
+> TP: Yes, good idea! Added now a draft of acknowledging help from CSC in the same paragraph about compute resources. Thoghts? And feel free to edit it directly if you have an idea to improve it.
 
 > MV: To me that would sound very good thing to do. I would definitely add CSC and relevant people to Acknowledgements. 
 
