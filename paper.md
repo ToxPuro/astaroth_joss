@@ -238,6 +238,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 
 We acknowledge the contributions of every committer and code contributor to Astaroth[^contributor_footnote] and the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li and Indrani Das.
 We acknowledge the computational resources provided by CSC — IT Center for Science, the Aalto Science-IT project, and resources from LUMI-G through the Euro-HPC joint undertaking. Furthermore, we acknowledge the important technical assistance provided by CSC, by people like Fredrik Robertsén and others.
+We acknowledge the computational resources and services provided by ASIAA High-Performance Computing, and National Center for High-Performance Computing (NCHC), National Applied Research Laboratories (NARLabs) in Taiwan.
 
 > TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
@@ -258,7 +259,7 @@ We acknowledge the computational resources provided by CSC — IT Center for Sci
 
 > MV: To me that would sound very good thing to do. I would definitely add CSC and relevant people to Acknowledgements. 
 
-> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC ?  Or notable funding sources. 
+> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text. 
 
 # References
 
