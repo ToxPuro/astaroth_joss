@@ -58,6 +58,11 @@ It can run efficiently both on CUDA- and HIP-based environments --- and even on 
 While stencils are the core of `Astaroth`, it also accelerates other operations like reductions (e.g. sums), simple ray-tracing and has library integrations for performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
 `Astaroth` has primarily been used for turbulent astrophysical plasma simulations.
 
+> JP: Suggest "like" -> such as or whatever is appropriate for the context (less colloquial). Applies to all instances of "like"
+
+> JP: Suggest oxford comma ", and integrates"
+
+
 # Statement of need
 
 Much of the software used for scientific computing is written for CPUs, and has
@@ -97,6 +102,8 @@ The Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] pro
 In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational science tasks.
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
 
+> JP: "single-process computations" not sure if this is true. Would be clearer to emphasize that they focus on single-node computations (=shared memory). Also Kokkos is working on support for distributed memory (=MPI) but AFAIK it's not yet ready for production.
+
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
 Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and supports different physics cases.
@@ -120,6 +127,8 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
 > MR: I sum up on "runtime": Two terms are used in CS literature, with same meaning. One is of clear language and sufficiently self-explaining, the other is ambiguous jargon. It should be clear which to employ. If no consensus, majority will decide.
+
+> JP: "a standalone solver" suggest "standalone solvers. Depends on our definition of a solver (meaning RK3 or MHD&TFM&etc here?).
 
 ## `acc` compiler and runtime
 
@@ -160,6 +169,8 @@ As an optimization, kernels may be fused together to reduce memory reads.
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
 > TP: Yes, calls to kernels. Modified the suggestion to reflect this
 
+> JP: "fused together to reduce memory reads" a bit ambiguous. Is this done automatically? The integration kernels are fused to exploit the interdependence of the fields which does reduce memory reads. But the fusion of packing and reduction operations is done for better efficiency (small problem sizes fused to saturate the device with work). Should clarify what is meant here.
+
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
@@ -178,13 +189,17 @@ It also works as a testbed for performance research.
 This solver uses an astrophysical magnetohydrodynamical setup (`acc-runtime/samples/mhd_modular`) by default, but can be configured to run any DSL code.
 The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@johannes_paper].
 
+> JP: @johannes_paper will probably not get a doi before May-June so can reference the dsc instead where it's embedded
+
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 The folder `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
-> JP: Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."
+> JP: solver definition a bit unclear throughout the article. Do we mean the finite-diff + RK3 solver, or MHD/TFM/etc? Should pick one and use it throughout.
 
->JP: Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).
+> JP: ~~Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."~~
+
+>JP: ~~Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).~~
 
 >TP: agree on these but to me it sounds like they would best go to the solver.
 > and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compared to it Astraroths solver does not seem that modular.
@@ -209,13 +224,13 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > OL: Ok, so then this sentence is indeed about the PCA interface. In that case I feel we really do need to mention it. Because otherwise, if e.g. a pencil code user reads this paper, the only reference to solvers is the standalone solver, and I think that is unhelpful. It can be mentioned as work in progress.
 > TP: I get the point now: we have to make it clear PC is not accelerated via the standalone solver. Have to think about better wording but now made the tentative change: "... Pencil Code via Astaroth ... " ---> ".. Pencil Code, by integrating Astaroth's DSL and runtime inside of it, ... , ...". Maybe not the best but makes it more clear how Astaroth is used. I particularly think the inside of it is a bit clunky but for now this tentative version is better.
 
-> JP: Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."
+> JP: ~~Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."~~
 
-> JP: "At it's current state, Astaroth provides a production-ready toolkit (API+DSL+toolbox for reductions, IO, etc) for implementing various computational physics simulations based on structured grids. By providing efficient performance and weak scaling, astaroth enables extremely high-resolution simulations on exascale systems and further research in computational astrophysics, etc, etc, what is already mentioned at the end of the current version".
+> JP: ~~"At it's current state, Astaroth provides a production-ready toolkit (API+DSL+toolbox for reductions, IO, etc) for implementing various computational physics simulations based on structured grids. By providing efficient performance and weak scaling, astaroth enables extremely high-resolution simulations on exascale systems and further research in computational astrophysics, etc, etc, what is already mentioned at the end of the current version".~~
 
 > TP: answer to Johannes' suggestions. In short I would not try to sell the features of Astaroth here again but simply make sure it is visible that Astaroth has been used, is used and will be used for example by the PC community
 
-> JP: also worth noting here or the solver section: 10x speedup in TFM performance compared to PC and 93% weak scaling to 4096 MI250X GCDs[@pekkila_graphicsprocessors_2026].
+> JP: ~~also worth noting here or the solver section: 10x speedup in TFM performance compared to PC and 93% weak scaling to 4096 MI250X GCDs[@pekkila_graphicsprocessors_2026].~~
 
 > OL: I agree with Johannes about more references, but don't really care which way they are listed. Either way is fine, although I think the gravitational waves paper was PC not Astaroth.
 
@@ -248,10 +263,10 @@ The European Research Council, the European Union's Horizon 2020 research and in
 
 > TP: Would leave it to Maarit to know best which ones to mention. The JOSS paper for PC has approx ~5 sources mentioned so we should definitely not need more than that so maybe the 3 most important?
 
-> JP: here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)
+> JP: ~~here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)~~
 > 
 
-> JP: Could also add Frontier computer resource acknowledgement
+> JP: ~~Could also add Frontier computer resource acknowledgement~~
 
 > OL: Do we want to acknowledge help from CSC? E.g. Robertsen?
 
@@ -270,6 +285,8 @@ The European Research Council, the European Union's Horizon 2020 research and in
 [^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém and Tzu-Chun Hsu. 
 
 # Notes 
+
+> **JP NEW COMMENT: EVERYTHING BELOW OK, CAN REMOVE**
 
 > JP: some notes if we're going to include history and our prior work
 
