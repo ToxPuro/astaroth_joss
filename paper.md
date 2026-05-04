@@ -85,13 +85,6 @@ As an example, many image processing techniques, like edge detection and
 convolutions, are traditionally expressed using stencils.
 
 
-> OL: cleaned up comments on scalability. Is this discussion below about history resolved? Most of Johannes' suggestions are not in the text.
-
-> TP: Johannes and Miikka are you now happy with the history point of view? I would be. I understood Johannes' notes to simply to something to use for writing: we don't have the space to document the history of the code in real detail and it is not IMO interesting to the reader.
-
-> MV: I think the general content is ok. Excuse me for making the text better readable for a text editor. I do not know what editor you guys are using, but reading the document on Neovim is horrible because of how the text is laid out.
-
-
 # State of the field                                                                                                                  
 
 Methods to achieve performance portability in stencil computations have been widely studied.
@@ -133,7 +126,7 @@ Below, we present a quick overview of these components. More extensive documenta
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
 The implementation of the operations is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
-Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
+Of central importance of these is the unrolled and reordered computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 Additionally, `Astaroth` comes with its own standard library for the DSL: It provides, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
 
@@ -145,13 +138,9 @@ Additionally, `Astaroth` comes with its own standard library for the DSL: It pro
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
-`acc` also supports conditional compilation based on the conditional statements in the DSL source --- only compiling code that is actually executed at run-time.
-Further, `acc` supports run-time compilation, because run-time configuration variables may change the evaluation of those conditional statements.
-The information thus gained also allows `Astaroth` to optimize runtime behaviour more precisely, e.g. memory allocations or communication patterns.
-
-> MR: better: "run-time configuration variables" -> "run-time configuration parameters"
-> TP: agreed, IMO slightly better, but fine with either word.
-> OL: removed discussion as it was resolved, except for this one point
+`acc` also supports conditional compilation based on any conditional statements in the DSL source --- only compiling code that is actually executed at run-time.
+Further, `acc` supports run-time compilation, because run-time configuration parameters may change the evaluation of those conditional statements.
+The information thus gained also allows `Astaroth` to optimize run-time behaviour more precisely, e.g. memory allocations or communication patterns.
 
 > TP: The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
 > MR: "conditional compilation" refers to the preprocessor conditionals, right? But if so, isn't this a very standard functionality, not needed to be stressed?
