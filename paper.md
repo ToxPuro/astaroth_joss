@@ -132,16 +132,16 @@ Below, we present a quick overview of these components. More extensive documenta
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
-The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
+The implementation of the operations is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
 Additionally, `Astaroth` comes with its own standard library for the DSL: It provides, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
 
 > MR: I reiterate on declarative vs. imperative: There is no surplus in these terms for domain scientists - they are simply not interesting for them. Again a majority decision case.
-
-> MR: "implementation of the operators is left to ... DSL compiler" Which operators? div, curl, laplace are written in DSL.
+> TP: Okay fine, but we can make concessions to the more technical readers at certain places? As Oskar has pointed out earlier we are talking about quite technical things here anyways (compilers and different ways of compilation).
 
 > MR: "software-managed caches" this could be misread as, e.g., use of shared memory
+> TP: Maybe but if the user really wants to be sure they can read the thesis
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
@@ -150,10 +150,12 @@ Further, `acc` supports run-time compilation, because run-time configuration var
 The information thus gained also allows `Astaroth` to optimize runtime behaviour more precisely, e.g. memory allocations or communication patterns.
 
 > MR: better: "run-time configuration variables" -> "run-time configuration parameters"
+> TP: agreed, IMO slightly better, but fine with either word.
 > OL: removed discussion as it was resolved, except for this one point
 
 > TP: The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
 > MR: "conditional compilation" refers to the preprocessor conditionals, right? But if so, isn't this a very standard functionality, not needed to be stressed?
+> TP: I understand that Oskar groups code elimination also to conditional compilation, which is correct based on my understanding of the words definition.
 
 > MV: I am fine with the text here. I think however Sienny insights could be helpful here, as she is less familiar with the intimate details of how this all works. My view might be "contaminanted" by the discussion we already had. 
 
