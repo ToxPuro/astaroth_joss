@@ -126,14 +126,22 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 `Astaroth` consists of three main components: 1) `acc`, a compiler and runtime for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
 
+> MR: I sum up on "runtime": Two terms are used in CS literature, with same meaning. One is of clear language and sufficiently self-explaining, the other is ambiguous jargon. It should be clear which to employ. If no consensus, majority will decide.
+
 ## `acc` compiler and runtime
 
 `Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
 The implementation of the operators is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of software-managed caches [@pekkila_graphicsprocessors_2026].
-In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points, -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
-Additionally, `Astaroth` comes with its own standard library for the DSL: It provised, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
+In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+Additionally, `Astaroth` comes with its own standard library for the DSL: It provides, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
+
+> MR: I reiterate on declarative vs. imperative: There is no surplus in these terms for domain scientists - they are simply not interesting for them. Again a majority decision case.
+
+> MR: "implementation of the operators is left to ... DSL compiler" Which operators? div, curl, laplace are written in DSL.
+
+> MR: "software-managed caches" this could be misread as, e.g., use of shared memory
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
@@ -141,9 +149,11 @@ The program thus produced is executed in the `acc` runtime, which further optimi
 Further, `acc` supports run-time compilation, because run-time configuration variables may change the evaluation of those conditional statements.
 The information thus gained also allows `Astaroth` to optimize runtime behaviour more precisely, e.g. memory allocations or communication patterns.
 
+> MR: better: "run-time configuration variables" -> "run-time configuration parameters"
 > OL: removed discussion as it was resolved, except for this one point
 
 > TP: The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
+> MR: "conditional compilation" refers to the preprocessor conditionals, right? But if so, isn't this a very standard functionality, not needed to be stressed?
 
 > MV: I am fine with the text here. I think however Sienny insights could be helpful here, as she is less familiar with the intimate details of how this all works. My view might be "contaminanted" by the discussion we already had. 
 
@@ -166,7 +176,7 @@ For fast data transfers and to support all possible hardware, both GPU-to-GPU re
 This runtime system can be accessed through `Astaroth`s runtime API.
 The API is C-ABI compatible, supporting foreign function interfaces to external applications written in any programming language.
 The API is organized into two layers: the `Device` layer and the `Grid` layer.
-The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from disk.
+The `Device` layer provides access to single-GPU functionality, such as moving data between CPU and GPU, launching kernels, and loading/storing snapshots from/to disk.
 The `Grid` layer provides access to multi-GPU functionality, such as executing DAGs, distributed initialization, and distributed loading/storing of snapshots.
 Other special functionality is also provided through the API, such as distributed Fourier transforms.
 
