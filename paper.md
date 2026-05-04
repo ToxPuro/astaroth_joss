@@ -268,7 +268,9 @@ We acknowledge the computational resources and services provided by CSC — IT C
 
 > MV: To me that would sound very good thing to do. I would definitely add CSC and relevant people to Acknowledgements. 
 
-> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text. 
+> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text.
+
+> MJKL: Johannes' acknowledgement line from above is complete as per funding agencies. Touko's written acknowledgement line of CSC etc also looks good to me. As per the Frontier project, I think it was also a CSC collaborative project, hence acknowledging CSC should be enough here. 
 
 # References
 
