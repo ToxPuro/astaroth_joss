@@ -103,6 +103,7 @@ In a more specialized approach, the Cactus framework[@goodale_cactusframework_20
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
 
 > JP: "single-process computations" not sure if this is true. Would be clearer to emphasize that they focus on single-node computations (=shared memory). Also Kokkos is working on support for distributed memory (=MPI) but AFAIK it's not yet ready for production.
+> TP: We had the opposite worry with Matthias that single-node performance is immediately clear and can Kokkos be used to talk between processes, that was immediately clear based on my reading.
 
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
@@ -165,11 +166,13 @@ In the DSL, users can define a list of compute steps specifying which kernels to
 The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns, which also determines dependency relations between the tasks.
 As an optimization, kernels may be fused together to reduce memory reads.
 
-> TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and kernels may be fused together to reduce memory reads."
+> TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and to reduce memory reads kernels may be fused together."
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
 > TP: Yes, calls to kernels. Modified the suggestion to reflect this
 
 > JP: "fused together to reduce memory reads" a bit ambiguous. Is this done automatically? The integration kernels are fused to exploit the interdependence of the fields which does reduce memory reads. But the fusion of packing and reduction operations is done for better efficiency (small problem sizes fused to saturate the device with work). Should clarify what is meant here.
+
+> TP: This refers to a bit niche implementation I did where the DSL compiler infers which kernels would be good candidates for fusion and automatically generates fused versions of them and at runtime decides can it use them. The motivation is that then the user can write Kernels that have smaller better defined scopes but can be then fused together by the runtime. I would be fine if the wording is a bit ambiguous since we cannot exactly describe what is done in a few words anyways.
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
@@ -190,27 +193,16 @@ This solver uses an astrophysical magnetohydrodynamical setup (`acc-runtime/samp
 The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@johannes_paper].
 
 > JP: @johannes_paper will probably not get a doi before May-June so can reference the dsc instead where it's embedded
+> TP: What about arxiv? You could but it there and we could refer to it from there?
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 The folder `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
 > JP: solver definition a bit unclear throughout the article. Do we mean the finite-diff + RK3 solver, or MHD/TFM/etc? Should pick one and use it throughout.
-
-> JP: ~~Suggest more focus on the modular/API nature of Astaroth. Something in line (stream-of-consciousness draft follows, feel free to refine) "Domain-specialized modules can be developed using the Astaroth DSL and API. We provide MHD, TFM, sink particle, ray tracing, whatnot, modules out of the box as production-ready solvers. Third-party modules for acoustic/earthquake simulations have also been developed[@ladino_or_what_was_it_again]. Furthermore, the library has been integrated as a GPU backend for Pencil Code [@some_PC-A_reference?], expanding the the use cases further to (what?)."~~
-
->JP: ~~Additional justification (can leave this out, just for information): I strongly recommend listing TFM as one of the highlights. It is production-ready for extracting turbulent transport coefficient for mean-field solar dynamo models and to my knowledge, the fastest in the world right now by a factor of $10\times$ (compared to PC[@pekkila_graphicsprocessors_2026;@schrinner_around_2006;@brandenburg_scale_dependence_2008;@warnecke_nature_around_2020], not aware of any other implementations).~~
-
->TP: agree on these but to me it sounds like they would best go to the solver.
-> and based on my experience with PC I would not overstate of the modularity of Astaroth as a solver: IMO PC is more modular and compared to it Astraroths solver does not seem that modular.
+> TP: I think the full physics solver is meant throughout. Would not immediately come up with a way to improve it. But at the same time I am not sure is it that unclear (we of course rely on the reader to be familiar with how the word solver is usually used in this context, but that is IMO fine).
 
 > OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now. 
-
-> TP: dropped the seismology module: there indeed is no such module. They have made a PR for solving the wave equation, which is a long way from a proper third-party module for earthquake simulations. It is correct that Astaroth has been used in seismology but not that there is a module for it.
-
-> OL: ah, shame. It's not a module, but could it be argued that it is a "setup"? We could also talk about work-in-progress on a third party module and reference the paper.
-
-> TP: Calling it a setup would IMO fair. But what is public, (here is the PR https://bitbucket.org/jpekkila/astaroth/pull-requests/65) is quite sparse and I would not like to ovesell it and I think what we say in the research impact statement about is sufficient.
 
 # Research impact statement
 
@@ -224,31 +216,18 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > OL: Ok, so then this sentence is indeed about the PCA interface. In that case I feel we really do need to mention it. Because otherwise, if e.g. a pencil code user reads this paper, the only reference to solvers is the standalone solver, and I think that is unhelpful. It can be mentioned as work in progress.
 > TP: I get the point now: we have to make it clear PC is not accelerated via the standalone solver. Have to think about better wording but now made the tentative change: "... Pencil Code via Astaroth ... " ---> ".. Pencil Code, by integrating Astaroth's DSL and runtime inside of it, ... , ...". Maybe not the best but makes it more clear how Astaroth is used. I particularly think the inside of it is a bit clunky but for now this tentative version is better.
 
-> JP: ~~Suggest clarifying, e.g., something like (stream of consciousness, please revise) "The Astaroth framework has been used for several publications focusing on various aspects of performance optimization[@pekkila_graphicsprocessors_2026], communication techniques[@vaisala_interaction_2021;@lappi_masters;@pekkila_scalablecommunication_2022;@pekkila_graphicsprocessors_2026], compiler techniques[@pekkila_masters_2019;@pekkila_graphicsprocessors_2026;@puro_masters?], astrophysical plasma simulations[@vaisala_interaction_2021;@pekkila_graphicsprocessors_2026], gravitational waves[@roper2020numerical], seismic modeling[@ladino], and list everything else that comes to mind[@other;@references]."~~
-
-> JP: ~~"At it's current state, Astaroth provides a production-ready toolkit (API+DSL+toolbox for reductions, IO, etc) for implementing various computational physics simulations based on structured grids. By providing efficient performance and weak scaling, astaroth enables extremely high-resolution simulations on exascale systems and further research in computational astrophysics, etc, etc, what is already mentioned at the end of the current version".~~
-
-> TP: answer to Johannes' suggestions. In short I would not try to sell the features of Astaroth here again but simply make sure it is visible that Astaroth has been used, is used and will be used for example by the PC community
-
-> JP: ~~also worth noting here or the solver section: 10x speedup in TFM performance compared to PC and 93% weak scaling to 4096 MI250X GCDs[@pekkila_graphicsprocessors_2026].~~
-
 > OL: I agree with Johannes about more references, but don't really care which way they are listed. Either way is fine, although I think the gravitational waves paper was PC not Astaroth.
 
 > TP: I have tried to give all references that now come to mind, including those in Johannes' suggestion. If you spot one is missing please simply add it. Yes, the gravitational waves paper is for PC and to showcase what will be done in the future with PC.
 
 > OL: should there be more highlights on the domain science side? Currently the only highlight is the performance
+> TP: What more should we say? We can say something in general terms but would we speak about new physics results like the asymptotics discovered in Fred's paper? But again there the only meaningful role Astaroth played was the performance, naturally.
 
 > OL: The pencil code accelleration is mentioned without explanation of the PCA setup. I read it as referring to this development, it should be expanded to explain this to the reader (not a lot of text, just one or two sentences).
 
-> TP: Do you mean we have to repeat that PC was accelerated with PC? Now I changed "Acceleration of Pencil Code ---> Acceleration of Pencil Code with Astaroth". And if you mean that the text would read like that the acceleration of PC is what is described here I would not be sure since in this section we give anyways use cases of Astaroth so then it would simply one use case among others. What more should we say and do you think we could make the line more clear?
-
 > OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
 
-> MV: I believe that the future of standalone solver is in the Python interface. However, even though with Ondrej's thesis work will like do a lot for it to become reality, it is maybe too new development to be feature in this paper yet. What do you think? 
-
-> TP: Yes, surely it will be important and a great advance but given that the work is just starting I would not include it yet, since the reader would get the impression that the Python interface work is further along than it is.
-
-> MV: That is fine. Here we can only focus on thing that actually exist. 
+> TP: Do you read the text now as that we say we are expecting people to migrate to the standalone solver? Agreed that will not happen (at least from the PC community) so that is not we are trying to convey. Have now worded the text to be clear that Astaroth is inside PC and we are not accelerating it with the standalone solver.
 
 # Acknowledgements
 
@@ -263,58 +242,11 @@ The European Research Council, the European Union's Horizon 2020 research and in
 
 > TP: Would leave it to Maarit to know best which ones to mention. The JOSS paper for PC has approx ~5 sources mentioned so we should definitely not need more than that so maybe the 3 most important?
 
-> JP: ~~here's what I've listed for my papers (not sure if ReSoLVE is still relevant, Maarit will know this. Likely yes because IIRC it was the funding body before ERC)~~
-> 
-
-> JP: ~~Could also add Frontier computer resource acknowledgement~~
-
-> OL: Do we want to acknowledge help from CSC? E.g. Robertsen?
-
-> TP: Yes, good idea! Added now a draft of acknowledging help from CSC in the same paragraph about compute resources. Thoghts? And feel free to edit it directly if you have an idea to improve it.
-
-> MV: To me that would sound very good thing to do. I would definitely add CSC and relevant people to Acknowledgements. 
 
 > MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text.
-
-> MJKL: Johannes' acknowledgement line from above is complete as per funding agencies. Touko's written acknowledgement line of CSC etc also looks good to me. As per the Frontier project, I think it was also a CSC collaborative project, hence acknowledging CSC should be enough here. 
 
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
 [^paradigm_footnote]: In declarative programming, computations are defined by describing what the results look like; in imperative programming, by describing the steps to perform.
 [^contributor_footnote]: Contributors not otherwise credited in the text are: Petr Bém and Tzu-Chun Hsu. 
-
-# Notes 
-
-> **JP NEW COMMENT: EVERYTHING BELOW OK, CAN REMOVE**
-
-> JP: some notes if we're going to include history and our prior work
-
-> Astaroth Code: hard-coded compressible hydrodynamics 2014-2019[@vaisala_magneticphenomena_2017;@pekkila2017methods]
-
-> Astaroth: generalized stencil framework 2019- (DSL V1, single-gpu) [@pekkila_masters_2019], rewritten DSL V2 grammar and code generator [@pekkila_stencilcomputations_2025]
-
-> Astaroth: single-node multi-gpu[@vaisala_interactionlarge_2021], general MPI halo exchange communication and Z-order [@pekkila2022scalable], distributed reductions(lappi, not sure if mentioned in the thesis) and task system[@lappi], topology-aware domain decomposition and mapping and communication optimizations (fused packing) and TFM[@pekkila_graphicsprocessors_2026]
-
-> Astaroth: CPU, PC-A, DSL improvements, ray tracing, and other contributions [@Touko'sWork]
-
-> JP START: added bullet points of things
-
-> - methods to accelerate and improve perfomance-portability and productivity Stencil computations widely studied: numerous software projects at different levels of abstractions. We refer the reader to [pekkila_graphicsprocessors_2026] for more details on the background.
-
-> - Low-level generalized approaches suitable for implementing stencil solvers for graphics processors include CUDA and HIP [@nvidia_cudac_2025;@amd_hipdocumentation_2024] (computation) and GPU-aware MPI[messagepassinginterfaceforum_openmpi_2025;argonnenationallaboratoryandmississippistateuniversity_mpich_2026] (communication).
-
-> - OpenMP[dagum1998openmp], OpenACC[openacc2025spec], Kokkos[@trott2021kokkos], Raja[@beckingsale2019raja] provide abstractions and portability layers for parallel computational patterns and are suitable for implementing domain-specialized solvers on shared-memory systems.
-
-> - Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[mullapudi2015polymage]. Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
-
-> - Closest to Astaroth are domain-specialized frameworks providing the building blocks for computational physics, such as Cactus[@goodale_cactusframework_2003] and Parthenon[@grete_parthenonperformance_2023].
-
-> - Closest to our work is the Parthenon, which provides a framework for distributed computations of  adaptive mesh refinement, utilizing Kokkos as the backend for shared-memory computation.
-
-> - Like these projects, Astaroth provides ready-made components for implementing computation and communication for their domain-specialized case.
-
-> - Compared to these projects, Astaroth uses a domain-specific language that is lowered into platform-portable autotuned CUDA/HIP code to implement efficient stencil computations, resembling the approaches of Halide, Polymage, and Patus for their domains.
-
-> - The distinctive feature of Astaroth is that it specializes in cache-constrained computations on structured grids especially in multiphysics simulations, where the coupling of physical fields, the use of large stencils, and the use of double-precision arithmetic. These requirements result in prohibitively large working sets in on-chip memory for obtaining sufficient levels of reuse to break through the memory bandwidth bound. Astaroth implements a code generator for unrolling and reordering the stencil computations to reduce instruction counts, improve the locality of memory accesses, and ensuring sufficient instruction-level parallelism to obtain improved latency-hiding at low occupancy due to high register allocation per thread to improve the reuse of intermediate values.
-
