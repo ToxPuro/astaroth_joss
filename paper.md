@@ -201,6 +201,7 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 
 > JP: solver definition a bit unclear throughout the article. Do we mean the finite-diff + RK3 solver, or MHD/TFM/etc? Should pick one and use it throughout.
 > TP: I think the full physics solver is meant throughout. Would not immediately come up with a way to improve it. But at the same time I am not sure is it that unclear (we of course rely on the reader to be familiar with how the word solver is usually used in this context, but that is IMO fine).
+> MV: I would qualify something as a "solver" if it applies Astaroth to its intended purpose to solve the inteded problem. With this I mean not only FDM + RK3, but required setting, orchestration and boundary condition. E.g full MHD solver. Just limiting to FDM + RK3 is, in my opinion, overtly reductive, because that would not be how the userbase would think. 
 
 > OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now. 
 
