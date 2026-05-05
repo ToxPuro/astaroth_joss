@@ -55,14 +55,12 @@ In recent years, GPUs have become the primary compute platform for data-parallel
 `Astaroth` is a GPU framework for stencil computations, that has been developed to address this problem of scalable scientific computing.
 `Astaroth` provides its own domain specific language (DSL), in which researchers can express their required computations without having to focus on technical implementation details.
 It can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
-While stencils are the core of `Astaroth`, it also accelerates other operations like reductions (e.g. sums), simple ray-tracing and has library integrations for performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
-`Astaroth` has primarily been used for turbulent astrophysical plasma simulations.
+While stencils are the core of `Astaroth`, it also accelerates other operations like reductions (e.g. sums), simple ray-tracing, and integrates with libraries performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
+`Astaroth` is optimized for multiphysics use cases and has primarily been used for turbulent astrophysical plasma simulations.
 
-> JP: Suggest "like" -> such as or whatever is appropriate for the context (less colloquial). Applies to all instances of "like"
-
-> JP: Suggest oxford comma ", and integrates"
 
 > MV: In this section we do not address at all that one of the big selling points for Astaroth is that it is very good for cache-constrained multiphysics. Right now there is no work about it in the summary, while it was a huge deal with respect how Astaroth works as good as it does. IMHO, even more important innovation from Johannes that the DSL. It deserves at least a sentence in the summary. 
+> TP: Good point! We speak about this later and I would like to keep the more technical wording to that section so I know added simply that `Astaroth` is optimized for multiphysics use cases.
 
 # Statement of need
 
@@ -91,6 +89,7 @@ As an example, many image processing techniques, like edge detection and
 convolutions, are traditionally expressed using stencils.
 
 > MV: Another TODO item: we need to qualify the 20-60x speedup better in the text. Such metrics are very much contextual and could be an issue for the referee if we are not more precise. 
+> TP: Would think that the immediate citation makes it clear that the context can be found in the paper for the reader who is interested. I would not think that JOSS expects to expand on speedup results. If the referees complain I would then expand on the context.
 
 
 # State of the field                                                                                                                  
@@ -205,6 +204,7 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 > JP: solver definition a bit unclear throughout the article. Do we mean the finite-diff + RK3 solver, or MHD/TFM/etc? Should pick one and use it throughout.
 > TP: I think the full physics solver is meant throughout. Would not immediately come up with a way to improve it. But at the same time I am not sure is it that unclear (we of course rely on the reader to be familiar with how the word solver is usually used in this context, but that is IMO fine).
 > MV: I would qualify something as a "solver" if it applies Astaroth to its intended purpose to solve the inteded problem. With this I mean not only FDM + RK3, but required setting, orchestration and boundary condition. E.g full MHD solver. Just limiting to FDM + RK3 is, in my opinion, overtly reductive, because that would not be how the userbase would think. 
+> TP: Agreed, and again not sure how we could make the wording less ambiguous to mean the full physics solver.
 
 > OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now. 
 
@@ -213,7 +213,7 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
 We expect that the acceleration of `Pencil Code`, by integrating `Astaroth`'s DSL and runtime inside of it, will increase the number of `Astaroth` users.
-The associated performance increase of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
+The associated speedup of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
 
 > OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
 > TP: Yes agree that wording was fuzzy. The reason why I did not use the word users was that I was not 100% sure what constitutes a user of Astaroth when they do not directly interact with it, or are not necessarily are aware of its existence, but maybe my worry was overblown.
@@ -234,6 +234,7 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > TP: Do you read the text now as that we say we are expecting people to migrate to the standalone solver? Agreed that will not happen (at least from the PC community) so that is not we are trying to convey. Have now worded the text to be clear that Astaroth is inside PC and we are not accelerating it with the standalone solver.
 
 > MV: This comment here is just a TODO note to myself that I need to find a way to address this better from my side when I can. Also does the gravitational wave paper use Astaroth? If not, we need to be more clear about it.  
+> TP: Doesn't the word will in the sentence make it clear that we are speaking about future work that has not been done yet and thus has not used Astaroth yet? 
 
 # Acknowledgements
 
