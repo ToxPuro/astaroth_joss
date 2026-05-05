@@ -62,6 +62,7 @@ While stencils are the core of `Astaroth`, it also accelerates other operations 
 
 > JP: Suggest oxford comma ", and integrates"
 
+> MV: In this section we do not address at all that one of the big selling points for Astaroth is that it is very good for cache-constrained multiphysics. Right now there is no work about it in the summary, while it was a huge deal with respect how Astaroth works as good as it does. IMHO, even more important innovation from Johannes that the DSL. It deserves at least a sentence in the summary. 
 
 # Statement of need
 
@@ -88,6 +89,8 @@ Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and
 convolutions, are traditionally expressed using stencils.
+
+> MV: Another TODO item: we need to qualify the 20-60x speedup better in the text. Such metrics are very much contextual and could be an issue for the referee if we are not more precise. 
 
 
 # State of the field                                                                                                                  
@@ -229,6 +232,8 @@ The associated performance increase of 20-60x will enable more realistic astroph
 > OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
 
 > TP: Do you read the text now as that we say we are expecting people to migrate to the standalone solver? Agreed that will not happen (at least from the PC community) so that is not we are trying to convey. Have now worded the text to be clear that Astaroth is inside PC and we are not accelerating it with the standalone solver.
+
+> MV: This comment here is just a TODO note to myself that I need to find a way to address this better from my side when I can. Also does the gravitational wave paper use Astaroth? If not, we need to be more clear about it.  
 
 # Acknowledgements
 
