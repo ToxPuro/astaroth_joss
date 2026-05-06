@@ -145,21 +145,13 @@ Additionally, `Astaroth` comes with its own standard library for the DSL: It pro
 > MR: I reiterate on declarative vs. imperative: There is no surplus in these terms for domain scientists - they are simply not interesting for them. Again a majority decision case.
 > TP: Okay fine, but we can make concessions to the more technical readers at certain places? As Oskar has pointed out earlier we are talking about quite technical things here anyways (compilers and different ways of compilation).
 
-> MR: "software-managed caches" this could be misread as, e.g., use of shared memory
-> TP: Maybe but if the user really wants to be sure they can read the thesis
-
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
-`acc` also supports conditional compilation based on any conditional statements in the DSL source --- only compiling code that is actually executed at run-time.
-Further, `acc` supports run-time compilation, because run-time configuration parameters may change the evaluation of those conditional statements.
+`acc` also supports run-time compilation, because run-time configuration parameters may change the evaluation of conditional statements, thereby changing the branches taken at run-time.
+With run-time compilation, for a given configuration, `acc` compiles only those parts of the DSL source that will be executed.
 The information thus gained also allows `Astaroth` to optimize run-time behaviour more precisely, e.g. memory allocations or communication patterns.
 
-> TP: The only worry is that is the text understandable enough for the targeted physicist readers so viewpoints from Miikka,Sienny,Maarit and Matthias would be valuable!
-> MR: "conditional compilation" refers to the preprocessor conditionals, right? But if so, isn't this a very standard functionality, not needed to be stressed?
-> TP: I understand that Oskar groups code elimination also to conditional compilation, which is correct based on my understanding of the words definition.
-
-> MV: I am fine with the text here. I think however Sienny insights could be helpful here, as she is less familiar with the intimate details of how this all works. My view might be "contaminanted" by the discussion we already had. 
-
+> OL: rewrote the paragraph based on the discussion on monday (May 4th). Removed reference to conditional compilation. Hope this is more clear.
 
 ## Multi-GPU runtime API
 
@@ -175,6 +167,8 @@ As an optimization, kernels may be fused together to reduce memory reads.
 > JP: "fused together to reduce memory reads" a bit ambiguous. Is this done automatically? The integration kernels are fused to exploit the interdependence of the fields which does reduce memory reads. But the fusion of packing and reduction operations is done for better efficiency (small problem sizes fused to saturate the device with work). Should clarify what is meant here.
 
 > TP: This refers to a bit niche implementation I did where the DSL compiler infers which kernels would be good candidates for fusion and automatically generates fused versions of them and at runtime decides can it use them. The motivation is that then the user can write Kernels that have smaller better defined scopes but can be then fused together by the runtime. I would be fine if the wording is a bit ambiguous since we cannot exactly describe what is done in a few words anyways.
+
+> OL: I'm fine with the general wording Touko suggests, but should kernel fusion be part of the Multi-GPU runtim discussion, or the DSL compiler discussion? It feels like a compiler kind of thing to me. Either way it would be good if the sentence had an agent, atm kernels "may be fused together" by nothing in particular, imo should either say "`acc` may fuse..." or "the runtime may fuse...".
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
