@@ -190,6 +190,7 @@ The samples directory also includes other production-ready setups, e.g. `tfm-mpi
 
 > JP: @johannes_paper will probably not get a doi before May-June so can reference the dsc instead where it's embedded
 > TP: What about arxiv? You could but it there and we could refer to it from there?
+> MJKL: I second Touko in this. We should be able to make a re-submission in the beginning of the next week, after which it is also a high time to make an arxiv submission.
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
