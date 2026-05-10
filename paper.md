@@ -168,7 +168,7 @@ The decomposition into tasks is based on the overall domain decomposition and th
 > MR: my proposal
 
 Computational steps, which need to be interlaced with communication or boundary updates, must be implemented in separate kernels.
-The DSL construct ``ComputeSteps” (formally a function) allows the user to bundle these kernels in the desired order and to specify the boundary updates.
+The DSL construct `ComputeSteps` (formally a function) allows the user to bundle these kernels in the desired order and to specify the boundary updates.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the necessary communications/updates from the dependencies across the kernels and accordingly constructs a directed acyclic graph (DAG) of all needed computation and communication/update tasks, enabling maximal concurrency of their execution.
 As an optimization, kernels may be fused to reduce memory reads.
 
