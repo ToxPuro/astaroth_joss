@@ -135,15 +135,20 @@ Below, we present a quick overview of these components. More extensive documenta
 
 ## `acc` compiler and runtime
 
-`Astaroth` has a DSL for stencil-based computation, designed to be used by domain scientists without having to consider technical implementation details.
+`Astaroth` has a DSL for stencil-based computations, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
 The implementation of the operations is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 Of central importance of these is the unrolled and reordered computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) reductions -- which are commonly needed for stencil-based solvers and require multiple steps to perform across multiple GPUs, and 2) distributed simplified ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
+
 Additionally, `Astaroth` comes with its own standard library for the DSL: It provides, in addition to other functionality, derivative operators needed for PDE solvers, which are implemented for generally spaced Cartesian, spherical or cylindrical grids, and Poisson solvers needed for, e.g. self-gravity.
 
 > MR: I reiterate on declarative vs. imperative: There is no surplus in these terms for domain scientists - they are simply not interesting for them. Again a majority decision case.
 > TP: Okay fine, but we can make concessions to the more technical readers at certain places? As Oskar has pointed out earlier we are talking about quite technical things here anyways (compilers and different ways of compilation).
+
+> MR: I talked to Fred (native speaker), he says "reductions, which ... require several steps to be performed ..." or
+>                                                                               several steps    be performed ..."
+>  "several" instead of "multiple" to avoid doubling and to clarify difference between "some" and "many"
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
@@ -155,10 +160,17 @@ The information thus gained also allows `Astaroth` to optimize run-time behaviou
 
 ## Multi-GPU runtime API
 
+<!--
 In the DSL, users can define a list of compute steps specifying which kernels to run and which boundary conditions to impose.
 `Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the compute steps, where each step is decomposed into computation and communication tasks.
-The decomposition into tasks is based on the overall domain decomposition, and the stencils' data access patterns, which also determines dependency relations between the tasks.
-As an optimization, kernels may be fused together to reduce memory reads.
+The decomposition into tasks is based on the overall domain decomposition and the stencils' data access patterns, which also determines dependency relations between the tasks.
+-->
+> MR: my proposal
+
+Computational steps, which need to be interlaced with communication or boundary updates, must be implemented in separate kernels.
+The DSL construct ``ComputeSteps” (formally a function) allows the user to bundle these kernels in the desired order and to specify the boundary updates.
+Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the necessary communications/updates from the dependencies across the kernels and accordingly constructs a directed acyclic graph (DAG) of all needed computation and communication/update tasks, enabling maximal concurrency of their execution.
+As an optimization, kernels may be fused to reduce memory reads.
 
 > TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and to reduce memory reads kernels may be fused together."
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
