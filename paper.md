@@ -106,23 +106,9 @@ The Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] pro
 In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational science tasks.
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on the background.
 
-> JP: "single-process computations" not sure if this is true. Would be clearer to emphasize that they focus on single-node computations (=shared memory). Also Kokkos is working on support for distributed memory (=MPI) but AFAIK it's not yet ready for production.
-> TP: We had the opposite worry with Matthias that single-node performance is immediately clear and can Kokkos be used to talk between processes, that was immediately clear based on my reading.
-
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
 Astaroth also incorporates other key functionalities for computational sciences, e.g., distributed reductions, IO, and supports different physics cases.
-
-> TP: We have tried to remove words we can not defend or quantify like "ergonomic" and "compact". I would say now the word "modular" is one such word again. What do you think? I would be fine also with dropping this sentence since also we should not advertise different physics cases Astaroth comes since IMO they are not modular or expansive enough to advertise.
-
-> OL: I think modular is arguably ok, if it can be shown. Unlike ergonomic or compact, modular has an objective definition: something that consists of modules which can be combined to form a working system. If example modules are listed and how they work together is explained, that would justify the term, IMO. But we may of course run up against the word count...
-
-> OL: but maybe a better solution would be to talk about the components as "modules" (i.e. "different physics modules". "IO module"? "reduction module"?, idk which components are covered by the "modular") instead of describing the overall structure of the system as "modular"
-
-> MV: Yes I agree with OL here. Some specificity can be a benefit. Astaroth has a number of different component both in and outside what is done in DSL. Now due to my work in AI I also tent to speak more about stuff in terms or "orchestration" and "workflow" too with respect to utilizing varius code components. Not sure if those word would be useful in this text. Here I am merely thinking out loud.   
-
-> TP: Right, you guys make good points. Although I still have a worry about is saying the physics features are modular. If there are not developments I am not aware of the physics choices are driven by the macro flags. This makes the implementation clearly switchable, but not sure can we call it modular. Modules are strongly about interfaces and hiding implementation details to have interchangeable implementations that one can choose between. The switch based implementation neither hides details or has well defined interfaces that enable switchable implementations. (And not having really options to choose between many of the physics aspects like equation of state furthers my worry, but this maybe is asking for too much for something to be modular). I have now tentatively dropped the word
-
 
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel.
 
@@ -130,8 +116,6 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 
 `Astaroth` consists of three main components: 1) `acc`, a compiler and runtime system for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
-
-> JP: "a standalone solver" suggest "standalone solvers. Depends on our definition of a solver (meaning RK3 or MHD&TFM&etc here?).
 
 ## `acc` compiler and runtime system
 
@@ -155,17 +139,20 @@ Additionally, `Astaroth` comes with its own standard library for the DSL: It pro
 The program thus produced is executed in the `acc` runtime system, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
 `acc` also supports run-time compilation, because run-time configuration parameters may change the evaluation of conditional statements, thereby changing the branches taken at run-time.
 With run-time compilation, for a given configuration, `acc` compiles only those parts of the DSL source that will be executed.
-The information thus gained also allows `Astaroth` to optimize run-time behaviour more precisely, e.g. memory allocations or communication patterns.
+The information of what code gets executed also allows `Astaroth` to optimize run-time behaviour more precisely, e.g. memory allocations or communication patterns.
 
 > OL: rewrote the paragraph based on the discussion on monday (May 4th). Removed reference to conditional compilation. Hope this is more clear.
+> TP: The information thus gained ---> the information of what code gets executed, since the paragraph has underwent some changes and this is now clearer.
 
 ## Multi-GPU runtime system and API
 
-In the DSL, using the keyword `ComputeSteps`, users can define a list of compute steps specifying a sequence of kernels and boundary updates.
+In the DSL, using the keyword `ComputeSteps`, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
 Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
 Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
 Communication tasks are inserted where needed.
+
+> TP: Boundary updates ---> boundary conditions, so the actual function of them is more apparent to the reader.
 
 > TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and to reduce memory reads kernels may be fused together."
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
@@ -176,6 +163,8 @@ Communication tasks are inserted where needed.
 > TP: This refers to a bit niche implementation I did where the DSL compiler infers which kernels would be good candidates for fusion and automatically generates fused versions of them and at runtime decides can it use them. The motivation is that then the user can write Kernels that have smaller better defined scopes but can be then fused together by the runtime. I would be fine if the wording is a bit ambiguous since we cannot exactly describe what is done in a few words anyways.
 
 > OL: Matthias wrote a suggestion for the above paragraph. I took some of his suggestion and added some of my own improvements. There's still the matter of "dropping unnecessary kernel calls". Now that I think about it, this will probably raise more questions. The reader will wonder why there would be unnecessary kernels in a `ComputeSteps`.
+
+> TP: Fair enough. The motivation is similar to run-time compilation: some kernels are only meaningful depending on some input variables. I am fine with not mentioning the feature.
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
