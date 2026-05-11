@@ -1,6 +1,8 @@
 ---
 title: 'Astaroth: A scientific computing framework for accelerating stencil computations.'
 tags:
+  - GPU
+  - DSL
   - C/C++
   - scientific computing
   - high performance computing
@@ -126,14 +128,12 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 
 # Software design
 
-`Astaroth` consists of three main components: 1) `acc`, a compiler and runtime for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
+`Astaroth` consists of three main components: 1) `acc`, a compiler and runtime system for a domain-specific language (DSL) for stencil computations, 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
 Below, we present a quick overview of these components. More extensive documentation is available at [@astaroth_doc]. 
-
-> MR: I sum up on "runtime": Two terms are used in CS literature, with same meaning. One is of clear language and sufficiently self-explaining, the other is ambiguous jargon. It should be clear which to employ. If no consensus, majority will decide.
 
 > JP: "a standalone solver" suggest "standalone solvers. Depends on our definition of a solver (meaning RK3 or MHD&TFM&etc here?).
 
-## `acc` compiler and runtime
+## `acc` compiler and runtime system
 
 `Astaroth` has a DSL for stencil-based computations, designed to be used by domain scientists without having to consider technical implementation details.
 The main operations, like stencils, are written in a declarative syntax, and the kernels that use them are written in an imperative syntax. [^paradigm_footnote]
@@ -151,26 +151,20 @@ Additionally, `Astaroth` comes with its own standard library for the DSL: It pro
 >  "several" instead of "multiple" to avoid doubling and to clarify difference between "some" and "many"
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
-The program thus produced is executed in the `acc` runtime, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
+The program thus produced is executed in the `acc` runtime system, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
 `acc` also supports run-time compilation, because run-time configuration parameters may change the evaluation of conditional statements, thereby changing the branches taken at run-time.
 With run-time compilation, for a given configuration, `acc` compiles only those parts of the DSL source that will be executed.
 The information thus gained also allows `Astaroth` to optimize run-time behaviour more precisely, e.g. memory allocations or communication patterns.
 
 > OL: rewrote the paragraph based on the discussion on monday (May 4th). Removed reference to conditional compilation. Hope this is more clear.
 
-## Multi-GPU runtime API
+## Multi-GPU runtime system and API
 
-<!--
-In the DSL, users can define a list of compute steps specifying which kernels to run and which boundary conditions to impose.
-`Astaroth`'s multi-GPU runtime constructs a directed acyclic graph (DAG) of the compute steps, where each step is decomposed into computation and communication tasks.
-The decomposition into tasks is based on the overall domain decomposition and the stencils' data access patterns, which also determines dependency relations between the tasks.
--->
-> MR: my proposal
-
-Computational steps, which need to be interlaced with communication or boundary updates, must be implemented in separate kernels.
-The DSL construct `ComputeSteps` (formally a function) allows the user to bundle these kernels in the desired order and to specify the boundary updates.
-Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the necessary communications/updates from the dependencies across the kernels and accordingly constructs a directed acyclic graph (DAG) of all needed computation and communication/update tasks, enabling maximal concurrency of their execution.
-As an optimization, kernels may be fused to reduce memory reads.
+In the DSL, using the keyword `ComputeSteps`, users can define a list of compute steps specifying a sequence of kernels and boundary updates.
+Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
+Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
+Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
+Communication tasks are inserted where needed.
 
 > TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and to reduce memory reads kernels may be fused together."
 > OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
@@ -180,7 +174,7 @@ As an optimization, kernels may be fused to reduce memory reads.
 
 > TP: This refers to a bit niche implementation I did where the DSL compiler infers which kernels would be good candidates for fusion and automatically generates fused versions of them and at runtime decides can it use them. The motivation is that then the user can write Kernels that have smaller better defined scopes but can be then fused together by the runtime. I would be fine if the wording is a bit ambiguous since we cannot exactly describe what is done in a few words anyways.
 
-> OL: I'm fine with the general wording Touko suggests, but should kernel fusion be part of the Multi-GPU runtim discussion, or the DSL compiler discussion? It feels like a compiler kind of thing to me. Either way it would be good if the sentence had an agent, atm kernels "may be fused together" by nothing in particular, imo should either say "`acc` may fuse..." or "the runtime may fuse...".
+> OL: Matthias wrote a suggestion for the above paragraph. I took some of his suggestion and added some of my own improvements. There's still the matter of "dropping unnecessary kernel calls". Now that I think about it, this will probably raise more questions. The reader will wonder why there would be unnecessary kernels in a `ComputeSteps`.
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
@@ -219,26 +213,11 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
-We expect that the acceleration of `Pencil Code`, by integrating `Astaroth`'s DSL and runtime inside of it, will increase the number of `Astaroth` users.
+We expect that the recent acceleration of `Pencil Code`, which was done by embedding `Astaroth`'s DSL and runtime system inside of it, will increase the number of `Astaroth` users.
 The associated speedup of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to the propagation and processes producing primordial gravitational waves [@roper2020numerical].
-
-> OL: Edit suggestion added for penultimate sentence, old sentence below. "People relying on" is fuzzy, would prefer simply "users". Also used active voice to make it clear who it is that expects this migration to happen. 
-> TP: Yes agree that wording was fuzzy. The reason why I did not use the word users was that I was not 100% sure what constitutes a user of Astaroth when they do not directly interact with it, or are not necessarily are aware of its existence, but maybe my worry was overblown.
-> OL: Ok, so then this sentence is indeed about the PCA interface. In that case I feel we really do need to mention it. Because otherwise, if e.g. a pencil code user reads this paper, the only reference to solvers is the standalone solver, and I think that is unhelpful. It can be mentioned as work in progress.
-> TP: I get the point now: we have to make it clear PC is not accelerated via the standalone solver. Have to think about better wording but now made the tentative change: "... Pencil Code via Astaroth ... " ---> ".. Pencil Code, by integrating Astaroth's DSL and runtime inside of it, ... , ...". Maybe not the best but makes it more clear how Astaroth is used. I particularly think the inside of it is a bit clunky but for now this tentative version is better.
-
-> OL: I agree with Johannes about more references, but don't really care which way they are listed. Either way is fine, although I think the gravitational waves paper was PC not Astaroth.
-
-> TP: I have tried to give all references that now come to mind, including those in Johannes' suggestion. If you spot one is missing please simply add it. Yes, the gravitational waves paper is for PC and to showcase what will be done in the future with PC.
 
 > OL: should there be more highlights on the domain science side? Currently the only highlight is the performance
 > TP: What more should we say? We can say something in general terms but would we speak about new physics results like the asymptotics discovered in Fred's paper? But again there the only meaningful role Astaroth played was the performance, naturally.
-
-> OL: The pencil code accelleration is mentioned without explanation of the PCA setup. I read it as referring to this development, it should be expanded to explain this to the reader (not a lot of text, just one or two sentences).
-
-> OL: to me, the change that would drive users to Astaroth is the PCA transpiler method, as that allows PC users to keep their own methods. I don't think PC users will be migrating to the standalone solver. But as long as we make it clear that this is just an expectation that WE have, I guess it's fine. Made an edit suggestion about this above.
-
-> TP: Do you read the text now as that we say we are expecting people to migrate to the standalone solver? Agreed that will not happen (at least from the PC community) so that is not we are trying to convey. Have now worded the text to be clear that Astaroth is inside PC and we are not accelerating it with the standalone solver.
 
 > MV: This comment here is just a TODO note to myself that I need to find a way to address this better from my side when I can. Also does the gravitational wave paper use Astaroth? If not, we need to be more clear about it.  
 > TP: Doesn't the word will in the sentence make it clear that we are speaking about future work that has not been done yet and thus has not used Astaroth yet? 
