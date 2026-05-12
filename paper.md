@@ -197,7 +197,9 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 > MV: I would qualify something as a "solver" if it applies Astaroth to its intended purpose to solve the inteded problem. With this I mean not only FDM + RK3, but required setting, orchestration and boundary condition. E.g full MHD solver. Just limiting to FDM + RK3 is, in my opinion, overtly reductive, because that would not be how the userbase would think. 
 > TP: Agreed, and again not sure how we could make the wording less ambiguous to mean the full physics solver.
 
-> OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now. 
+> OL: I think the test-field methods may be best expanded in research impact. I've mentioned them here for now.
+> HS: It might be helpful to distinguish HD/MHD/Physics solvers. It may be good to add the existing physics solvers and capabilities._
+> HS: One possibility is to also add the status on high-order solvers in the field?
 
 # Research impact statement
 
@@ -227,7 +229,10 @@ The European Research Council, the European Union's Horizon 2020 research and in
 
 
 > MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text.
-
+> HS: The authors acknowledge support for the CompAS Project from the Institute of Astronomy and Astrophysics,
+Academia Sinica (ASIAA), the Academia Sinica grant AS-IAIA-114-M01, and the National Science and Technology Council (NSTC) in Taiwan through grants 112-2112-M-001-030, 113-2112-M-001-008, and 114-2112-M-001-001-; the International Collaboration and Cooperation grant for COSMAGG that supports the exchanges between Taiwan
+and Finland: 113-2927-I-001-513-, 114-2927-I-001-506-, and Research Council of Finland project 359462.
+> HS: adding Mordecai Mac Low, Chun-Fan Liu, and Man Hei Li.
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
