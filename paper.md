@@ -92,6 +92,7 @@ convolutions, are traditionally expressed using stencils.
 
 > MV: Another TODO item: we need to qualify the 20-60x speedup better in the text. Such metrics are very much contextual and could be an issue for the referee if we are not more precise. 
 > TP: Would think that the immediate citation makes it clear that the context can be found in the paper for the reader who is interested. I would not think that JOSS expects to expand on speedup results. If the referees complain I would then expand on the context.
+> MV: If it is like so, then OK. 
 
 
 # State of the field                                                                                                                  
