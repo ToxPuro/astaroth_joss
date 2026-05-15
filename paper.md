@@ -146,7 +146,7 @@ The information of what code gets executed also allows `Astaroth` to optimize ru
 
 ## Multi-GPU runtime system and API
 
-In the DSL, using the keyword `ComputeSteps`, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
+In the DSL, using the `ComputeSteps` language construct, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
 Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
 Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
@@ -202,6 +202,8 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 > HS: It might be helpful to distinguish HD/MHD/Physics solvers. It may be good to add the existing physics solvers and capabilities.
 
 > HS: One possibility is to also add the status on high-order solvers in the field?
+
+> OL: that could be valuable. We could at least mention them. Do you know what the main ones are?
 
 # Research impact statement
 
