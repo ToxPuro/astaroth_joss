@@ -191,7 +191,7 @@ The samples directory also includes other production-ready setups, e.g. `tfm-mpi
 
 The solver takes care of distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
 It is also built to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
-The folder `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
+The directory `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
 > JP: solver definition a bit unclear throughout the article. Do we mean the finite-diff + RK3 solver, or MHD/TFM/etc? Should pick one and use it throughout.
 > TP: I think the full physics solver is meant throughout. Would not immediately come up with a way to improve it. But at the same time I am not sure is it that unclear (we of course rely on the reader to be familiar with how the word solver is usually used in this context, but that is IMO fine).
