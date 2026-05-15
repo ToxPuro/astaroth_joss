@@ -205,6 +205,8 @@ The folder `analysis/` contains Python-based data analysis tools, which can be u
 
 > OL: that could be valuable. We could at least mention them. Do you know what the main ones are?
 
+> MV: Oh dear. To answer this question properly will require more time that I have.  
+
 # Research impact statement
 
 `Astaroth` has already been used in many papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
@@ -217,6 +219,7 @@ The associated speedup of 20-60x will enable more realistic astrophysical simula
 
 > MV: This comment here is just a TODO note to myself that I need to find a way to address this better from my side when I can. Also does the gravitational wave paper use Astaroth? If not, we need to be more clear about it.  
 > TP: Doesn't the word will in the sentence make it clear that we are speaking about future work that has not been done yet and thus has not used Astaroth yet? 
+> MV: Sure now that I think about it again. 
 
 # Acknowledgements
 
@@ -241,7 +244,8 @@ and Finland: 113-2927-I-001-513-, 114-2927-I-001-506-, and Research Council of F
 
 > HS: adding Mordecai Mac Low, Chun-Fan Liu, and Man Hei Li.
 
-> MV: I added Sienny's references to the Acknowledgements properly now. 
+> MV: I added Sienny's references to the Acknowledgements properly now.
+
 # References
 
 [^stencil_footnote]: Stencil computations, or so called iterative stencil loops [@li2004automatic], are computations on structured grids where a given point is updated using a fixed neighborhood pattern. Good examples are convolutions in image processing and convolutional neural networks, and different schemes for spatial derivatives like the finite-difference method.
