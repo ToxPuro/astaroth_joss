@@ -167,6 +167,8 @@ Communication tasks are inserted where needed.
 
 > TP: Fair enough. The motivation is similar to run-time compilation: some kernels are only meaningful depending on some input variables. I am fine with not mentioning the feature.
 
+> JP: grammar confusing "core of a subdomain --- ... --- which are". 'Which are' refers to 'smaller regions' so not independent clauses. I would also avoid '---' throughout and stick solely to commas.
+
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
 For fast data transfers and to support all possible hardware, both GPU-to-GPU remote direct memory access (RDMA) and CPU-to-CPU communication are supported.
