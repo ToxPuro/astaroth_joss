@@ -61,8 +61,6 @@ While stencils are the core of `Astaroth`, it also accelerates other operations 
 `Astaroth` is optimized for multiphysics use cases and has primarily been used for turbulent astrophysical plasma simulations.
 
 
-> MV: In this section we do not address at all that one of the big selling points for Astaroth is that it is very good for cache-constrained multiphysics. Right now there is no work about it in the summary, while it was a huge deal with respect how Astaroth works as good as it does. IMHO, even more important innovation from Johannes that the DSL. It deserves at least a sentence in the summary. 
-> TP: Good point! We speak about this later and I would like to keep the more technical wording to that section so I know added simply that `Astaroth` is optimized for multiphysics use cases.
 
 # Statement of need
 
@@ -89,11 +87,6 @@ Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDE's.
 As an example, many image processing techniques, like edge detection and
 convolutions, are traditionally expressed using stencils.
-
-> MV: Another TODO item: we need to qualify the 20-60x speedup better in the text. Such metrics are very much contextual and could be an issue for the referee if we are not more precise. 
-> TP: Would think that the immediate citation makes it clear that the context can be found in the paper for the reader who is interested. I would not think that JOSS expects to expand on speedup results. If the referees complain I would then expand on the context.
-> MV: If it is like so, then OK. 
-
 
 # State of the field                                                                                                                  
 
@@ -150,7 +143,7 @@ The information of what code gets executed also allows `Astaroth` to optimize ru
 In the DSL, using the `ComputeSteps` language construct, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
 Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
-Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
+Each step is split into tasks along these regions: the big region at the core of a subdomain, which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries, which are.
 Communication tasks are inserted where needed.
 
 > TP: Boundary updates ---> boundary conditions, so the actual function of them is more apparent to the reader.
@@ -168,6 +161,7 @@ Communication tasks are inserted where needed.
 > TP: Fair enough. The motivation is similar to run-time compilation: some kernels are only meaningful depending on some input variables. I am fine with not mentioning the feature.
 
 > JP: grammar confusing "core of a subdomain --- ... --- which are". 'Which are' refers to 'smaller regions' so not independent clauses. I would also avoid '---' throughout and stick solely to commas.
+> TP:  Made a suggestion edit for this 
 
 `Astaroth`'s task scheduler executes these DAGs, asynchronously launching computation and communication tasks as prerequisite tasks are completed.
 This improves performance in communication-bound cases, especially for higher process counts [@lappi2021task].
@@ -185,7 +179,7 @@ Other special functionality is also provided through the API, such as distribute
 `Astaroth` also includes a standalone finite-difference solver, which takes full advantage of the DSL and runtime API, and can be used to write new simulations.
 It also works as a testbed for performance research.
 This solver uses an astrophysical magnetohydrodynamical setup (`acc-runtime/samples/mhd_modular`) by default, but can be configured to run any DSL code.
-The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@johannes_paper].
+The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@pekkila_graphicsprocessors_2026].
 
 > JP: @johannes_paper will probably not get a doi before May-June so can reference the dsc instead where it's embedded
 > TP: What about arxiv? You could but it there and we could refer to it from there?
@@ -220,10 +214,6 @@ The associated speedup of 20-60x will enable more realistic astrophysical simula
 > OL: should there be more highlights on the domain science side? Currently the only highlight is the performance
 > TP: What more should we say? We can say something in general terms but would we speak about new physics results like the asymptotics discovered in Fred's paper? But again there the only meaningful role Astaroth played was the performance, naturally.
 
-> MV: This comment here is just a TODO note to myself that I need to find a way to address this better from my side when I can. Also does the gravitational wave paper use Astaroth? If not, we need to be more clear about it.  
-> TP: Doesn't the word will in the sentence make it clear that we are speaking about future work that has not been done yet and thus has not used Astaroth yet? 
-> MV: Sure now that I think about it again. 
-
 # Acknowledgements
 
 We acknowledge the contributions of all developers of Astaroth[^contributor_footnote] and also the early users of it who have been instrumental in its evolution. These include Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li, Mordecai Mac Low, Chun-Fan Liu, Man Hei Li and Indrani Das.
@@ -232,22 +222,7 @@ The development of `Astaroth`  has received funding from the Academy of Finland,
 The European Research Council, the European Union's Horizon 2020 research and innovation program, project UniSDyn, Grant/Award Number: 818665; KAUTE Foundation, Grant/Award Numbers: 20240173 and 20250154; Research Council of Finland, project MomEnt, Grant/Award Number: 373416.
 The authors acknowledge support for the CompAS Project from the Institute of Astronomy and Astrophysics, Academia Sinica (ASIAA), the Academia Sinica grant AS-IAIA-114-M01, and the National Science and Technology Council (NSTC) in Taiwan through grants 112-2112-M-001-030, 113-2112-M-001-008, and 114-2112-M-001-001-; the International Collaboration and Cooperation grant for COSMAGG that supports the exchanges between Taiwan and Finland: 113-2927-I-001-513-, 114-2927-I-001-506-, and Research Council of Finland project 359462.
 
-> TP: Would Maarit know the best which funding sources to cite for the development of Astaroth??
 
-> MV: Good question! What is the policy here? How far we should go? Like should I mention Wihuri and SKR because I got funding from then for my PhD?
-
-> TP: Would leave it to Maarit to know best which ones to mention. The JOSS paper for PC has approx ~5 sources mentioned so we should definitely not need more than that so maybe the 3 most important?
-
-
-> MV: Similarly question to Sienny: should we add anyone or anything from Taiwan to the Acknowledgements, e.g. NCHC? Or notable funding sources. I tentatively added something about the computational services into the text.
-
-> HS: The authors acknowledge support for the CompAS Project from the Institute of Astronomy and Astrophysics,
-Academia Sinica (ASIAA), the Academia Sinica grant AS-IAIA-114-M01, and the National Science and Technology Council (NSTC) in Taiwan through grants 112-2112-M-001-030, 113-2112-M-001-008, and 114-2112-M-001-001-; the International Collaboration and Cooperation grant for COSMAGG that supports the exchanges between Taiwan
-and Finland: 113-2927-I-001-513-, 114-2927-I-001-506-, and Research Council of Finland project 359462.
-
-> HS: adding Mordecai Mac Low, Chun-Fan Liu, and Man Hei Li.
-
-> MV: I added Sienny's references to the Acknowledgements properly now.
 
 # References
 
