@@ -86,7 +86,7 @@ Code [@puro2023programmatic], achieving speedups of 20-60 [@pekkila2022scalable]
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDEs.
 As an example, many image processing techniques, like edge detection and
-convolutions, are costumarily expressed using stencils.
+convolutions, are stencil operations.
 
 # State of the field                                                                                                                  
 
@@ -108,7 +108,7 @@ We refer the reader to [@pekkila_graphicsprocessors_2026] for more details on th
 
 Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], which is a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
 In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
-Astaroth also incorporates other key functionalities for computational science, e.g., distributed reductions, I/O, and supports different physics cases.
+Astaroth also supports multiple physics cases, and incorporates other key functionalities for computational science: e.g., distributed reductions, I/O.
 
 A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel.
 
@@ -119,6 +119,7 @@ A distinctive feature of Astaroth is its specialization for cache-constrained us
 `Astaroth` consists of three main components: 1) `acc`, a compiler and runtime system for a domain-specific language (DSL) for stencil computations, 
 
 > MR: Is it correct to say that the runtime system is for the DSL?
+> OL: There are two runtime systems: the compiler runtime and the multi-gpu runtime
 
 2) an API for executing stencil applications on multi-GPU platforms, and 3) a standalone solver for certain simulation cases.
 Below, we present a quick overview of these components. Extensive documentation is available at [@astaroth_doc]. 
@@ -150,7 +151,7 @@ The information of what code gets executed also allows `Astaroth` to optimize ru
 In the DSL, using the `ComputeSteps` language construct, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
 Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
-Each step is split into tasks along these regions: the big region at the core of a subdomain, which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries, which are.
+Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
 Communication tasks are inserted where needed.
 
 > TP: Boundary updates ---> boundary conditions, so the actual function of them is more apparent to the reader.
@@ -171,6 +172,7 @@ Communication tasks are inserted where needed.
 
 > JP: grammar confusing "core of a subdomain --- ... --- which are". 'Which are' refers to 'smaller regions' so not independent clauses. I would also avoid '---' throughout and stick solely to commas.
 > TP:  Made a suggestion edit for this
+> OL: If we use commas throughout, the oxford list comma before "and" will get mixed with the commas separating the nonrestrictive which-clauses. Which is why I used an em-dash, because that felt most natural. We can also use a semi-colon for the list comma, but that feels weirder. I've changed it back for now.
 
 > MR: The speaking about regions and subdomains hangs here somewhat in the blue, as nothing has been explained so far about them.
 
