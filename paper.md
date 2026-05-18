@@ -55,7 +55,7 @@ bibliography: paper.bib
 Stencil computations[^stencil_footnote] are one of the bedrocks of high-performance scientific simulations, forming the core of many partial differential equation (PDE) and numerical linear algebra solvers. 
 In recent years, GPUs have become the primary compute platform for data-parallel applications in high-performance computing, and it is difficult to run large simulations without them.
 `Astaroth` is a GPU framework for stencil computations, that has been developed to address this problem of scalable scientific computing.
-`Astaroth` provides its own domain specific language (DSL), in which researchers can express the required computations without having to focus on technical implementation details.
+`Astaroth` provides its own domain specific language (DSL), in which researchers can express such computations without having to focus on technical implementation details.
 It can run efficiently both on CUDA- and HIP-based environments --- and even on hardware lacking GPUs, e.g. for testing purposes.
 While stencils are the core of `Astaroth`, it also accelerates other operations like reductions (e.g. sums), simple ray-tracing, and integrates with libraries performing GPU-accelerated Fourier transforms, all of which are important for simulations on structured grids.
 `Astaroth` is optimized for multiphysics use cases and has primarily been used for turbulent astrophysical plasma simulations.
