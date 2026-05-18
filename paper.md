@@ -151,28 +151,17 @@ The information of what code gets executed also allows `Astaroth` to optimize ru
 In the DSL, using the `ComputeSteps` language construct, users can define a list of compute steps specifying a sequence of kernels and boundary conditions.
 Kernels defined in `ComputeSteps` may be fused to reduce memory reads.
 Based on the overall domain decomposition and the stencils' data access patterns, `acc` infers the dependency relationships between the steps, and constructs a directed acyclic graph (DAG) of dependent tasks.
-Each step is split into tasks along these regions: the big region at the core of a subdomain --- which is not dependent on communicated data from neighbors, and the smaller regions at the boundaries --- which are.
+Each step is split into many tasks, one per region: there are 26 smaller regions at the subdomain's boundaries --- which are dependent on communicated data from neighbors; and one big region at the core of the subdomain --- which is not.
 Communication tasks are inserted where needed.
 
 > TP: Boundary updates ---> boundary conditions, so the actual function of them is more apparent to the reader.
 > 
 > MR: I first had "conditions", but thought that this too much restricts to PDEs.
 
-> TP: What do you think is it worth mentioning that the system drops unnecessary calls i.e. those without observable effect due to configuration variables? If yes, then I would propose the following: "As an optimization, unecessary kernel calls are dropped and to reduce memory reads kernels may be fused together."
-> OL: that can be mentioned if there are words left in the budget. But a "call" is ambiguous". A call to what? A kernel? Needs to be specified.
-> TP: Yes, calls to kernels. Modified the suggestion to reflect this
-
-> JP: "fused together to reduce memory reads" a bit ambiguous. Is this done automatically? The integration kernels are fused to exploit the interdependence of the fields which does reduce memory reads. But the fusion of packing and reduction operations is done for better efficiency (small problem sizes fused to saturate the device with work). Should clarify what is meant here.
-
-> TP: This refers to a bit niche implementation I did where the DSL compiler infers which kernels would be good candidates for fusion and automatically generates fused versions of them and at runtime decides can it use them. The motivation is that then the user can write Kernels that have smaller better defined scopes but can be then fused together by the runtime. I would be fine if the wording is a bit ambiguous since we cannot exactly describe what is done in a few words anyways.
-
-> OL: Matthias wrote a suggestion for the above paragraph. I took some of his suggestion and added some of my own improvements. There's still the matter of "dropping unnecessary kernel calls". Now that I think about it, this will probably raise more questions. The reader will wonder why there would be unnecessary kernels in a `ComputeSteps`.
-
-> TP: Fair enough. The motivation is similar to run-time compilation: some kernels are only meaningful depending on some input variables. I am fine with not mentioning the feature.
-
 > JP: grammar confusing "core of a subdomain --- ... --- which are". 'Which are' refers to 'smaller regions' so not independent clauses. I would also avoid '---' throughout and stick solely to commas.
 > TP:  Made a suggestion edit for this
 > OL: If we use commas throughout, the oxford list comma before "and" will get mixed with the commas separating the nonrestrictive which-clauses. Which is why I used an em-dash, because that felt most natural. We can also use a semi-colon for the list comma, but that feels weirder. I've changed it back for now.
+> OL: Also switched up the order now, and added a semi-colon because the list items are long
 
 > MR: The speaking about regions and subdomains hangs here somewhat in the blue, as nothing has been explained so far about them.
 
