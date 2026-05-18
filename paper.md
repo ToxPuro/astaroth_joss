@@ -82,7 +82,7 @@ The early stages of `Astaroth`'s development focused on implementing the
 high-order stencil methods of Pencil Code for isothermal hydrodynamics
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
 With later revisions, `Astaroth` has successfully been used to accelerate Pencil
-Code [@puro2023programmatic] achieving speedups of 20-60 [@pekkila2022scalable].
+Code [@puro2023programmatic], achieving speedups of 20-60 [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDEs.
 As an example, many image processing techniques, like edge detection and
