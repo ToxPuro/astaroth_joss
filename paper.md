@@ -63,9 +63,9 @@ Much of the software used for scientific computing is written for CPUs, and has
 to be ported to GPUs to run larger problems with decent times-to-solution.
 `Astaroth` has been developed to solve this problem for the subset of
 scientific software that relies heavily on stencil computations.
-`Astaroth`'s Domain Specific Language (DSL) can be used to rewrite existing PDE solvers or to write
+`Astaroth`'s domain specific language (DSL) can be used to rewrite existing PDE solvers or to write
 completely new ones.
-As an example, `Astaroth` has been used to write a PDE solver for astrophysical
+As an example, `Astaroth` has been used to write a partial differential equation (PDE) solver for astrophysical
 plasma simulations [@vaisala2023exploring], which scales to thousands of GPUs with a weak scaling
 efficiency \>90% [@pekkila_graphicsprocessors_2026]. 
 
@@ -150,7 +150,7 @@ This solver uses an astrophysical magnetohydrodynamical setup (`acc-runtime/samp
 The samples directory also includes other production-ready setups, e.g. `tfm-mpi` for the test-field method [@pekkila_graphicsprocessors_2026].
 
 The solver handles distributed initial conditions, domain decomposition, simulation diagnostics, and logging.
-It is also prepared to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
+It is also designed to react to a number of events, such as NaNs in the simulation data, simulation time limits, and a stop signal given through the file system.
 The directory `analysis/` contains Python-based data analysis tools, which can be used to process and work with the data produced by the standalone solver. 
 
 
@@ -159,7 +159,7 @@ The directory `analysis/` contains Python-based data analysis tools, which can b
 `Astaroth` has already been used in a number of papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally, it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
 We expect that the recent GPU-acceleration of `Pencil Code`, which was done by embedding `Astaroth`'s DSL and runtime system into it, will increase the number of `Astaroth` users.
-The associated speedup of 20-60x will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to processes producing primordial gravitational waves and their propagation [@roper2020numerical].
+The associated speedup of 20-60 will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to processes producing primordial gravitational waves and their propagation [@roper2020numerical].
 
 # Acknowledgements
 
