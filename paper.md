@@ -161,6 +161,8 @@ Additionally, it has been used for research on performance optimization methods[
 We expect that the recent GPU-acceleration of `Pencil Code`, which was done by embedding `Astaroth`'s DSL and runtime system into it, will increase the number of `Astaroth` users.
 The associated speedup of 20-60 will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to processes producing primordial gravitational waves and their propagation [@roper2020numerical].
 
+> OL: speedup needs a unit. If "x" (the letter) is bad, I suggest either the latex 20-60 `$\times$` (using mathjax e.g.) or replacing speedup with "speedup factor".
+
 # Acknowledgements
 
 We acknowledge the contributions of all developers and early users of `Astaroth` who have been instrumental in its evolution. These include Petr Bém, Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li, Mordecai Mac Low, Chun-Fan Liu, Man Hei Li, Tzu-Chun Hsu and Indrani Das.
