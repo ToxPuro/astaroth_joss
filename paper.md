@@ -73,7 +73,7 @@ Accelerating such simulations was the original reason for the creation of
 `Astaroth`.
 A widely used framework for them is the Pencil Code [@brandenburg2020pencil],
 which is a modular multiphysics PDE and particle dynamics solver.
-The prototype of `Astaroth` focused on accelerating 
+A prototype of `Astaroth` focused on accelerating 
 high-order finite-difference methods for isothermal hydrodynamics, as employed by Pencil Code, on GPUs
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
 The Astaroth framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
