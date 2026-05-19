@@ -76,7 +76,7 @@ which is a modular multiphysics PDE and particle dynamics solver.
 A prototype of `Astaroth` focused on accelerating 
 high-order finite-difference methods for isothermal hydrodynamics, as employed by Pencil Code, on GPUs
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
-The Astaroth framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
+The `Astaroth` framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
 With later revisions, `Astaroth` has successfully been used to accelerate Pencil
 Code [@puro2023programmatic], achieving speedups of 20-60 [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
@@ -97,10 +97,10 @@ Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] provide
 In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational tasks.
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details.
 
-Closest to Astaroth is Parthenon[@grete_parthenonperformance_2023], a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
-In contrast, Astaroth provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
+Closest to `Astaroth` is Parthenon[@grete_parthenonperformance_2023], a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
+In contrast, `Astaroth` provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
 
-A distinctive feature of Astaroth is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel, such as distributed reductions.
+A distinctive feature of `Astaroth` is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel, such as distributed reductions.
 `Astaroth` also supports multiple different physics cases. 
 
 # Software design
@@ -163,7 +163,7 @@ The associated speedup of 20-60x will enable more realistic astrophysical simula
 
 # Acknowledgements
 
-We acknowledge the contributions of all developers and early users of Astaroth who have been instrumental in its evolution. These include Petr Bém, Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li, Mordecai Mac Low, Chun-Fan Liu, Man Hei Li, Tzu-Chun Hsu and Indrani Das.
+We acknowledge the contributions of all developers and early users of `Astaroth` who have been instrumental in its evolution. These include Petr Bém, Jörn Warnecke, Frederick Gent, Ruben Krasnopolsky, Wei-Wen Li, Mordecai Mac Low, Chun-Fan Liu, Man Hei Li, Tzu-Chun Hsu and Indrani Das.
 We acknowledge the computational resources and services provided by CSC — IT Center for Science, the Aalto Science-IT project, ASIAA High-Performance Computing, and National Center for High-Performance Computing (NCHC), National Applied Research Laboratories (NARLabs) in Taiwan, the Oak Ridge Leadership Computing Facility at the Oak Ridge National Laboratory, and resources from LUMI-G through the Euro-HPC joint undertaking. Furthermore, we appreciate the important technical assistance provided by CSC, by people like Fredrik Robertsén and others.
 The development of `Astaroth`  has received funding from the Academy of Finland, ReSoLVE Centre of Excellence, Grant/Award Number: 307411;
 The European Research Council, the European Union's Horizon 2020 research and innovation program, project UniSDyn, Grant/Award Number: 818665; KAUTE Foundation, Grant/Award Numbers: 20240173 and 20250154; Research Council of Finland, project MomEnt, Grant/Award Number: 373416.
