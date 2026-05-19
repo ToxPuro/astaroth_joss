@@ -71,10 +71,10 @@ efficiency \>90% [@pekkila_graphicsprocessors_2026].
 
 Accelerating such simulations was the original reason for the creation of
 `Astaroth`.
-A widely used framework for them is the Pencil Code [@brandenburg2020pencil],
+A widely used framework for them is the `Pencil Code` [@brandenburg2020pencil],
 which is a modular multiphysics PDE and particle dynamics solver.
 A prototype of `Astaroth` focused on accelerating 
-high-order finite-difference methods for isothermal hydrodynamics, as employed by Pencil Code, on GPUs
+high-order finite-difference methods for isothermal hydrodynamics, as employed by `Pencil Code`, on GPUs
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
 The `Astaroth` framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
 With later revisions, `Astaroth` has successfully been used to accelerate Pencil
@@ -87,18 +87,18 @@ convolutions, are stencil operations.
 # State of the field                                                                                                                  
 
 Methods to achieve performance portability in stencil computations have been widely studied.
-Domain-specific languages for image processing include Halide[@ragan2013halide] and Polymage[@mullapudi2015polymage].
-Autotuning code-generation frameworks include Patus[@christen_patuscode_2011] and PARTANS[@lutz_partansautotuning_2013].
+Domain-specific languages for image processing include `Halide`[@ragan2013halide] and `Polymage`[@mullapudi2015polymage].
+Autotuning code-generation frameworks include `Patus`[@christen_patuscode_2011] and `PARTANS`[@lutz_partansautotuning_2013].
 
 More generalized software that provides the building blocks for domain-specialized libraries also exist:
-Delite[@sujeeth_delitecompiler_2014] and Lift[@steuwer_liftfunctional_2017] provide intermediate languages as targets for domain-specific languages; <!--% JP (can be left out if no room) -->
-Kokkos[@trott2021kokkos] and RAJA[@beckingsale2019raja] provide abstraction layers for parallel computational patterns but focus on single-node computations;
-Chapel[@callahan_cascadehigh_2004] and Charm++[@kale_charmportable_1993] provide programming models for parallel and distributed computations;
-In a more specialized approach, the Cactus framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational tasks.
+`Delite`[@sujeeth_delitecompiler_2014] and `Lift`[@steuwer_liftfunctional_2017] provide intermediate languages as targets for domain-specific languages; <!--% JP (can be left out if no room) -->
+`Kokkos`[@trott2021kokkos] and `RAJA`[@beckingsale2019raja] provide abstraction layers for parallel computational patterns but focus on single-node computations;
+`Chapel`[@callahan_cascadehigh_2004] and `Charm++`[@kale_charmportable_1993] provide programming models for parallel and distributed computations;
+In a more specialized approach, the `Cactus` framework[@goodale_cactusframework_2003] provides a collection of functionalities shared between computational tasks.
 We refer the reader to [@pekkila_graphicsprocessors_2026] for more details.
 
-Closest to `Astaroth` is Parthenon[@grete_parthenonperformance_2023], a distributed framework for adaptive mesh refinement using Kokkos as the backend for intra-node computations.
-In contrast, `Astaroth` provides a DSL and an optimizing code generator for implementing the computations akin to Halide, Polymage, and Patus.
+Closest to `Astaroth` is `Parthenon`[@grete_parthenonperformance_2023], a distributed framework for adaptive mesh refinement using `Kokkos` as the backend for intra-node computations.
+In contrast, `Astaroth` provides a DSL and an optimizing code generator for implementing the computations akin to `Halide`, `Polymage`, and `Patus`.
 
 A distinctive feature of `Astaroth` is its specialization for cache-constrained use cases, especially in multiphysics simulations where the values of interdependent fields need to be held in working memory at the same time. Additionally, `Astaroth` does not only consider stencils in isolation, but also their combinations with other operations inside the same kernel, such as distributed reductions.
 `Astaroth` also supports multiple different physics cases. 
