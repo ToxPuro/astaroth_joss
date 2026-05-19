@@ -78,7 +78,7 @@ high-order finite-difference methods for isothermal hydrodynamics, as employed b
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
 The `Astaroth` framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
 With later revisions, `Astaroth` has successfully been used to accelerate Pencil
-Code [@puro2023programmatic], achieving speedups of 20-60 [@pekkila2022scalable].
+Code [@puro2023programmatic], achieving speedup factors of 20-60 [@pekkila2022scalable].
 Of course, `Astaroth`'s PDE solver is not limited to astrophysics, and neither
 is `Astaroth` limited to PDEs.
 As an example, many image processing techniques, like edge detection and
@@ -159,9 +159,8 @@ The directory `analysis/` contains Python-based data analysis tools, which can b
 `Astaroth` has already been used in a number of papers as the core PDE-solver, mainly for astrophysical plasma simulations [@vaisala2021interaction; @vaisala2023exploring; @gent2026asymptotic], but also in seismology [@ladino2025acoustic]. 
 Additionally, it has been used for research on performance optimization methods[@pekkila_graphicsprocessors_2026;@pekkila2025stencil;@pekkila2017methods], communication techniques [@pekkila2022scalable;@lappi2021task], compiler techniques[@pekkila_masters_2019;@puro2023programmatic] and other topics [@yokelson2024soma; @puro2025gpu].
 We expect that the recent GPU-acceleration of `Pencil Code`, which was done by embedding `Astaroth`'s DSL and runtime system into it, will increase the number of `Astaroth` users.
-The associated speedup of 20-60 will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to processes producing primordial gravitational waves and their propagation [@roper2020numerical].
+The associated speedup factor of 20-60 will enable more realistic astrophysical simulations in a wide range of use cases from modelling small-scale dynamos [@warnecke2025small] to processes producing primordial gravitational waves and their propagation [@roper2020numerical].
 
-> OL: speedup needs a unit. If "x" (the letter) is bad, I suggest either the latex 20-60 `$\times$` (using mathjax e.g.) or replacing speedup with "speedup factor".
 
 # Acknowledgements
 
