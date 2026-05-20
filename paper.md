@@ -73,7 +73,7 @@ Accelerating such simulations was the original reason for the creation of
 `Astaroth`.
 A widely used framework for them is the `Pencil Code` [@brandenburg2020pencil],
 which is a modular multiphysics PDE and particle dynamics solver.
-A prototype of `Astaroth` focused on accelerating 
+The `Astaroth` prototype focused on accelerating 
 high-order finite-difference methods for isothermal hydrodynamics, as employed by `Pencil Code`, on GPUs
 [@pekkila2017methods;@vaisala_magneticphenomena_2017]. 
 The `Astaroth` framework for general stencil computations took shape in [@pekkila_masters_2019] with the introduction of the DSL, code generator, and multilayer API.
@@ -115,7 +115,9 @@ The main operations, such as stencils, are written in a declarative syntax, and 
 The implementation is left to `Astaroth`'s DSL compiler `acc`, which applies a number of specialized optimizations. 
 An especially important optimization is the unrolled and reordered computation of all required stencils at the start of the kernels, which enables instruction-level parallelism and efficient usage of caches [@pekkila_graphicsprocessors_2026].
 In addition to stencils, the DSL supports two other operations: 1) multi-GPU reductions -- which are commonly needed for stencil-based solvers; and 2) simplified distributed ray-tracing, where rays cannot change directions and are restricted to move through neighbouring grid points -- which is necessary for simulations incorporating radiative transfer [@heinemann2006radiative].
-`Astaroth`'s DSL also includes a standard library, providing, inter alia: derivative operators used in PDE solvers, implemented for generally spaced Cartesian, spherical or cylindrical grids; and Poisson solvers, e.g. for self-gravity [@krasnopolsky2026iterative].
+`Astaroth`'s DSL also includes a standard library, providing, inter alia: derivative operators used in PDE solvers, implemented for generally spaced Cartesian, spherical and cylindrical grids; and Poisson solvers, e.g. for self-gravity [@krasnopolsky2026iterative].
+
+> OL: "generally spaced" feels nonstandard. Do you mean that there is no uniform dx,dy,dz between coordinates? In that case, maybe "non-uniform" or "arbitrary". Or even "structured Cartesian, spherical and cylindrical grids""
 
 `acc` transpiles the DSL source into CUDA or HIP source code, which is further compiled into machine code using a native CUDA or HIP compiler.
 The program thus produced is executed in the `acc` runtime system, which further optimizes the kernels by autotuning the thread block sizes for kernel execution.
